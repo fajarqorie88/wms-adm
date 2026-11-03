@@ -680,6 +680,36 @@ html[data-view=pc] .vw-data.vm-grid .pBk i{font-size:11px;right:6px;bottom:3px}
 html[data-view=pc] .vw-data.vm-grid .pBo{font-size:21px}
 html[data-view=pc] .vw-data.vm-grid .pFt{margin-top:8px;font-size:12px;min-height:0}
 html[data-view=pc] .vw-data.vm-grid .pAp{font-size:12px;padding:3px 12px}
+/* GRID PC (tab Data): 4 kolom, semua ukuran kartu diperkecil ke 65% (desain tetap sama). Hanya berlaku di mode PC + view grid */
+html[data-view=pc] .vw-data.vm-grid>.dc{grid-column:span 3}
+@media(max-width:1100px){html[data-view=pc] .vw-data.vm-grid>.dc{grid-column:span 4}}
+@media(max-width:800px){html[data-view=pc] .vw-data.vm-grid>.dc{grid-column:span 6}}
+html[data-view=pc] .vw-data.vm-grid .dc .sw-in{padding:8px 9px}
+html[data-view=pc] .vw-data.vm-grid .pH{gap:4px}
+html[data-view=pc] .vw-data.vm-grid .pE{font-size:12px}
+html[data-view=pc] .vw-data.vm-grid .pTg{gap:4px}
+html[data-view=pc] .vw-data.vm-grid .pb{font-size:8.5px;padding:1px 6px;border-radius:5px}
+html[data-view=pc] .vw-data.vm-grid .pS{padding:1px 6px;border-radius:5px}
+html[data-view=pc] .vw-data.vm-grid .pLn{margin:5px 3px}
+html[data-view=pc] .vw-data.vm-grid .pLn:before,html[data-view=pc] .vw-data.vm-grid .pLn:after{width:6px;height:6px;top:-3.5px}
+html[data-view=pc] .vw-data.vm-grid .pLn:before{left:-3.5px}
+html[data-view=pc] .vw-data.vm-grid .pLn:after{right:-3.5px}
+html[data-view=pc] .vw-data.vm-grid .pB{gap:5px}
+html[data-view=pc] .vw-data.vm-grid .pLp{font-size:8px}
+html[data-view=pc] .vw-data.vm-grid .pSd{font-size:11px}
+html[data-view=pc] .vw-data.vm-grid .pC{font-size:8px;margin-top:1px}
+html[data-view=pc] .vw-data.vm-grid .pI .pC:first-of-type{margin-top:4px}
+html[data-view=pc] .vw-data.vm-grid .pX{display:grid;grid-template-columns:repeat(3,37px);gap:5px;width:auto;justify-content:start}
+html[data-view=pc] .vw-data.vm-grid .pX>*{width:37px;min-width:37px;max-width:37px;height:37px;aspect-ratio:auto;border-radius:8px}
+html[data-view=pc] .vw-data.vm-grid .pBk b{font-size:15.5px}
+html[data-view=pc] .vw-data.vm-grid .pBk i{font-size:7px;right:3px;bottom:1px}
+html[data-view=pc] .vw-data.vm-grid .pBo{font-size:13.5px}
+html[data-view=pc] .vw-data.vm-grid .pBf.n{border-width:1px;font-size:7px;gap:2px;padding:2px;line-height:1.1}
+html[data-view=pc] .vw-data.vm-grid .pBf.n svg{width:12px;height:12px}
+html[data-view=pc] .vw-data.vm-grid .pFt{margin-top:5px;font-size:8px;row-gap:6px;gap:8px}
+html[data-view=pc] .vw-data.vm-grid .pAp{font-size:8px;padding:2px 7px;border-radius:4px}
+html[data-view=pc] .vw-data.vm-grid .pWo{padding-top:5px;gap:8px}
+html[data-view=pc] .vw-data.vm-grid .pWo span+span{padding-left:8px}
 .ipb-t{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ipb-n{font-size:28px;font-weight:700;line-height:1.1}
 .ipb-n small{font-size:14px;font-weight:400;opacity:.65;margin-left:6px}
