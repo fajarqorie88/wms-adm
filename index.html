@@ -102,7 +102,7 @@ async function awUpsert(r){
   awSigSet(r);
 }
 async function awPut(r){
-  try{await awUpsert(r);console.log("Appwrite: data terkirim")}
+  try{await awUpsert(r)}
   catch(e){console.error("Appwrite gagal:",e);if(typeof toast==="function")toast("Appwrite gagal: "+((e&&e.message)||e))}
 }
 /* Hapus = tombstone: dokumen TIDAK dihapus, isinya diganti penanda {id,del:waktu} supaya perangkat lain ikut menghapus saat sinkron */
@@ -1156,7 +1156,7 @@ ${warn?`<div class="mt-2 p-2" style="border-radius:8px;background:${pc>=90?'#fee
 <p class="text-xs opacity-60 mt-2">Foto: ${fmtB(SC.fb)} (${SC.files} file) - Data: ${fmtB(SC.db)} (${SC.docs} dokumen, perkiraan)</p>`:`<p class="text-xs opacity-60 my-2">Memuat...</p>`}
 <p class="text-xs opacity-60 mt-1">Total kapasitas ${fmtB(cap)} <button class="underline" onclick="scEdit()">ubah</button></p></div>`}
 /* ---------- PIE CHART OK / NG (tab Grafik) ---------- */
-let PS={sel:null,fetching:false,okA:[],ngA:[],off:(()=>{try{return JSON.parse(L.wms_pieoff||'{}')||{}}catch(e){return{}}})(),dof:(()=>{try{return JSON.parse(L.wms_piedot||'{}')||{}}catch(e){return{}}})(),eof:(()=>{try{return JSON.parse(L.wms_pieelb||'{}')||{}}catch(e){return{}}})(),ak:null};
+let PS={sel:null,fetching:false,okA:[],ngA:[],off:(()=>{try{return JSON.parse(L.woms_pieoff||L.wms_pieoff||'{}')||{}}catch(e){return{}}})(),dof:(()=>{try{return JSON.parse(L.woms_piedot||L.wms_piedot||'{}')||{}}catch(e){return{}}})(),eof:(()=>{try{return JSON.parse(L.woms_pieelb||L.wms_pieelb||'{}')||{}}catch(e){return{}}})(),ak:null};
 function pieBig(id){const r=D.insp.find(x=>String(x.id)==String(id));if(!r||!r.photo)return;const d=document.createElement('div');d.className='fixed';d.style.cssText='inset:0;z-index:9999;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:12px';d.onclick=()=>d.remove();d.innerHTML='<img src="'+r.photo+'" style="max-width:100%;max-height:100%;border-radius:12px">';document.body.appendChild(d)}
 async function pieFetch(list){if(PS.fetching)return;PS.fetching=true;let n=0;for(const r of list){if(r.photo||!r.photoId||!awST)continue;try{if(await awPhotoGet(r))n++}catch(e){}}PS.fetching=false;if(n&&tab=='grafik')render()}
 /* Callout pie bisa digeser (drag): garis penunjuk ikut menyambung ke sisi kotak label yang terdekat, seperti callout Excel. Ketuk 2x untuk kembalikan ke posisi awal */
@@ -1186,7 +1186,7 @@ function piePlace(g,ox,oy){const D=g.dataset,cx0=+D.cx,cy0=+D.cy,w=+D.w,h=+D.h,
   pieRef(g.parentNode)}
 (function(){let d=null,last=null;
   const xy=(e,rt)=>{const m=rt.getScreenCTM();if(!m)return null;const p=rt.ownerSVGElement.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(m.inverse())};
-  const sv=()=>{try{L.wms_pieoff=JSON.stringify(PS.off)}catch(e){}};
+  const sv=()=>{try{L.woms_pieoff=JSON.stringify(PS.off)}catch(e){}};
   document.addEventListener('pointerdown',e=>{const g=e.target&&e.target.closest?e.target.closest('.pcl'):null;if(!g)return;const rt=g.parentNode.parentNode,q=xy(e,rt);if(!q)return;
     d={g,rt,q,sx:e.clientX,sy:e.clientY,ox:+g.dataset.ox||0,oy:+g.dataset.oy||0,id:e.pointerId,mv:false};try{g.setPointerCapture(e.pointerId)}catch(x){}e.preventDefault()});
   document.addEventListener('pointermove',e=>{if(!d||e.pointerId!=d.id)return;
@@ -1200,7 +1200,7 @@ function piePlace(g,ox,oy){const D=g.dataset,cx0=+D.cx,cy0=+D.cy,w=+D.w,h=+D.h,
 /* Titik callout (hitam) juga bisa digeser; garis ikut menyambung. Dibatasi di antara arc reactor dan tepi pie. Ketuk 2x untuk reset */
 (function(){let d=null,last=null;
   const xy=(e,rt)=>{const m=rt.getScreenCTM();if(!m)return null;const p=rt.ownerSVGElement.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(m.inverse())};
-  const sv=()=>{try{L.wms_piedot=JSON.stringify(PS.dof)}catch(e){}};
+  const sv=()=>{try{L.woms_piedot=JSON.stringify(PS.dof)}catch(e){}};
   const put=(g,ox,oy)=>{const D=g.dataset,ax0=+D.ax0,ay0=+D.ay0,[x,y]=pieDotClamp(ax0+ox,ay0+oy);ox=x-ax0;oy=y-ay0;
     g.setAttribute('transform','translate('+ox.toFixed(2)+' '+oy.toFixed(2)+')');D.ox=ox;D.oy=oy;
     const c=g.parentNode,l=c.querySelector('.pcl');if(l){l.dataset.ax=x.toFixed(2);l.dataset.ay=y.toFixed(2);pieRef(c)}};
@@ -1217,7 +1217,7 @@ function piePlace(g,ox,oy){const D=g.dataset,cx0=+D.cx,cy0=+D.cy,w=+D.w,h=+D.h,
 /* Titik elbow callout: sewarna garis, bisa digeser. Posisi disimpan sebagai selisih dari posisi otomatis. Ketuk 2x untuk reset */
 (function(){let d=null,last=null;
   const xy=(e,rt)=>{const m=rt.getScreenCTM();if(!m)return null;const p=rt.ownerSVGElement.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(m.inverse())};
-  const sv=()=>{try{L.wms_pieelb=JSON.stringify(PS.eof)}catch(e){}};
+  const sv=()=>{try{L.woms_pieelb=JSON.stringify(PS.eof)}catch(e){}};
   const put=(g,ox,oy)=>{g.dataset.eox=ox;g.dataset.eoy=oy;const r=pieRef(g.parentNode);if(r){g.dataset.eox=r.e[0]-r.e0[0];g.dataset.eoy=r.e[1]-r.e0[1]}};
   document.addEventListener('pointerdown',e=>{const g=e.target&&e.target.closest?e.target.closest('.pce'):null;if(!g)return;const rt=g.parentNode.parentNode,q=xy(e,rt);if(!q)return;
     d={g,rt,q,sx:e.clientX,sy:e.clientY,ox:+g.dataset.eox||0,oy:+g.dataset.eoy||0,id:e.pointerId,mv:false};try{g.setPointerCapture(e.pointerId)}catch(x){}e.preventDefault()});
@@ -1408,6 +1408,7 @@ async function awForgot(e0){
     alert('Permintaan diterima Appwrite. Link reset password dikirim ke '+e+'. Cek Inbox dan folder Spam (pengirim: Appwrite). Link berlaku 1 jam.')
   }catch(x){console.error('forgot',x);toast(x&&x.code==429?'Terlalu banyak permintaan, coba lagi nanti':'Gagal mengirim link: '+((x&&x.message)||x))}
   finally{awFB=false}}
+function fbReset(e){return awForgot(e)}
 function resetView(){const T=(a,b)=>LG=='en'?b:a;
   const pw=(id,ph)=>`<div class="pw"><input id="${id}" class="i" type="password" placeholder="${ph}" autocomplete="new-password"><button type="button" class="pw-e" tabindex="-1" aria-label="Show password" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="pwTog(this)">${PWX}</button></div>`;
   return`<div class="lg"><div class="in"><div class="text-right text-xs mb-3" style="color:#93c5fd"><button class="underline" style="font-weight:${LG=='id'?700:400}" onclick="setLang('id')">ID</button> | <button class="underline" style="font-weight:${LG=='en'?700:400}" onclick="setLang('en')">EN</button></div>
@@ -2193,7 +2194,7 @@ async function awMasterPush(){
       catch(e){if(e&&e.code==404)await awDB.createDocument(AW_DB,AW_MT,id,data);else throw e}
     }
     for(let k=parts.length;k<oldN;k++){try{await awDB.deleteDocument(AW_DB,AW_MT,'master_'+k)}catch(e){}}
-    awLast=snap;console.log('Appwrite: master terkirim');awBusy=false;return true;
+    awLast=snap;awBusy=false;return true;
   }catch(e){console.error('Appwrite master (kirim) gagal:',e);toast('Master gagal dikirim: '+((e&&e.message)||e))}
   awBusy=false;return false;
 }
