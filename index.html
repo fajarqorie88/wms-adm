@@ -1655,16 +1655,24 @@ function puEnter(e,si,mi){if(e.key!='Enter')return;e.preventDefault();const m=ma
 function puSave(si,mi){const m=mainBy(PUC),R=m&&puRow(puSt(m),m.subs[si].id,m.subs[si].mats[mi].mt),was=R&&R.saved;if(puDo(si,mi))try{hap('ok')}catch(e){}puDraw();if(m&&R&&!was&&R.saved){const t=puStat(m);if(t[0]==t[1])puAuto()}}
 function puStat(m){const S=puSt(m);let d=0,t=0;m.subs.forEach(s=>s.mats.forEach(mat=>{t++;if(puRow(S,s.id,mat.mt).saved)d++}));return[d,t]}
 function puSettle(m){const S=puSt(m);Object.keys(S.rows).forEach(k=>{const R=S.rows[k];if(R.sv!==''&&!R.saved&&R.kA===R.sv)R.saved=true})}
+/* Setelah selesai update satu Trafo: otomatis buka Trafo berikutnya (urutan Master) yang masih ada field belum Saved. Kalau tidak ada lagi: popup tutup. X / klik di luar tetap menutup dan menghentikan alur */
+function puNext(m){if(PUC!==m.id)return;const i=D.mains.findIndex(x=>String(x.id)==String(m.id));
+ const n=i<0?null:D.mains.slice(i+1).find(x=>{const t=puStat(x);return t[1]>0&&t[0]<t[1]});
+ if(!n)return puHide();
+ puSettle(m);F.main=n.id;F.sub='';F.mat='';F.loc='';F.mq='';PUC=n.id;render();puDraw();
+ const bx=document.querySelector('#pu .pu-bx');if(bx)bx.scrollTop=0;
+ const S=puSt(n);let f=null;n.subs.forEach((s,si)=>s.mats.forEach((mat,mi)=>{if(!f&&!puRow(S,s.id,mat.mt).saved)f=[si,mi]}));
+ const e=f&&puId('puI',f[0],f[1]);if(e){try{e.focus()}catch(x){}}}
 async function puAuto(){const m=mainBy(PUC);if(!m||PUA)return;PUA=1;
  try{await PUQ}catch(e){}
  const bad=PUERR||!!awCheck()||!navigator.onLine;PUERR=0;
  awSuccess(bad?TT('Tersimpan di perangkat','Saved on device'):TT('Update berhasil','Update successful'),bad?TT('Dikirim ke server lewat Upload Data','Sent to server via Upload Data'):TT('Data terkirim ke server','Data sent to server'));
- setTimeout(()=>{PUA=0;if(PUC===m.id&&!puDirty(m).length)puHide()},1200)}
+ setTimeout(()=>{PUA=0;if(PUC===m.id&&!puDirty(m).length)puNext(m)},1200)}
 function puSaveBtn(){const m=mainBy(PUC);if(!m||PUA)return;puSettle(m);let n=0,bad=0;puDirty(m).forEach(p=>{if(puDo(p[0],p[1]))n++;else bad++});puDraw();if(bad)return;
  const t=puStat(m);
  if(t[0]==t[1]){if(n){try{hap('ok')}catch(e){}puAuto()}else toast(TT('Belum ada data baru untuk disimpan','No new data to save'));return}
  if(!n&&!t[0])return toast(TT('Isi minimal satu field dulu','Fill in at least one field first'));
- PUA=1;awSuccess(TT('Tersimpan','Saved'),t[0]+' / '+t[1]+' '+TT('field terisi','fields filled'));setTimeout(()=>{PUA=0;if(PUC===m.id&&!puDirty(m).length)puHide()},1200)}
+ PUA=1;awSuccess(TT('Tersimpan','Saved'),t[0]+' / '+t[1]+' '+TT('field terisi','fields filled'));setTimeout(()=>{PUA=0;if(PUC===m.id&&!puDirty(m).length)puNext(m)},1200)}
 const puApR=r=>{if(r.ap=='a'){r.ap='p';r.apBy=r.apName=r.apRole='';r.apAt=0}};
 function puSync(r,oldPid){PUQ=PUQ.then(async()=>{if(awCheck())return;try{if(oldPid&&awST){try{await awST.deleteFile(AW_BK,String(oldPid))}catch(e){}}await awUpsert(r)}catch(e){PUERR=1;console.error('Kirim data gagal:',e)}}).catch(()=>{})}
 function puEdit(si,mi){const m=mainBy(PUC),s=m.subs[si],R=puRow(puSt(m),s.id,s.mats[mi].mt);R.saved=false;puDraw();const e=puId('puI',si,mi);if(e)e.focus()}
