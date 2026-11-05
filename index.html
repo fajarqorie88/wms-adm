@@ -524,21 +524,36 @@ html[data-view=pc] #pdb .pdb-t i{font-size:13px}
 .gc .gz{position:static;justify-content:flex-end;margin:4px 2px 6px}
 .gc .gz button{width:32px;height:32px;border-radius:50%;background:#2a3b66;color:#fff;border:1.5px solid #4f7bd8}
 .gc .gz button:hover{background:#2563EB}
-.gh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.gh-t{min-width:0;font-weight:800;line-height:1.28;font-size:17px;color:#fff;word-break:break-word}
+.gh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.gh-t{flex:1 1 200px;min-width:0;font-weight:800;line-height:1.28;font-size:17px;color:#fff;word-break:break-word}
 .gh-t div{font-size:inherit}
-.gh-ck{flex:none;min-width:104px;max-width:42%;border:2.5px solid #4f7bd8;border-radius:12px;background:#3b4a63;overflow:hidden;text-align:center}
-.gh-ck b{display:block;background:#4f7bd8;color:#fff;font-size:13px;padding:3px 8px}
+.gh-t .gh-s{font-size:13px;font-weight:700;color:#cfd3da;margin-top:2px}
+.gh-r{display:flex;gap:8px;align-items:stretch;flex:none}
+.gh-bx{flex:none;min-width:92px;border:2.5px solid #4f7bd8;border-radius:12px;background:rgba(79,123,216,.22);overflow:hidden;text-align:center;display:flex;flex-direction:column}
+.gh-bx b{display:block;background:rgba(79,123,216,.45);border-bottom:2.5px solid #4f7bd8;color:#fff;font-size:13px;padding:3px 8px}
+.gh-ck{min-width:104px;max-width:42%}
 .gh-ck span{display:block;color:#fff;font-weight:700;font-size:12px;padding:1px 8px;line-height:1.5}
 .gh-ck i{display:block;height:4px}
+.gh-dt{min-width:92px;justify-content:center}
+.gh-dt .d1{display:block;color:#fff;font-weight:700;font-size:11px;padding:6px 6px 0;line-height:1.2}
+.gh-dt .d2{display:block;color:#fff;font-weight:800;font-size:20px;padding:0 6px 6px;line-height:1.15}
+.gh-dd{margin:8px 0 2px;display:block;font-weight:700}
+.gh-dd summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 12px;border-radius:999px;border:2.5px solid #2dd4bf;background:#0b4a4a;color:#fff;font-size:11px;max-width:100%;box-sizing:border-box}
+.gh-dd summary::-webkit-details-marker{display:none}
+.gh-dd summary::after{content:'\25BE'}
+.gh-dd[open] summary::after{content:'\25B4'}
+.gh-dd>div{margin-top:4px;border:2.5px solid #2dd4bf;background:#0b4a4a;border-radius:14px;padding:2px 12px;max-height:150px;overflow-y:auto}
+.gh-dd>div span{display:block;color:#fff;font-size:11px;padding:5px 0;border-bottom:.5px solid rgba(45,212,191,.25)}
+.gh-dd>div span:last-child{border-bottom:0}
 .gh-p{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}
 .gh-p span{height:24px;padding:0 12px;border-radius:999px;border:2.5px solid;color:#fff;font-weight:700;font-size:11px;display:inline-flex;align-items:center}
+.gh-p .pl.cur{background:#2dd4bf;border-color:#2dd4bf;color:#06231f}
 .gh-p .pl{background:#0b4a4a;border-color:#2dd4bf;max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;line-height:19px}
 .gh-lg{justify-content:center;margin:6px 0 4px}
 .gc,.gc *{font-family:'Century Gothic',CenturyGothic,'Questrial',AppleGothic,sans-serif}
 .gh-p .pr{background:#6b0000;border-color:#ff1a1a}.gh-p .pb{background:#2a3b66;border-color:#4f7bd8}.gh-p .pg{background:#173d0a;border-color:#62b82a}
 html[data-view=pc] .gh-t{font-size:24px}
-html[data-view=pc] .gh-ck{min-width:150px}html[data-view=pc] .gh-ck b{font-size:16px}html[data-view=pc] .gh-ck span{font-size:15px}
+html[data-view=pc] .gh-ck{min-width:150px}html[data-view=pc] .gh-bx b{font-size:16px}html[data-view=pc] .gh-ck span{font-size:15px}html[data-view=pc] .gh-t .gh-s{font-size:16px}html[data-view=pc] .gh-dt{min-width:130px}html[data-view=pc] .gh-dt .d1{font-size:14px}html[data-view=pc] .gh-dt .d2{font-size:28px}html[data-view=pc] .gh-dd summary,html[data-view=pc] .gh-dd>div span{font-size:13px}
 html[data-view=pc] .gh-p span{height:28px;font-size:13px}
 html[data-view=pc] .gh-p .pl{line-height:23px}
 .gz{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:2}
@@ -1917,11 +1932,13 @@ d.innerHTML=`<div class="c max-w-xl mx-auto text-sm" style="position:relative"><
 const chBtn=()=>`<button type="button" class="b w-full" style="margin:10px 0" onclick="G.hc=!G.hc;render()">${G.hc?'&#9660; Show Chart':'&#9650; Hide Chart'}</button>`;
 
 /* ---------- HEADER GRAFIK (format baru: judul 3 baris + legenda pil + kotak Checker) ---------- */
-function chHdrData(ct,mat,loc){const rows=[].concat(...ct.map(k=>k.rows)),
- lc=loc!=null?[loc||'-']:[...new Set(rows.map(i=>i.loc||'-'))],ck=[];rows.forEach(i=>[i.c1,i.c2].forEach(n=>{n=String(n||'').trim();if(n&&!ck.includes(n))ck.push(n)}));
- return{l:['DATA OUTPUT AMPERE WELDING','Date: '+dateTxt(),'Material: '+mat],lc,ck:ck.slice(0,6),cm:rows.some(i=>cmV(i)!=null)}}
-const chLoc=lc=>lc.length>3?lc.slice(0,3).concat('+'+(lc.length-3)):lc;
-function chHd(ct,mat,loc){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-t">${h.l.map(t=>`<div>${esc(t)}</div>`).join('')}</div><div class="gh-ck"><b>Checker:</b>${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}<i></i></div></div><div class="gh-p">${chLoc(h.lc).map(n=>`<span class="pl" title="${esc(n)}">${esc(n)}</span>`).join('')}</div>`}
+function dtParts(){const s=dateTxt();if(s=='Semua')return{a:'Semua',b:''};const m=s.match(/^(.*?)[\s,]*(\d{4})$/);return m&&m[1]?{a:m[1],b:m[2]}:{a:s,b:''}}
+function chHdrData(ct,mat,loc){const rows=[].concat(...ct.map(k=>k.rows)),ck=[],hl=loc!=null||!!G.loc,lr=loc!=null?loc:(G.loc||''),
+ lc=[...new Set(rows.map(i=>i.loc||'-'))];let mt=hl?matList().filter(m=>gData().some(i=>i.mat==m&&(i.loc||'')==lr)):[];if(hl&&!mt.length)mt=[mat];
+ rows.forEach(i=>[i.c1,i.c2].forEach(n=>{n=String(n||'').trim();if(n&&!ck.includes(n))ck.push(n)}));
+ return{t:'DATA OUTPUT AMPERE WELDING DOOR-ASSY D40D',sub:hl?'Lokasi: '+(lr||'-')+' - Material:':'Material: '+mat,kind:hl?'mat':'loc',pl:hl?mt:lc,lc,cur:mat,ck:ck.slice(0,6),cm:rows.some(i=>cmV(i)!=null),dt:dtParts()}}
+const chPills=h=>h.kind=='loc'?`<details class="gh-dd"><summary>${esc(h.pl.length>1?'Semua ('+h.pl.length+')':(h.pl[0]||'-'))}</summary><div>${h.pl.map(n=>`<span>${esc(n)}</span>`).join('')}</div></details>`:`<div class="gh-p">${h.pl.map(n=>`<span class="pl${n==h.cur?' cur':''}" title="${esc(n)}">${esc(n)}</span>`).join('')}</div>`;
+function chHd(ct,mat,loc){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-t"><div>${esc(h.t)}</div><div class="gh-s">${esc(h.sub)}</div>${chPills(h)}</div><div class="gh-r"><div class="gh-bx gh-dt"><b>Date:</b><span class="d1">${esc(h.dt.a)}</span>${h.dt.b?`<span class="d2">${esc(h.dt.b)}</span>`:''}</div><div class="gh-bx gh-ck"><b>Checker:</b>${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}<i></i></div></div></div>`}
 const chLg=(ct,mat,loc)=>`<div class="gh-p gh-lg"><span class="pr">Std Min</span><span class="pr">Std Max</span><span class="pb">Actual</span>${chHdrData(ct,mat,loc).cm?'<span class="pg">After C/M</span>':''}</div>`;
 function grafikView(){calInit();const a=gData(),v=a.map(i=>i.kA),n=v.length,LG=G.view=='loc'?locGroups(a):[];
 const S=(k,ph,o)=>`<select class="i" style="width:48%;display:inline-block" onchange="G.${k}=this.value;render()">${opts(o,G[k],ph)}</select>`;
@@ -1956,6 +1973,7 @@ function eqTS(e){clearTimeout(EQT);const t=e.touches[0],x=t.clientX,y=t.clientY;
 function eqSort(d){eqClose();ss={k:'main',d};G.tbl=true;render()}
 document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('#eqm'))eqClose()});
 document.addEventListener('scroll',eqClose,true);
+function gName(){let d=new Date();if(G.cal){const p=G.cal.split('-').map(Number);if(p.length==3&&p[0])d=new Date(p[0],p[1]-1,p[2])}return d.getDate()+'-'+['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][d.getMonth()]+'-'+String(d.getFullYear()).slice(2)}
 function stamp(){const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+'_'+z(d.getHours())+z(d.getMinutes())+z(d.getSeconds())}
 function mkDoc(){if(!window.jspdf){toast('Library PDF belum termuat');return null}const d=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),ot=d.text.bind(d);d.text=(t,...a)=>ot(Array.isArray(t)?t.map(tr):tr(String(t)),...a);return d}
 async function outPdf(doc,name,dl){const C=window.Capacitor&&window.Capacitor.Plugins;try{
@@ -1979,13 +1997,12 @@ const PW=1662,PH=1116,SC=1.8,CH=14,mats=matList().filter(m=>!sel||sel.includes(m
 (G.view=='loc'?locGroups(a,sel):mats.map(mt=>({mat:mt,loc:null,all:cats(a.filter(i=>i.mat==mt))}))).forEach(g=>{const mt=g.mat,all=g.all,pages=Math.max(1,Math.ceil(all.length/CH));for(let pg=0;pg<pages;pg++){
 const c2=document.createElement('canvas');draw(c2,true,mt,{W:PW,H:PH,sc:SC,loc:g.loc,sub:all.slice(pg*CH,(pg+1)*CH)});
 if(!first)doc.addPage();first=0;
-doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(37,99,235);doc.text('WMS - Grafik Arus Welding - '+(g.loc!=null?'Lokasi '+(g.loc||'-')+' - ':'')+'Material '+mt+(pages>1?' ('+(pg+1)+'/'+pages+')':''),10,9);
-doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(90);doc.text('Akun: '+U.id+'   Dibuat: '+new Date().toLocaleString(LC()),287,9,{align:'right'});
-doc.text('Equipment: '+mn+'   Lokasi: '+ln+'   Type: '+(G.type||'Semua')+'   Rentang: '+dtxt+'   '+stat,10,14);doc.setTextColor(0);
-doc.addImage(c2.toDataURL('image/jpeg',.92),'JPEG',10,17,277,186)}});
+doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(90);
+doc.text('Equipment: '+mn+'   Lokasi: '+ln+'   Type: '+(G.type||'Semua')+'   Rentang: '+dtxt+'   '+stat+(pages>1?'   Hal: '+(pg+1)+'/'+pages:''),10,9);doc.setTextColor(0);
+doc.addImage(c2.toDataURL('image/jpeg',.92),'JPEG',10,12,277,186)}});
 doc.addPage();doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(37,99,235);doc.text('Data Pengecekan',10,12);doc.setTextColor(0);doc.setFont('helvetica','normal');
 pdfTable(doc,20,[['Waktu',10,20],['Main',50,18],['Sub',85,24],['Material',130,14],['kA',160,8],['Standar (Master)',180,14],['Status',220,6],['After C/M (kA)',238,10],['Judge After',266,6]],[...a].sort((x,y)=>new Date(y.dt)-new Date(x.dt)).map(i=>{const s=stdOf(i),cv=cmV(i);return[new Date(i.dt).toLocaleString(LC()),i.main,i.sub+' '+i.subType,i.mat,f1(i.kA),f1(s.min)+'-'+f1(s.max),ok(i)?'OK':'NG',cv==null?'-':f1(cv),cv==null?'-':cmJv(i,cv)]}));
-await outPdf(doc,'WMS_Grafik_'+stamp()+'.pdf',dl)}
+await outPdf(doc,'WMS_Graph_'+gName()+'.pdf',dl)}
 const matList=()=>G.mat?[G.mat]:D.M.mats;
 function locGroups(a,sel){const ls=[...D.M.locs];a.forEach(i=>{const l=i.loc||'';if(!ls.includes(l))ls.push(l)});const out=[];ls.forEach(l=>{if(G.loc&&l!=G.loc)return;matList().filter(m=>!sel||sel.includes(m)).forEach(mt=>{const r=a.filter(i=>(i.loc||'')==l&&i.mat==mt);if(r.length)out.push({loc:l,mat:mt,all:cats(r)})})});return out}
 function stdOf(i){const m=mainBy(i.mid),s=subBy(m,i.sid),x=s&&s.mats.find(t=>t.mt==i.mat);return x?{min:x.min,max:x.max}:{min:i.min,max:i.max}}
@@ -2056,13 +2073,21 @@ function smoothLine(x,P,sc,T,base){const n=P.length;if(!n)return;const m=new Arr
  if(n>1){const g=x.createLinearGradient(0,T,0,base);g.addColorStop(0,'rgba(43,140,255,.45)');g.addColorStop(1,'rgba(43,140,255,0)');path();x.lineTo(P[n-1][0],base);x.lineTo(P[0][0],base);x.closePath();x.fillStyle=g;x.fill();
   path();x.strokeStyle='#2b8cff';x.lineWidth=4*sc;x.lineJoin='round';x.lineCap='round';x.setLineDash([]);x.stroke()}}
 /* Header di dalam gambar PDF: judul 3 baris, legenda pil, kotak Checker */
+/* Header di dalam gambar PDF: judul, baris Material/Lokasi + pil kecil, kotak Date dan Checker */
 function pdfHdr(x,h,W,sc){const rr=(X0,Y0,w,hh,r)=>{x.beginPath();x.moveTo(X0+r,Y0);x.arcTo(X0+w,Y0,X0+w,Y0+hh,r);x.arcTo(X0+w,Y0+hh,X0,Y0+hh,r);x.arcTo(X0,Y0+hh,X0,Y0,r);x.arcTo(X0,Y0,X0+w,Y0,r);x.closePath()};
- x.save();x.textAlign='left';x.fillStyle='#fff';x.font='bold '+17*sc+'px '+GF;h.l.forEach((t,i)=>x.fillText(t,10*sc,(20+i*21)*sc));
- const bw=150*sc,bx=W-bw-12*sc,rows=Math.max(1,h.ck.length),bh=(26+rows*17+6)*sc;rr(bx,8*sc,bw,bh,10*sc);x.fillStyle='#3b4a63';x.fill();x.strokeStyle='#4f7bd8';x.lineWidth=2.5*sc;x.stroke();
- x.save();rr(bx,8*sc,bw,bh,10*sc);x.clip();x.fillStyle='#4f7bd8';x.fillRect(bx,8*sc,bw,24*sc);x.restore();
- x.textAlign='center';x.fillStyle='#fff';x.font='bold '+14*sc+'px '+GF;x.fillText('Checker:',bx+bw/2,26*sc);x.font='bold '+13*sc+'px '+GF;(h.ck.length?h.ck:['-']).forEach((n,i)=>x.fillText(n,bx+bw/2,(46+i*17)*sc));
- const pill=(px,w,t,f,st)=>{rr(px,76*sc,w,24*sc,12*sc);x.fillStyle=f;x.fill();x.strokeStyle=st;x.lineWidth=2.5*sc;x.stroke();x.fillStyle='#fff';x.font='bold '+11*sc+'px '+GF;x.textAlign='center';x.fillText(t,px+w/2,92*sc)};
- let px=10*sc;chLoc(h.lc).forEach(n=>{const w=(n.length*7+30)*sc;pill(px,w,n,'#0b4a4a','#2dd4bf');px+=w+8*sc});x.restore()}
+ x.save();x.textAlign='left';
+ const bw=150*sc,dw=118*sc,gp=8*sc,rows=Math.max(1,h.ck.length),bh=Math.max(26+rows*17+6,70)*sc,cx=W-bw-12*sc,dx=cx-gp-dw,lim=dx-16*sc,hb=24*sc;
+ let fs=17;x.font='bold '+fs*sc+'px '+GF;while(fs>9&&x.measureText(h.t).width>lim-10*sc){fs-=.5;x.font='bold '+fs*sc+'px '+GF}
+ x.fillStyle='#fff';x.fillText(h.t,10*sc,20*sc);x.font='bold '+14*sc+'px '+GF;x.fillStyle='#cfd3da';x.fillText(h.sub,10*sc,40*sc);
+ const box=(bx,w,t)=>{rr(bx,8*sc,w,bh,10*sc);x.fillStyle='rgba(79,123,216,.22)';x.fill();x.save();rr(bx,8*sc,w,bh,10*sc);x.clip();x.fillStyle='rgba(79,123,216,.45)';x.fillRect(bx,8*sc,w,hb);x.fillStyle='#4f7bd8';x.fillRect(bx,8*sc+hb-1.25*sc,w,2.5*sc);x.restore();rr(bx,8*sc,w,bh,10*sc);x.strokeStyle='#4f7bd8';x.lineWidth=2.5*sc;x.stroke();x.textAlign='center';x.fillStyle='#fff';x.font='bold '+14*sc+'px '+GF;x.fillText(t,bx+w/2,26*sc)};
+ box(cx,bw,'Checker:');x.font='bold '+13*sc+'px '+GF;(h.ck.length?h.ck:['-']).forEach((n,i)=>x.fillText(n,cx+bw/2,(46+i*17)*sc));
+ box(dx,dw,'Date:');const bt=8*sc+hb,bH=bh-hb;x.fillStyle='#fff';
+ if(h.dt.b){x.font='bold '+12*sc+'px '+GF;x.fillText(h.dt.a,dx+dw/2,bt+bH*.4);x.font='bold '+24*sc+'px '+GF;x.fillText(h.dt.b,dx+dw/2,bt+bH*.86)}else{x.font='bold '+14*sc+'px '+GF;x.fillText(h.dt.a,dx+dw/2,bt+bH*.58)}
+ const ph=15*sc,rg=18*sc,pcap=Math.min(230*sc,lim-10*sc-14*sc);let px=10*sc,py=50*sc;
+ h.pl.forEach(n=>{let f=8.5;x.font='bold '+f*sc+'px '+GF;while(f>5.5&&x.measureText(n).width>pcap){f-=.25;x.font='bold '+f*sc+'px '+GF}
+  const w=x.measureText(n).width+14*sc;if(px>10*sc&&px+w>lim){px=10*sc;py+=rg}
+  const cu=h.kind=='mat'&&n==h.cur;rr(px,py,w,ph,ph/2);x.fillStyle=cu?'#2dd4bf':'#0b4a4a';x.fill();x.strokeStyle='#2dd4bf';x.lineWidth=1.5*sc;x.stroke();x.fillStyle=cu?'#06231f':'#fff';x.textAlign='center';x.fillText(n,px+w/2,py+ph/2+f*sc*.35);px+=w+4*sc});
+ x.restore()}
 function pdfLg(x,h,W,H,sc){const rr=(X0,Y0,w,hh,r)=>{x.beginPath();x.moveTo(X0+r,Y0);x.arcTo(X0+w,Y0,X0+w,Y0+hh,r);x.arcTo(X0+w,Y0+hh,X0,Y0+hh,r);x.arcTo(X0,Y0+hh,X0,Y0,r);x.arcTo(X0,Y0,X0+w,Y0,r);x.closePath()};
  const L=[['Std Min','#6b0000','#ff1a1a'],['Std Max','#6b0000','#ff1a1a'],['Actual','#2a3b66','#4f7bd8']].concat(h.cm?[['After C/M','#173d0a','#62b82a']]:[]),ws=L.map(a=>(a[0].length*7+30)*sc),tot=ws.reduce((u,v)=>u+v,0)+8*sc*(L.length-1);
  x.save();let px=(W-tot)/2;const y=H-32*sc;L.forEach((a,i)=>{rr(px,y,ws[i],24*sc,12*sc);x.fillStyle=a[1];x.fill();x.strokeStyle=a[2];x.lineWidth=2.5*sc;x.stroke();x.fillStyle='#fff';x.font='bold '+11*sc+'px '+GF;x.textAlign='center';x.fillText(a[0],px+ws[i]/2,y+16*sc);px+=ws[i]+8*sc});x.restore()}
