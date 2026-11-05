@@ -94,10 +94,10 @@ function awSigSet(r){try{const m=awSigMap();m[String(r.id)]=awSig(r);localStorag
 function awNeed(r){if(r.photo&&!r.photoId)return true;return awSigMap()[String(r.id)]!==awSig(r)}
 async function awUpsert(r){
   if(r.photo&&!r.photoId){try{await awPhotoUp(r)}catch(e){console.error("Foto gagal diunggah:",e);if(typeof toast==="function")toast("Foto gagal diunggah: "+((e&&e.message)||e))}}
-  const id=String(r.id),data=awRec(r);
+  const id=String(r.id),data=awRec(r),known=!!awSigMap()[id];
   await awRetry(async()=>{
-    try{await awDB.updateDocument(AW_DB,AW_TB,id,data)}
-    catch(e){if(e&&e.code==404)await awDB.createDocument(AW_DB,AW_TB,id,data);else throw e}
+    try{if(known)await awDB.updateDocument(AW_DB,AW_TB,id,data);else await awDB.createDocument(AW_DB,AW_TB,id,data)}
+    catch(e){if(known&&e&&e.code==404)await awDB.createDocument(AW_DB,AW_TB,id,data);else if(!known&&e&&e.code==409)await awDB.updateDocument(AW_DB,AW_TB,id,data);else throw e}
   });
   awSigSet(r);
 }
@@ -520,6 +520,23 @@ html[data-view=pc] #pdb .pdb-t{padding:14px 8px}
 html[data-view=pc] #pdb .pdb-t i{font-size:13px}
 /* ===== ZOOM GRAFIK ===== */
 .gc{position:relative}
+.c.gc{background:#141414!important;color:#fff;border-color:#262626!important;overflow:hidden}
+.gc .gz{position:static;justify-content:flex-end;margin:4px 2px 6px}
+.gc .gz button{width:32px;height:32px;border-radius:50%;background:#2a3b66;color:#fff;border:1.5px solid #4f7bd8}
+.gc .gz button:hover{background:#2563EB}
+.gh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.gh-t{min-width:0;font-weight:800;line-height:1.28;font-size:17px;color:#fff;word-break:break-word}
+.gh-t div{font-size:inherit}
+.gh-ck{flex:none;min-width:104px;max-width:42%;border:2.5px solid #4f7bd8;border-radius:12px;background:#3b4a63;overflow:hidden;text-align:center}
+.gh-ck b{display:block;background:#4f7bd8;color:#fff;font-size:13px;padding:3px 8px}
+.gh-ck span{display:block;color:#fff;font-weight:700;font-size:12px;padding:1px 8px;line-height:1.5}
+.gh-ck i{display:block;height:4px}
+.gh-p{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}
+.gh-p span{height:24px;padding:0 12px;border-radius:999px;border:2.5px solid;color:#fff;font-weight:700;font-size:11px;display:inline-flex;align-items:center}
+.gh-p .pr{background:#6b0000;border-color:#ff1a1a}.gh-p .pb{background:#2a3b66;border-color:#4f7bd8}.gh-p .pg{background:#173d0a;border-color:#62b82a}
+html[data-view=pc] .gh-t{font-size:24px}
+html[data-view=pc] .gh-ck{min-width:150px}html[data-view=pc] .gh-ck b{font-size:16px}html[data-view=pc] .gh-ck span{font-size:15px}
+html[data-view=pc] .gh-p span{height:28px;font-size:13px}
 .gz{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:2}
 .gz button{width:34px;height:34px;border-radius:10px;background:var(--bd);color:var(--tx);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .gz button:hover{background:#2563EB;color:#fff}
@@ -1626,7 +1643,7 @@ function puOpen(){const m=mainBy(F.main);if(!m)return;PUC=m.id;document.body.sty
 function puBadge(R,mat){const k=parseFloat(R.kA);if(isNaN(k))return'';const ok=k>=mat.min&&k<=mat.max;return`<span class="pu-b ${ok?'ok':'no'}">${ok?'OK':'NG'}</span>`}
 const puFs=n=>{const w=String(n).split(/[\s-]+/).reduce((a,x)=>Math.max(a,x.length),0);return w<=4?'f1':w<=6?'f2':w<=8?'f3':w<=10?'f4':'f5'};
 function puRowH(si,s,mat,mi,S){const R=puRow(S,s.id,mat.mt),d=R.saved,kk=s.id+'|'+mat.mt,ket=S.ket[kk]||'',ph=S.ph[kk]||'';
- return`<div class="pu-r"><div class="pu-rw"><label class="pu-ip${d?' lk':''}"><b class="pu-lb ${puFs(mat.mt)}" title="${esc(mat.mt)}">${esc(mat.mt).replace(/-/g,'-<wbr>')}</b><input id="puI_${si}_${mi}" type="number" step="0.1" inputmode="decimal" enterkeyhint="next" value="${esc(R.kA)}"${d?' readonly':''} oninput="puIn(${si},${mi},this)" onblur="puFmt(${si},${mi},this)" onkeydown="puEnter(event,${si},${mi})"><i>kA</i></label><span id="puB_${si}_${mi}" class="pu-bg">${puBadge(R,mat)}</span><button type="button" class="pu-ed" aria-label="Edit" style="display:${d?'flex':'none'}" onclick="puEdit(${si},${mi})">${PUI.ed}</button></div><div class="pu-std">std ${f1(mat.min)}-${f1(mat.max)} kA</div><div class="pu-er" id="puR_${si}_${mi}">${esc(R.err||'')}</div>${S.open[kk]?`<textarea id="puK_${si}_${mi}" class="pu-ta" rows="2" oninput="puKin(${si},${mi},this.value)" onchange="puApply(${si},${mi})" placeholder="Remarks ${esc(mat.mt)}">${esc(ket)}</textarea>`:''}${ph?`<div class="pu-th"><img src="${ph}" alt=""><button type="button" aria-label="Hapus foto" onclick="puPhDel(${si},${mi})">&times;</button></div>`:''}</div>`}
+ return`<div class="pu-r"><div class="pu-rw"><label class="pu-ip${d?' lk':''}"><b class="pu-lb ${puFs(mat.mt)}" title="${esc(mat.mt)}">${esc(mat.mt).replace(/-/g,'-<wbr>')}</b><input id="puI_${si}_${mi}" type="number" step="0.1" inputmode="decimal" enterkeyhint="next" value="${esc(R.kA)}"${d?' readonly':''} oninput="puIn(${si},${mi},this)" onblur="puFmt(${si},${mi},this);puBlur(${si},${mi})" onkeydown="puEnter(event,${si},${mi})"><i>kA</i></label><span id="puB_${si}_${mi}" class="pu-bg">${puBadge(R,mat)}</span><button type="button" class="pu-ed" aria-label="Edit" style="display:${d?'flex':'none'}" onclick="puEdit(${si},${mi})">${PUI.ed}</button></div><div class="pu-std">std ${f1(mat.min)}-${f1(mat.max)} kA</div><div class="pu-er" id="puR_${si}_${mi}">${esc(R.err||'')}</div>${S.open[kk]?`<textarea id="puK_${si}_${mi}" class="pu-ta" rows="2" oninput="puKin(${si},${mi},this.value)" onchange="puApply(${si},${mi})" placeholder="Remarks ${esc(mat.mt)}">${esc(ket)}</textarea>`:''}${ph?`<div class="pu-th"><img src="${ph}" alt=""><button type="button" aria-label="Hapus foto" onclick="puPhDel(${si},${mi})">&times;</button></div>`:''}</div>`}
 function puMenuH(si,s,S){const k=S.menu[0]=='k';return`<div class="pu-mn" id="puM_${si}"><div class="pu-mt">${k?TT('Remarks untuk material:','Remarks for material:'):TT('Foto untuk material:','Photo for material:')}</div>${s.mats.map((mat,mi)=>{const kk=s.id+'|'+mat.mt,has=k?S.ket[kk]:S.ph[kk];return k?`<button type="button" class="pu-mi" onclick="puPick(${si},${mi})"><span>${esc(mat.mt)}</span>${has?PUI.ck:''}</button>`:`<div class="pu-mi"><span>${esc(mat.mt)}${has?' '+PUI.ck:''}</span><span class="pu-mb"><button type="button" onclick="puPick(${si},${mi},'c')">${TT('Kamera','Camera')}</button><button type="button" onclick="puPick(${si},${mi},'g')">${TT('Galeri','Gallery')}</button></span></div>`}).join('')}</div>`}
 function puSec(m,si,S){const s=m.subs[si],hk=s.mats.some(x=>S.ket[s.id+'|'+x.mt]),hp=s.mats.some(x=>S.ph[s.id+'|'+x.mt]);
  return`<div class="pu-sec"><div class="pu-ph"><span class="pu-ty ${/^x/i.test(s.type)?'tx':'tc'}">${esc(s.type)}</span><span class="pu-nm">${esc(s.name)}</span></div>${s.mats.map((mat,mi)=>puRowH(si,s,mat,mi,S)).join('')}<div class="pu-ac"><button type="button" class="pu-ab k${hk?' on':''}" onclick="puMenu('k',${si})">${TT('Keterangan','Remarks')}</button><button type="button" class="pu-ab p${hp?' on':''}" aria-label="Foto" onclick="puMenu('p',${si})">${PUI.cm}</button></div>${S.menu&&S.menu[1]==si?puMenuH(si,s,S):''}<input type="file" id="puF_${si}" accept="image/*" capture="environment" hidden onchange="puPhoto(${si},this)"><input type="file" id="puG_${si}" accept="image/*" hidden onchange="puPhoto(${si},this)"></div>`}
@@ -1638,6 +1655,10 @@ function puDraw(){const m=mainBy(PUC);if(!m)return puHide();const S=puSt(m);let 
 function puFit(){requestAnimationFrame(()=>document.querySelectorAll('#pu .pu-ip').forEach(ip=>{const b=ip.querySelector('.pu-lb'),u=ip.querySelector('i');if(!b)return;const t=b.textContent,av=ip.clientWidth-20-8-72-(u?u.offsetWidth:0);if(av<=0)return;const m=document.createElement('span');m.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;font-weight:700;left:-9999px';m.textContent=t;document.body.appendChild(m);let f=13;m.style.fontSize=f+'px';while(f>8.5&&m.offsetWidth>av){f-=.5;m.style.fontSize=f+'px'}const ok=m.offsetWidth<=av;m.remove();b.style.fontSize=f+'px';b.style.maxWidth=av+'px';if(ok){b.classList.add('fit1');b.innerHTML=esc(t)}else b.classList.remove('fit1')}))}
 addEventListener('resize',()=>{if(document.getElementById('pu'))puFit()});
 function puIn(si,mi,el){const m=mainBy(PUC),s=m.subs[si],mat=s.mats[mi],R=puRow(puSt(m),s.id,mat.mt);R.kA=el.value;R.err='';const e=puId('puR',si,mi);if(e)e.textContent='';const b=puId('puB',si,mi);if(b)b.innerHTML=puBadge(R,mat)}
+function puMark(si,mi){const el=puId('puI',si,mi);if(!el)return;el.readOnly=true;const ip=el.closest('.pu-ip');if(ip)ip.classList.add('lk');const rw=el.closest('.pu-rw'),ed=rw&&rw.querySelector('.pu-ed');if(ed)ed.style.display='flex';const b=puId('puB',si,mi),m=mainBy(PUC);if(b&&m){const s=m.subs[si],mat=s.mats[mi];b.innerHTML=puBadge(puRow(puSt(m),s.id,mat.mt),mat)}}
+function puBlur(si,mi){const m=mainBy(PUC);if(!m||PUA)return;const s=m.subs[si],mat=s&&s.mats[mi];if(!mat)return;const R=puRow(puSt(m),s.id,mat.mt);if(R.saved||R.kA===''||isNaN(parseFloat(R.kA)))return;
+ if(R.kA===R.sv){R.saved=true;puMark(si,mi);return}
+ if(puDo(si,mi)){puMark(si,mi);const t=puStat(m);if(t[0]==t[1])puAuto()}}
 function puFmt(si,mi,el){if(el.readOnly)return;const n=parseFloat(el.value);if(isNaN(n))return;el.value=n.toFixed(1);puIn(si,mi,el)}
 function puDo(si,mi){const m=mainBy(PUC);if(!m)return false;const s=m.subs[si],mat=s.mats[mi],S=puSt(m),R=puRow(S,s.id,mat.mt);if(R.saved)return true;
  const k=parseFloat(R.kA);if(isNaN(k)){R.err=TT('Isi angka kA dulu','Enter the kA value first');return false}
@@ -1645,7 +1666,7 @@ function puDo(si,mi){const m=mainBy(PUC);if(!m)return false;const s=m.subs[si],m
  const kk=s.id+'|'+mat.mt,ket=S.ket[kk]||'',ph=S.ph[kk]||'',stt=k>=mat.min&&k<=mat.max?'OK':'NG';let r=R.rid&&D.insp.find(x=>x.id==R.rid),oldPid='';
  if(r){if(ph!==r.photo){oldPid=r.photoId||'';r.photo=ph;r.photoId=''}Object.assign(r,{kA:k,min:mat.min,max:mat.max,status:stt,ket:ket,loc:loc,editedBy:U.email||U.id,editedByName:(D.prof&&D.prof.name)||U.name||'',ea:Date.now()});puApR(r)}
  else{r={id:uid8(),dt:F.dt,mid:m.id,main:m.code,sid:s.id,sub:s.name,subType:s.type,mat:mat.mt,kA:k,min:mat.min,max:mat.max,status:stt,c1:F.c1||'',c2:F.c2||'',shift:F.shift||'',loc:loc,desc:F.desc||'',job:F.job||'',ket:ket,photo:ph,userId:U.id,userName:(D.prof&&D.prof.name)||U.name||'',userEmail:U.email||U.id,created:Date.now(),ap:'p'};D.insp.unshift(r);R.rid=r.id}
- R.kA=k.toFixed(1);R.sv=R.kA;R.saved=true;R.err='';save(true);cloudPut(r);puSync(r,oldPid);return true}
+ R.kA=k.toFixed(1);R.sv=R.kA;R.saved=true;R.err='';save();cloudPut(r);puSync(r,oldPid);return true}
 function puEnter(e,si,mi){if(e.key!='Enter')return;e.preventDefault();const m=mainBy(PUC);if(!m)return;const el=e.target;if(el.readOnly)return;const filled=String(el.value).trim()!=='';
  if(filled){puFmt(si,mi,el);puSave(si,mi)}
  const S=puSt(m),L=[];m.subs.forEach((s,a)=>s.mats.forEach((mat,b)=>L.push([a,b,puRow(S,s.id,mat.mt)])));const cur=L.findIndex(x=>x[0]==si&&x[1]==mi);
@@ -1663,18 +1684,19 @@ function puNext(m){if(PUC!==m.id)return;const i=D.mains.findIndex(x=>String(x.id
  const bx=document.querySelector('#pu .pu-bx');if(bx)bx.scrollTop=0;
  const S=puSt(n);let f=null;n.subs.forEach((s,si)=>s.mats.forEach((mat,mi)=>{if(!f&&!puRow(S,s.id,mat.mt).saved)f=[si,mi]}));
  const e=f&&puId('puI',f[0],f[1]);if(e){try{e.focus()}catch(x){}}}
-async function puAuto(){const m=mainBy(PUC);if(!m||PUA)return;PUA=1;
- try{await PUQ}catch(e){}
- const bad=PUERR||!!awCheck()||!navigator.onLine;PUERR=0;
- awSuccess(bad?TT('Tersimpan di perangkat','Saved on device'):TT('Update berhasil','Update successful'),bad?TT('Dikirim ke server lewat Upload Data','Sent to server via Upload Data'):TT('Data terkirim ke server','Data sent to server'));
- setTimeout(()=>{PUA=0;if(PUC===m.id&&!puDirty(m).length)puNext(m)},1200)}
+function puBgDone(){PUQ.then(()=>{const bad=PUERR||!!awCheck()||!navigator.onLine;PUERR=0;toast(bad?TT('Tersimpan di perangkat. Kirim lewat Upload Data','Saved on device. Send via Upload Data'):TT('Data terkirim ke server','Data sent to server'))}).catch(()=>{})}
+function puAuto(){const m=mainBy(PUC);if(!m||PUA)return;PUA=1;save(true);
+ awSuccess(TT('Tersimpan','Saved'),TT('Dikirim ke server di background','Sending to server in background'));puBgDone();
+ setTimeout(()=>{PUA=0;if(PUC===m.id&&!puDirty(m).length)puNext(m)},700)}
 function puSaveBtn(){const m=mainBy(PUC);if(!m||PUA)return;puSettle(m);let n=0,bad=0;puDirty(m).forEach(p=>{if(puDo(p[0],p[1]))n++;else bad++});puDraw();if(bad)return;
  const t=puStat(m);
  if(t[0]==t[1]){if(n){try{hap('ok')}catch(e){}puAuto()}else toast(TT('Belum ada data baru untuk disimpan','No new data to save'));return}
  if(!n&&!t[0])return toast(TT('Isi minimal satu field dulu','Fill in at least one field first'));
- PUA=1;awSuccess(TT('Tersimpan','Saved'),t[0]+' / '+t[1]+' '+TT('field terisi','fields filled'));setTimeout(()=>{PUA=0;if(PUC===m.id&&!puDirty(m).length)puNext(m)},1200)}
+ PUA=1;save(true);awSuccess(TT('Tersimpan','Saved'),t[0]+' / '+t[1]+' '+TT('field terisi','fields filled'));puBgDone();setTimeout(()=>{PUA=0;if(PUC===m.id&&!puDirty(m).length)puNext(m)},700)}
 const puApR=r=>{if(r.ap=='a'){r.ap='p';r.apBy=r.apName=r.apRole='';r.apAt=0}};
-function puSync(r,oldPid){PUQ=PUQ.then(async()=>{if(awCheck())return;try{if(oldPid&&awST){try{await awST.deleteFile(AW_BK,String(oldPid))}catch(e){}}await awUpsert(r)}catch(e){PUERR=1;console.error('Kirim data gagal:',e)}}).catch(()=>{})}
+let PUW=0,PUL=[],PUJ={};
+function puPump(){while(PUW<3&&PUL.length){const f=PUL.shift();PUW++;f().then(()=>{PUW--;puPump()})}}
+function puSync(r,oldPid){const id=String(r.id),prev=PUJ[id]||Promise.resolve(),job=async()=>{await prev;if(awCheck())return;try{if(oldPid&&awST){try{await awST.deleteFile(AW_BK,String(oldPid))}catch(e){}}await awUpsert(r)}catch(e){PUERR=1;console.error('Kirim data gagal:',e)}},p=new Promise(res=>{PUL.push(()=>job().catch(()=>{}).then(res))});PUJ[id]=p;PUQ=Promise.all([PUQ,p]).then(()=>{});puPump()}
 function puEdit(si,mi){const m=mainBy(PUC),s=m.subs[si],R=puRow(puSt(m),s.id,s.mats[mi].mt);R.saved=false;puDraw();const e=puId('puI',si,mi);if(e)e.focus()}
 function puMenu(t,si){const m=mainBy(PUC),S=puSt(m);S.menu=(S.menu&&S.menu[0]==t&&S.menu[1]==si)?null:[t,si];puDraw()}
 function puPick(si,mi,src){const m=mainBy(PUC),s=m.subs[si],S=puSt(m),k=S.menu&&S.menu[0]=='k';S.menu=null;
@@ -1687,7 +1709,7 @@ function puPhoto(si,el){const f=el.files&&el.files[0];el.value='';if(!f)return;c
 function puPhDel(si,mi){const m=mainBy(PUC),s=m.subs[si];puSt(m).ph[s.id+'|'+s.mats[mi].mt]='';puApply(si,mi);puDraw()}
 function puDirty(m){const S=puSt(m),o=[];m.subs.forEach((s,si)=>s.mats.forEach((mat,mi)=>{const R=puRow(S,s.id,mat.mt);if(!R.saved&&R.kA!==''&&R.kA!==R.sv&&!isNaN(parseFloat(R.kA)))o.push([si,mi])}));return o}
 function puClose(){const m=mainBy(PUC);if(!m)return puHide();if(document.getElementById('puC'))return;if(puDirty(m).length)return puAsk();puHide()}
-function puHide(){const m=mainBy(PUC);if(m){const S=puSt(m);Object.keys(S.rows).forEach(k=>{const R=S.rows[k];if(R.sv!==''&&!R.saved&&R.kA===R.sv)R.saved=true})}const o=document.getElementById('pu');if(o){o.id='puOut';o.classList.remove('pu-in');o.classList.add('pu-out');setTimeout(()=>o.remove(),220)}PUC=null;document.body.style.overflow='';render()}
+function puHide(){save(true);const m=mainBy(PUC);if(m){const S=puSt(m);Object.keys(S.rows).forEach(k=>{const R=S.rows[k];if(R.sv!==''&&!R.saved&&R.kA===R.sv)R.saved=true})}const o=document.getElementById('pu');if(o){o.id='puOut';o.classList.remove('pu-in');o.classList.add('pu-out');setTimeout(()=>o.remove(),220)}PUC=null;document.body.style.overflow='';render()}
 function puAsk(){const o=document.getElementById('pu'),m=mainBy(PUC);if(!o||!m)return;const d=document.createElement('div');d.id='puC';d.className='pu-cf';d.innerHTML=`<div class="pu-cb"><div class="pu-ct">${TT('Simpan dulu?','Save first?')}</div><p>${TT('Masih ada data yang belum disimpan di ','There is unsaved data in ')}${esc(m.code)}.</p><div class="pu-cr"><button type="button" class="pu-b0" onclick="puDiscard()">${TT('Buang','Discard')}</button><button type="button" class="pu-sv" onclick="puSaveAll()">${TT('Simpan','Save')}</button></div></div>`;o.appendChild(d)}
 function puDiscard(){const m=mainBy(PUC);if(m){const S=puSt(m);puDirty(m).forEach(p=>{const s=m.subs[p[0]],R=puRow(S,s.id,s.mats[p[1]].mt);R.kA=R.sv;R.err='';if(R.sv!=='')R.saved=true})}puHide()}
 function puSaveAll(){const m=mainBy(PUC);if(m){let ok=true;puDirty(m).forEach(p=>{if(!puDo(p[0],p[1]))ok=false});if(!ok){const c=document.getElementById('puC');if(c)c.remove();puDraw();return}}try{hap('ok')}catch(e){}puHide()}
@@ -1889,10 +1911,16 @@ d.innerHTML=`<div class="c max-w-xl mx-auto text-sm" style="position:relative"><
 /* ---------- GRAFIK ---------- */
 /* Tombol Show/Hide Chart (di bawah pie chart): menyembunyikan kartu grafik per material/lokasi */
 const chBtn=()=>`<button type="button" class="b w-full" style="margin:10px 0" onclick="G.hc=!G.hc;render()">${G.hc?'&#9660; Show Chart':'&#9650; Hide Chart'}</button>`;
+
+/* ---------- HEADER GRAFIK (format baru: judul 3 baris + legenda pil + kotak Checker) ---------- */
+function chHdrData(ct,mat,loc){const rows=[].concat(...ct.map(k=>k.rows)),mains=[...new Set(ct.map(k=>k.main))],mt=mains.length<=3?mains.join(', '):mains.slice(0,3).join(', ')+' +'+(mains.length-3),
+ locs=loc!=null?[loc||'-']:[...new Set(rows.map(i=>i.loc||'-'))],ck=[];rows.forEach(i=>[i.c1,i.c2].forEach(n=>{n=String(n||'').trim();if(n&&!ck.includes(n))ck.push(n)}));
+ return{l:['Data output ampere welding '+mt,'Date: '+dateTxt(),'Line: '+locs.join(', ')+' - '+mat],ck:ck.slice(0,6),cm:rows.some(i=>cmV(i)!=null)}}
+function chHd(ct,mat,loc){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-t">${h.l.map(t=>`<div>${esc(t)}</div>`).join('')}</div><div class="gh-ck"><b>Checker:</b>${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}<i></i></div></div><div class="gh-p"><span class="pr">Std Min</span><span class="pr">Std Max</span><span class="pb">Actual</span>${h.cm?'<span class="pg">After C/M</span>':''}</div>`}
 function grafikView(){calInit();const a=gData(),v=a.map(i=>i.kA),n=v.length,LG=G.view=='loc'?locGroups(a):[];
 const S=(k,ph,o)=>`<select class="i" style="width:48%;display:inline-block" onchange="G.${k}=this.value;render()">${opts(o,G[k],ph)}</select>`;
 return`<div class="flex justify-between items-center flex-wrap"><h2 class="font-bold py-3">Grafik</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;max-width:420px;position:relative"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap" onclick="gpOpen('dl')">&#11015; Unduh PDF ${GP.open&&GP.mode=='dl'?'&#9652;':'&#9662;'}</button><button class="b b2" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap" onclick="gpOpen('share')">Bagikan ke... ${GP.open&&GP.mode=='share'?'&#9652;':'&#9662;'}</button>${GP.open?`<div class="c" id="gpbox" style="position:absolute;left:0;top:100%;margin-top:6px;z-index:20;width:285px;max-height:75vh;overflow-y:auto;box-shadow:0 6px 20px #0004"><div class="flex justify-between items-center mb-1"><b class="text-sm">${GP.mode=='dl'?'Pilih grafik untuk diunduh':'Pilih grafik untuk dibagikan'}</b><button class="text-blue-600 text-xs" onclick="gpAll()">${GP.sel.length==matList().length?'Hapus semua':'Pilih semua'}</button></div>${matList().map((m,k)=>`<label class="flex items-center gap-2 py-1 text-sm" style="margin:0"><input type="checkbox" ${GP.sel.includes(m)?'checked':''} onchange="gpT(${k})"> Material ${esc(m)}</label>`).join('')}${gpSec('Equipment',eqList(),GP.eq,'gpTe',eqNm,'gpAllE','gpe')}${gpSec('Lokasi',lcList(),GP.lc,'gpTl',lcNm,'gpAllL','gpl')}<div class="flex gap-1 mt-2"><button class="b flex-1" style="padding:8px;font-size:13px" onclick="gpGo()">${GP.mode=='dl'?'Unduh':'Bagikan ke...'} (${GP.sel.length})</button><button class="b b2" style="padding:8px 10px;font-size:13px" onclick="GP.open=0;render()">Batal</button></div></div>`:''}</div></div><div class="c"><div class="flex gap-1 mb-2"><button class="b ${G.view=='loc'?'b2':''}" style="flex:1;padding:8px;font-size:13px" onclick="G.view='mat';render()">Per Material</button><button class="b ${G.view=='loc'?'':'b2'}" style="flex:1;padding:8px;font-size:13px" onclick="G.view='loc';render()">Per Lokasi</button></div><div id="cb_fltg" style="margin-top:2px"><button type="button" class="flex justify-between items-center w-full" style="text-align:left;cursor:pointer" onclick="bxTog('fltg')"><b>Filters${fltN(G,['s','main','type','mat','loc','st'])?' <span class="bg or">'+fltN(G,['s','main','type','mat','loc','st'])+'</span>':''}</b>${bxIcon(BXO.fltg)}</button><div class="cbb" style="display:${BXO.fltg?'block':'none'}"><input class=\"i\" placeholder=\"Cari...\" value=\"${esc(G.s||'')}\" onchange=\"G.s=this.value;render()\">${S('main','Semua Equipment',D.mains.map(m=>[m.id,m.code]))}${S('type','Semua Type',tyAll())}${S('mat','Semua Material',D.M.mats)}${S('loc','Semua Lokasi',D.M.locs)}${S('st','Semua Status',['OK','NG'])}${fltRst('G')}
-</div></div></div>${apBan(a)}${calView()}${pieCard(a)}${chBtn()}${G.hc?'':vwSw()}${`${G.hc?'':G.view=='loc'?(LG.length?LG.map((g,k)=>`${k==0||LG[k-1].loc!=g.loc?`<h3 class="font-bold pt-2">Lokasi: ${esc(g.loc||'-')}</h3>`:''}<div class="c gc">${gzBtn('cl',k)}<b>Material ${esc(g.mat)}</b> <span class="text-xs opacity-60">per equipment - ${esc(g.loc||'-')}</span><div style="overflow-x:auto"><canvas id="cl${k}" height="360"></canvas></div></div>`).join(''):'<div class="c text-sm opacity-60">Belum ada data untuk lokasi ini</div>'):matList().map((m,k)=>`<div class="c gc">${gzBtn('cv',k)}<b>Material ${esc(m)}</b> <span class="text-xs opacity-60">per equipment</span><div style="overflow-x:auto"><canvas id="cv${k}" height="360"></canvas></div></div>`).join('')}
+</div></div></div>${apBan(a)}${calView()}${pieCard(a)}${chBtn()}${G.hc?'':vwSw()}${`${G.hc?'':G.view=='loc'?(LG.length?LG.map((g,k)=>`${k==0||LG[k-1].loc!=g.loc?`<h3 class="font-bold pt-2">Lokasi: ${esc(g.loc||'-')}</h3>`:''}<div class="c gc">${chHd(g.all,g.mat,g.loc)}${gzBtn('cl',k)}<div style="overflow-x:auto"><canvas id="cl${k}" height="360"></canvas></div></div>`).join(''):'<div class="c text-sm opacity-60">Belum ada data untuk lokasi ini</div>'):matList().map((m,k)=>`<div class="c gc">${chHd(cats(gData().filter(i=>i.mat==m)),m,null)}${gzBtn('cv',k)}<div style="overflow-x:auto"><canvas id="cv${k}" height="360"></canvas></div></div>`).join('')}
 <button type="button" class="b w-full" style="margin:10px 0" onclick="G.tbl=!G.tbl;render()">${G.tbl?'&#9650; Hide Data':'&#9660; Show Data'}</button>${G.tbl?chkTbl(a):''}`}`}
 const tLang=(a,b)=>LG=='en'?b:a;
 /* Tabel Data Check (tab Grafik): No, Sub, Material, Judge (OK/NG), Approval (Pending/Approved), Remarks */
@@ -1943,7 +1971,7 @@ function gpGo(){const eq=GP.eq.filter(x=>eqList().includes(x)),lc=GP.lc.filter(x
 async function pdfGrafik(dl,sel,eq,lc){const doc=mkDoc();if(!doc)return;const a=gData().filter(i=>(!sel||sel.includes(i.mat))&&(!eq||eq.includes(i.mid))&&(!lc||lc.includes(i.loc||''))),v=a.map(i=>i.kA),n=v.length,mn=selTxt(eq,eqList(),eqNm),ln=selTxt(lc,lcList(),lcNm),dtxt=dateTxt();if(!n)return toast('Tidak ada data untuk filter yang dipilih');
 const PW=1662,PH=1116,SC=1.8,CH=14,mats=matList().filter(m=>!sel||sel.includes(m)),stat=n?'Jumlah: '+n+'   Rata-rata: '+(v.reduce((x,y)=>x+y,0)/n).toFixed(1)+'   Min: '+f1(Math.min(...v))+'   Max: '+f1(Math.max(...v))+'   %OK: '+Math.round(a.filter(ok).length/n*100)+'%':'';let first=1;
 (G.view=='loc'?locGroups(a,sel):mats.map(mt=>({mat:mt,loc:null,all:cats(a.filter(i=>i.mat==mt))}))).forEach(g=>{const mt=g.mat,all=g.all,pages=Math.max(1,Math.ceil(all.length/CH));for(let pg=0;pg<pages;pg++){
-const c2=document.createElement('canvas');draw(c2,true,mt,{W:PW,H:PH,sc:SC,sub:all.slice(pg*CH,(pg+1)*CH)});
+const c2=document.createElement('canvas');draw(c2,true,mt,{W:PW,H:PH,sc:SC,loc:g.loc,sub:all.slice(pg*CH,(pg+1)*CH)});
 if(!first)doc.addPage();first=0;
 doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(37,99,235);doc.text('WMS - Grafik Arus Welding - '+(g.loc!=null?'Lokasi '+(g.loc||'-')+' - ':'')+'Material '+mt+(pages>1?' ('+(pg+1)+'/'+pages+')':''),10,9);
 doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(90);doc.text('Akun: '+U.id+'   Dibuat: '+new Date().toLocaleString(LC()),287,9,{align:'right'});
@@ -1974,7 +2002,7 @@ function gzMenu(kind,k){document.querySelectorAll('.gzm').forEach(x=>x.remove())
 /* Fit to screen untuk grafik berdata sedikit: grafik diperbesar memenuhi lebar kotak & tinggi layar */
 function gzFt(key,n){const f=G.zf&&G.zf[key];if(!f)return null;if(f.n==n&&Math.abs(innerHeight-f.ih)<120)return f;delete G.zf[key];if(G.z)delete G.z[key];return null}
 function gzDraw(kind,k){const c=$('#'+kind+k);if(!c)return;
-  if(kind=='cl'){const g=locGroups(gData())[k];if(g){const key=gzKeyL(g),f=gzFt(key,g.all.length);draw(c,false,g.mat,{sub:g.all,z:gzOf(key),fit:f})}}
+  if(kind=='cl'){const g=locGroups(gData())[k];if(g){const key=gzKeyL(g),f=gzFt(key,g.all.length);draw(c,false,g.mat,{sub:g.all,loc:g.loc,z:gzOf(key),fit:f})}}
   else{const m=matList()[k];if(m){const n=cats(gData().filter(i=>i.mat==m)).length,key='m|'+m,f=gzFt(key,n);draw(c,false,m,{z:gzOf(key),fit:f})}}}
 function gzApply(kind,k,nz){const key=gzKey(kind,k);G.z=G.z||{};G.z[key]=nz;const c=$('#'+kind+k),w=c&&c.parentElement,r=w?(w.scrollLeft+w.clientWidth/2)/(c.width||1):0;gzDraw(kind,k);const c2=$('#'+kind+k);if(w&&c2)w.scrollLeft=Math.max(0,r*c2.width-w.clientWidth/2)}
 function gz(kind,k,d){if(gzLP){gzLP=false;return}const cur=gzOf(gzKey(kind,k)),nz=Math.min(3,Math.max(.1,Math.round((Math.round(cur*10)/10+d*.1)*100)/100));if(nz!=cur)gzApply(kind,k,nz);if(document.querySelector('.gzm'))gzMenu(kind,k)}
@@ -2010,8 +2038,25 @@ function cmBind(c){if(c._cmb)return;c._cmb=1;let dr=null;
   c.addEventListener('pointerup',up);c.addEventListener('pointercancel',()=>{dr=null})}
 function cmPop(id){const i=D.insp.find(x=>x.id==id);if(!i)return;document.querySelectorAll('.cmpop').forEach(x=>x.remove());const k=cmV(i),j=cmJv(i,k),s=stdOf(i),d=document.createElement('div');d.className='cmpop fixed inset-0 z-40 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.55)';d.onclick=e=>{if(e.target===d)d.remove()};
  d.innerHTML=`<div class="c text-sm" style="max-width:380px;width:100%;position:relative;margin:0"><button style="position:absolute;top:8px;right:12px;font-size:18px;line-height:1" onclick="this.closest('.cmpop').remove()">&#10005;</button><b style="font-size:16px">&#9650; Counter Measure</b><div class="text-xs opacity-70 mt-1">${esc(i.main)} - ${esc(i.sub)} &middot; ${esc(i.mat)}</div><div style="display:flex;gap:8px;align-items:center;margin-top:10px"><div style="flex:1;border:1px solid var(--bd);border-radius:10px;padding:8px"><div class="text-xs opacity-60">Before</div><b style="font-size:20px">${f1(i.kA)}</b> kA<div><span class="bg ${ok(i)?'ok':'no'}" style="margin:4px 0 0">${ok(i)?'OK':'NG'}</span></div></div><span style="font-size:18px;opacity:.6">&#10140;</span><div style="flex:1;border:1px solid #639922;border-radius:10px;padding:8px"><div class="text-xs opacity-60">After C/M</div><b style="font-size:20px">${k==null?'-':f1(k)}</b> kA<div>${cmJh(i,k)}</div></div></div><div class="text-xs opacity-60 mt-2">Std ${f1(s.min)} - ${f1(s.max)} kA</div><div class="mt-2"><div class="text-xs opacity-60">Tindakan</div><div style="white-space:pre-wrap;word-break:break-word">${esc(i.cm||'-')}</div></div>${cmSolved(i)?`<div style="margin-top:8px">${slvB()}</div>`:''}<button class="b w-full mt-3" onclick="this.closest('.cmpop').remove();detail('${i.id}')">Buka detail data</button></div>`;document.body.appendChild(d)}
+
+/* Kurva Aktual halus (monotone cubic, tidak overshoot) + isian gradasi ke bawah */
+function smoothLine(x,P,sc,T,base){const n=P.length;if(!n)return;const m=new Array(n).fill(0),d=[];
+ for(let i=0;i<n-1;i++){const dx=P[i+1][0]-P[i][0];d.push(dx>0?(P[i+1][1]-P[i][1])/dx:0)}
+ if(n>1){m[0]=d[0];m[n-1]=d[n-2];for(let i=1;i<n-1;i++)m[i]=d[i-1]*d[i]<=0?0:(d[i-1]+d[i])/2;
+  for(let i=0;i<n-1;i++){if(d[i]==0){m[i]=m[i+1]=0;continue}const a=m[i]/d[i],b=m[i+1]/d[i],q=a*a+b*b;if(q>9){const t=3/Math.sqrt(q);m[i]=t*a*d[i];m[i+1]=t*b*d[i]}}}
+ const path=()=>{x.beginPath();x.moveTo(P[0][0],P[0][1]);for(let i=0;i<n-1;i++){const dx=P[i+1][0]-P[i][0];x.bezierCurveTo(P[i][0]+dx/3,P[i][1]+m[i]*dx/3,P[i+1][0]-dx/3,P[i+1][1]-m[i+1]*dx/3,P[i+1][0],P[i+1][1])}};
+ if(n>1){const g=x.createLinearGradient(0,T,0,base);g.addColorStop(0,'rgba(43,140,255,.45)');g.addColorStop(1,'rgba(43,140,255,0)');path();x.lineTo(P[n-1][0],base);x.lineTo(P[0][0],base);x.closePath();x.fillStyle=g;x.fill();
+  path();x.strokeStyle='#2b8cff';x.lineWidth=4*sc;x.lineJoin='round';x.lineCap='round';x.setLineDash([]);x.stroke()}}
+/* Header di dalam gambar PDF: judul 3 baris, legenda pil, kotak Checker */
+function pdfHdr(x,h,W,sc){const rr=(X0,Y0,w,hh,r)=>{x.beginPath();x.moveTo(X0+r,Y0);x.arcTo(X0+w,Y0,X0+w,Y0+hh,r);x.arcTo(X0+w,Y0+hh,X0,Y0+hh,r);x.arcTo(X0,Y0+hh,X0,Y0,r);x.arcTo(X0,Y0,X0+w,Y0,r);x.closePath()};
+ x.save();x.textAlign='left';x.fillStyle='#fff';x.font='bold '+17*sc+'px sans-serif';h.l.forEach((t,i)=>x.fillText(t,10*sc,(20+i*21)*sc));
+ const bw=150*sc,bx=W-bw-12*sc,rows=Math.max(1,h.ck.length),bh=(26+rows*17+6)*sc;rr(bx,8*sc,bw,bh,10*sc);x.fillStyle='#3b4a63';x.fill();x.strokeStyle='#4f7bd8';x.lineWidth=2.5*sc;x.stroke();
+ x.save();rr(bx,8*sc,bw,bh,10*sc);x.clip();x.fillStyle='#4f7bd8';x.fillRect(bx,8*sc,bw,24*sc);x.restore();
+ x.textAlign='center';x.fillStyle='#fff';x.font='bold '+14*sc+'px sans-serif';x.fillText('Checker:',bx+bw/2,26*sc);x.font='bold '+13*sc+'px sans-serif';(h.ck.length?h.ck:['-']).forEach((n,i)=>x.fillText(n,bx+bw/2,(46+i*17)*sc));
+ const pill=(px,w,t,f,st)=>{rr(px,76*sc,w,24*sc,12*sc);x.fillStyle=f;x.fill();x.strokeStyle=st;x.lineWidth=2.5*sc;x.stroke();x.fillStyle='#fff';x.font='bold '+11*sc+'px sans-serif';x.textAlign='center';x.fillText(t,px+w/2,92*sc)};
+ let px=10*sc;[['Std Min','#6b0000','#ff1a1a'],['Std Max','#6b0000','#ff1a1a'],['Actual','#2a3b66','#4f7bd8']].concat(h.cm?[['After C/M','#173d0a','#62b82a']]:[]).forEach(a=>{const w=(a[0].length*7+30)*sc;pill(px,w,a[0],a[1],a[2]);px+=w+8*sc});x.restore()}
 function draw(c,lt,mat,o){if(!c)return;o=o||{};const sc0=o.sc||1,z=o.z||1,pr=!!o.W,ct=o.sub||cats(gData().filter(i=>i.mat==mat)),n=ct.length,p0=44*sc0,pcW=(!o.W&&document.documentElement.dataset.view=='pc'&&c.parentElement)?c.parentElement.clientWidth-2:0,fw=(o.fit&&c.parentElement)?c.parentElement.clientWidth-2:0,W0=fw>0?fw/z:(o.W||Math.max(400,n*60+p0+20,pcW)),H0=o.fit?o.fit.H0:(o.H||(document.documentElement.dataset.view=='pc'&&!o.W?420:360)),sc=sc0*z,p=44*sc,W=Math.round(W0*z),H=Math.round(H0*z);c.width=W;c.height=H;c.style.width=W+'px';c.style.maxWidth='none';
-const x=c.getContext('2d'),dk=!lt&&document.documentElement.dataset.theme=='dark',fg=dk?'#f1f5f9':'#0f172a';x.clearRect(0,0,W,H);c._h=[];c._rd=()=>draw(c,lt,mat,o);if(!lt&&!pr)cmBind(c);if(lt){x.fillStyle='#fff';x.fillRect(0,0,W,H)}x.fillStyle=fg;x.font=12*sc+'px sans-serif';
+const x=c.getContext('2d'),dk=true,fg='#fff';x.clearRect(0,0,W,H);c._h=[];c._rd=()=>draw(c,lt,mat,o);if(!lt&&!pr)cmBind(c);x.fillStyle='#141414';x.fillRect(0,0,W,H);x.fillStyle=fg;x.font=12*sc+'px sans-serif';
 {const ft=x.fillText.bind(x);x.fillText=(t,...a)=>ft(tr(String(t)),...a)}
 if(!n){x.fillText('Belum ada data '+mat,16,H/2);return}
 const lw=(W-p-10*sc)/n-6*sc,lf=(pr?9:10)*sc,lh=lf*1.15;
@@ -2019,14 +2064,14 @@ const wrapT=(t,w)=>{const ws=String(t||'').split(/\s+/).filter(Boolean),o2=[];le
 const clampL=(a,m)=>{if(a.length<=m)return a;const r=a.slice(0,m);let t=r[m-1];while(t&&x.measureText(t+'\u2026').width>lw)t=t.slice(0,-1);r[m-1]=t+'\u2026';return r};
 x.font='bold '+lf+'px sans-serif';const LB=ct.map(k=>({m:clampL(wrapT(k.main,lw),3)}));x.font=lf+'px sans-serif';LB.forEach((b,i)=>b.s=clampL(wrapT(ct[i].sub,lw),2));x.font=12*sc+'px sans-serif';
 const mL=Math.max(...LB.map(b=>b.m.length)),sL=Math.max(...LB.map(b=>b.s.length)),B=Math.round(10*sc+lf+(mL+sL-1)*lh+3*sc);
-const sd=ct.map(k=>stdOf(k.rows[0])),vs=[].concat(...ct.map(k=>k.rows.map(i=>i.kA)),...ct.map(k=>k.rows.map(cmV).filter(v=>v!=null)),sd.map(s=>s.min),sd.map(s=>s.max)),lo=Math.min(...vs)-1,hi=Math.max(...vs)+1,T=30*sc,Y=v=>H-B-(v-lo)/(hi-lo)*(H-B-T),cw=(W-p-10*sc)/n,X=i=>p+(i+.5)*cw,g=pr?8:4;
-x.strokeStyle='#8884';x.lineWidth=sc;for(let k=0;k<=g;k++){const v=lo+(hi-lo)*k/g;x.beginPath();x.moveTo(p,Y(v));x.lineTo(W-10*sc,Y(v));x.stroke();x.fillText(v.toFixed(1),2,Y(v)+4*sc)}
-x.strokeStyle=fg;x.beginPath();x.moveTo(p,H-B);x.lineTo(W-10*sc,H-B);x.stroke();
+const sd=ct.map(k=>stdOf(k.rows[0])),vs=[].concat(...ct.map(k=>k.rows.map(i=>i.kA)),...ct.map(k=>k.rows.map(cmV).filter(v=>v!=null)),sd.map(s=>s.min),sd.map(s=>s.max)),lo=Math.min(...vs)-1,hi=Math.max(...vs)+1,T=(pr?106*sc:0)+30*sc,Y=v=>H-B-(v-lo)/(hi-lo)*(H-B-T),cw=(W-p-10*sc)/n,X=i=>p+(i+.5)*cw,g=pr?8:4;
+x.strokeStyle='#4a4a4a';x.lineWidth=sc;x.setLineDash([5*sc,5*sc]);for(let k=0;k<=g;k++){const v=lo+(hi-lo)*k/g;x.beginPath();x.moveTo(p,Y(v));x.lineTo(W-10*sc,Y(v));x.stroke();x.fillStyle='#aaa';x.fillText(v.toFixed(1),2,Y(v)+4*sc)}x.fillStyle=fg;
+x.strokeStyle='#3d3d3d';x.setLineDash([3*sc,6*sc]);ct.forEach((k,i)=>{x.beginPath();x.moveTo(X(i),T);x.lineTo(X(i),H-B);x.stroke()});x.setLineDash([]);x.strokeStyle='#777';x.beginPath();x.moveTo(p,H-B);x.lineTo(W-10*sc,H-B);x.stroke();
 const pts=[];ct.forEach((k,i)=>{const s=sd[i],rs=[...k.rows].sort((u,w)=>new Date(u.dt)-new Date(w.dt)),st=Math.min(10*sc,cw*.8/rs.length);rs.forEach((o2,j)=>pts.push({px:X(i)+(j-(rs.length-1)/2)*st,o:o2,min:s.min,max:s.max}));
 {const b=LB[i],y0=H-B+4*sc+lf;x.save();x.textAlign='center';x.fillStyle=fg;x.font='bold '+lf+'px sans-serif';b.m.forEach((t,j)=>x.fillText(t,X(i),y0+j*lh));x.fillStyle=dk?'#cbd5e1':'#475569';x.font=lf+'px sans-serif';b.s.forEach((t,j)=>x.fillText(t,X(i),y0+(mL+j)*lh+3*sc));x.restore()}});
 const ln=(f,col,dash,w)=>{x.strokeStyle=col;x.lineWidth=w*sc;x.setLineDash(dash.map(d=>d*sc));x.lineJoin='round';x.beginPath();pts.forEach((q,j)=>{const yy=Y(f(q));j?x.lineTo(q.px,yy):x.moveTo(q.px,yy)});x.stroke();x.setLineDash([])};
-const ls=f=>{if(pts.length>1)return ln(f,'#dc2626',[8,5],3.5);const q=pts[0],yy=Y(f(q)),hw=Math.min(cw*.45,70*sc);x.strokeStyle='#dc2626';x.lineWidth=3.5*sc;x.setLineDash([8*sc,5*sc]);x.beginPath();x.moveTo(q.px-hw,yy);x.lineTo(q.px+hw,yy);x.stroke();x.setLineDash([])};ls(q=>q.min);ls(q=>q.max);ln(q=>q.o.kA,'#2563EB',[],4);
-pts.forEach(q=>{x.fillStyle='#2563EB';x.beginPath();x.arc(q.px,Y(q.o.kA),7*sc,0,7);x.fill();if(!ok(q.o)){x.strokeStyle='#dc2626';x.lineWidth=3*sc;x.beginPath();x.arc(q.px,Y(q.o.kA),11*sc,0,7);x.stroke()}
+const ls=f=>{if(pts.length>1)return ln(f,'#dc2626',[8,5],3.5);const q=pts[0],yy=Y(f(q)),hw=Math.min(cw*.45,70*sc);x.strokeStyle='#dc2626';x.lineWidth=3.5*sc;x.setLineDash([8*sc,5*sc]);x.beginPath();x.moveTo(q.px-hw,yy);x.lineTo(q.px+hw,yy);x.stroke();x.setLineDash([])};ls(q=>q.min);ls(q=>q.max);smoothLine(x,pts.map(q=>[q.px,Y(q.o.kA)]),sc,T,H-B);
+pts.forEach(q=>{const bad=!ok(q.o);x.fillStyle='#141414';x.strokeStyle=bad?'#ff3b3b':'#fff';x.lineWidth=3*sc;x.beginPath();x.arc(q.px,Y(q.o.kA),6*sc,0,7);x.fill();x.stroke();if(bad){x.strokeStyle='#dc2626';x.lineWidth=2.5*sc;x.beginPath();x.arc(q.px,Y(q.o.kA),11*sc,0,7);x.stroke()}
 x.fillStyle=fg;x.font='bold '+13*sc+'px sans-serif';x.textAlign='center';x.fillText(f1(q.o.kA),q.px,Y(q.o.kA)-13*sc)});
 if(!lt&&!pr)ngPulse(c,pts.filter(q=>!ok(q.o)).map(q=>({x:q.px,y:Y(q.o.kA)})),W,H,sc);
 const nb=[];pts.forEach(q=>{if(ok(q.o))return;const py=Y(q.o.kA),w=28*sc,h=16*sc;let up=q.o.kA>q.max,gap=(up?32:16)*sc,by=up?py-gap-h:py+gap;if(up&&by<2*sc){up=false;by=py+16*sc}
@@ -2055,11 +2100,9 @@ x.fillStyle='#fff';x.font='bold '+10*sc+'px sans-serif';x.textAlign='center';x.f
     x.fillStyle=sec;x.font=9*sc+'px sans-serif';x.fillText('After C/M',X0+16*sc,Y0+14*sc);
     const vt=f1(a.k),by2=Y0+h-6*sc;x.fillStyle=fg;x.font='bold '+16*sc+'px sans-serif';x.fillText(vt,X0+8*sc,by2);const tw=x.measureText(vt).width;
     x.fillStyle=sec;x.font=9*sc+'px sans-serif';x.fillText('kA',X0+11*sc+tw,by2);
-    const d=a.k-a.q.o.kA;x.textAlign='right';x.fillStyle=okk?'#15803d':'#b91c1c';x.font='bold '+9.5*sc+'px sans-serif';x.fillText((d>0?'+':'')+d.toFixed(1),X0+w-6*sc,by2);x.textAlign='left'}
+    const d=a.k-a.q.o.kA;x.textAlign='right';x.fillStyle=okk?'#4ade80':'#f87171';x.font='bold '+9.5*sc+'px sans-serif';x.fillText((d>0?'+':'')+d.toFixed(1),X0+w-6*sc,by2);x.textAlign='left'}
    else{x.fillStyle=fg;x.font='bold '+14*sc+'px sans-serif';x.fillText(f1(a.k),X0+7*sc,Y0+h/2+5*sc)}})}}
-x.textAlign='left';x.font=11*sc+'px sans-serif';x.fillStyle='#2563EB';x.fillText('Aktual',p,14*sc);x.fillStyle='#dc2626';x.fillText('Std Min',p+55*sc,14*sc);x.fillStyle='#dc2626';x.fillText('Std Max',p+120*sc,14*sc);
-x.beginPath();x.moveTo(p+196*sc,5*sc);x.lineTo(p+191*sc,13*sc);x.lineTo(p+201*sc,13*sc);x.closePath();x.fillStyle='#639922';x.fill();x.fillStyle='#3B6D11';x.fillText('After C/M',p+206*sc,14*sc);
-x.fillStyle=fg;x.fillText('kA - '+mat+' (callout NG = di luar standar)',p+275*sc,14*sc)}
+x.textAlign='left';if(pr)pdfHdr(x,chHdrData(ct,mat,o.loc!=null?o.loc:null),W,sc)}
 
 /* ---------- MASTER ---------- */
 const r2=v=>Math.round(v*100)/100,tgOf=x=>x.tg!=null&&x.tg!==''?x.tg:r2((x.min+x.max)/2),alOf=x=>x.al!=null&&x.al!==''?x.al:(tgOf(x)>0?r2((x.max-x.min)/2/tgOf(x)*100):'');
