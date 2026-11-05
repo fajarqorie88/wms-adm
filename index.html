@@ -4,7 +4,7 @@
 <title>WMS - Welding Monitoring System</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Questrial&display=swap">
 <meta name="theme-color" content="#2563EB">
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="WMS"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -533,10 +533,14 @@ html[data-view=pc] #pdb .pdb-t i{font-size:13px}
 .gh-ck i{display:block;height:4px}
 .gh-p{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}
 .gh-p span{height:24px;padding:0 12px;border-radius:999px;border:2.5px solid;color:#fff;font-weight:700;font-size:11px;display:inline-flex;align-items:center}
+.gh-p .pl{background:#0b4a4a;border-color:#2dd4bf;max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;line-height:19px}
+.gh-lg{justify-content:center;margin:6px 0 4px}
+.gc,.gc *{font-family:'Century Gothic',CenturyGothic,'Questrial',AppleGothic,sans-serif}
 .gh-p .pr{background:#6b0000;border-color:#ff1a1a}.gh-p .pb{background:#2a3b66;border-color:#4f7bd8}.gh-p .pg{background:#173d0a;border-color:#62b82a}
 html[data-view=pc] .gh-t{font-size:24px}
 html[data-view=pc] .gh-ck{min-width:150px}html[data-view=pc] .gh-ck b{font-size:16px}html[data-view=pc] .gh-ck span{font-size:15px}
 html[data-view=pc] .gh-p span{height:28px;font-size:13px}
+html[data-view=pc] .gh-p .pl{line-height:23px}
 .gz{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:2}
 .gz button{width:34px;height:34px;border-radius:10px;background:var(--bd);color:var(--tx);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .gz button:hover{background:#2563EB;color:#fff}
@@ -1913,14 +1917,16 @@ d.innerHTML=`<div class="c max-w-xl mx-auto text-sm" style="position:relative"><
 const chBtn=()=>`<button type="button" class="b w-full" style="margin:10px 0" onclick="G.hc=!G.hc;render()">${G.hc?'&#9660; Show Chart':'&#9650; Hide Chart'}</button>`;
 
 /* ---------- HEADER GRAFIK (format baru: judul 3 baris + legenda pil + kotak Checker) ---------- */
-function chHdrData(ct,mat,loc){const rows=[].concat(...ct.map(k=>k.rows)),mains=[...new Set(ct.map(k=>k.main))],mt=mains.length<=3?mains.join(', '):mains.slice(0,3).join(', ')+' +'+(mains.length-3),
- locs=loc!=null?[loc||'-']:[...new Set(rows.map(i=>i.loc||'-'))],ck=[];rows.forEach(i=>[i.c1,i.c2].forEach(n=>{n=String(n||'').trim();if(n&&!ck.includes(n))ck.push(n)}));
- return{l:['Data output ampere welding '+mt,'Date: '+dateTxt(),'Line: '+locs.join(', ')+' - '+mat],ck:ck.slice(0,6),cm:rows.some(i=>cmV(i)!=null)}}
-function chHd(ct,mat,loc){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-t">${h.l.map(t=>`<div>${esc(t)}</div>`).join('')}</div><div class="gh-ck"><b>Checker:</b>${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}<i></i></div></div><div class="gh-p"><span class="pr">Std Min</span><span class="pr">Std Max</span><span class="pb">Actual</span>${h.cm?'<span class="pg">After C/M</span>':''}</div>`}
+function chHdrData(ct,mat,loc){const rows=[].concat(...ct.map(k=>k.rows)),
+ lc=loc!=null?[loc||'-']:[...new Set(rows.map(i=>i.loc||'-'))],ck=[];rows.forEach(i=>[i.c1,i.c2].forEach(n=>{n=String(n||'').trim();if(n&&!ck.includes(n))ck.push(n)}));
+ return{l:['DATA OUTPUT AMPERE WELDING','Date: '+dateTxt(),'Material: '+mat],lc,ck:ck.slice(0,6),cm:rows.some(i=>cmV(i)!=null)}}
+const chLoc=lc=>lc.length>3?lc.slice(0,3).concat('+'+(lc.length-3)):lc;
+function chHd(ct,mat,loc){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-t">${h.l.map(t=>`<div>${esc(t)}</div>`).join('')}</div><div class="gh-ck"><b>Checker:</b>${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}<i></i></div></div><div class="gh-p">${chLoc(h.lc).map(n=>`<span class="pl" title="${esc(n)}">${esc(n)}</span>`).join('')}</div>`}
+const chLg=(ct,mat,loc)=>`<div class="gh-p gh-lg"><span class="pr">Std Min</span><span class="pr">Std Max</span><span class="pb">Actual</span>${chHdrData(ct,mat,loc).cm?'<span class="pg">After C/M</span>':''}</div>`;
 function grafikView(){calInit();const a=gData(),v=a.map(i=>i.kA),n=v.length,LG=G.view=='loc'?locGroups(a):[];
 const S=(k,ph,o)=>`<select class="i" style="width:48%;display:inline-block" onchange="G.${k}=this.value;render()">${opts(o,G[k],ph)}</select>`;
 return`<div class="flex justify-between items-center flex-wrap"><h2 class="font-bold py-3">Grafik</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;max-width:420px;position:relative"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap" onclick="gpOpen('dl')">&#11015; Unduh PDF ${GP.open&&GP.mode=='dl'?'&#9652;':'&#9662;'}</button><button class="b b2" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap" onclick="gpOpen('share')">Bagikan ke... ${GP.open&&GP.mode=='share'?'&#9652;':'&#9662;'}</button>${GP.open?`<div class="c" id="gpbox" style="position:absolute;left:0;top:100%;margin-top:6px;z-index:20;width:285px;max-height:75vh;overflow-y:auto;box-shadow:0 6px 20px #0004"><div class="flex justify-between items-center mb-1"><b class="text-sm">${GP.mode=='dl'?'Pilih grafik untuk diunduh':'Pilih grafik untuk dibagikan'}</b><button class="text-blue-600 text-xs" onclick="gpAll()">${GP.sel.length==matList().length?'Hapus semua':'Pilih semua'}</button></div>${matList().map((m,k)=>`<label class="flex items-center gap-2 py-1 text-sm" style="margin:0"><input type="checkbox" ${GP.sel.includes(m)?'checked':''} onchange="gpT(${k})"> Material ${esc(m)}</label>`).join('')}${gpSec('Equipment',eqList(),GP.eq,'gpTe',eqNm,'gpAllE','gpe')}${gpSec('Lokasi',lcList(),GP.lc,'gpTl',lcNm,'gpAllL','gpl')}<div class="flex gap-1 mt-2"><button class="b flex-1" style="padding:8px;font-size:13px" onclick="gpGo()">${GP.mode=='dl'?'Unduh':'Bagikan ke...'} (${GP.sel.length})</button><button class="b b2" style="padding:8px 10px;font-size:13px" onclick="GP.open=0;render()">Batal</button></div></div>`:''}</div></div><div class="c"><div class="flex gap-1 mb-2"><button class="b ${G.view=='loc'?'b2':''}" style="flex:1;padding:8px;font-size:13px" onclick="G.view='mat';render()">Per Material</button><button class="b ${G.view=='loc'?'':'b2'}" style="flex:1;padding:8px;font-size:13px" onclick="G.view='loc';render()">Per Lokasi</button></div><div id="cb_fltg" style="margin-top:2px"><button type="button" class="flex justify-between items-center w-full" style="text-align:left;cursor:pointer" onclick="bxTog('fltg')"><b>Filters${fltN(G,['s','main','type','mat','loc','st'])?' <span class="bg or">'+fltN(G,['s','main','type','mat','loc','st'])+'</span>':''}</b>${bxIcon(BXO.fltg)}</button><div class="cbb" style="display:${BXO.fltg?'block':'none'}"><input class=\"i\" placeholder=\"Cari...\" value=\"${esc(G.s||'')}\" onchange=\"G.s=this.value;render()\">${S('main','Semua Equipment',D.mains.map(m=>[m.id,m.code]))}${S('type','Semua Type',tyAll())}${S('mat','Semua Material',D.M.mats)}${S('loc','Semua Lokasi',D.M.locs)}${S('st','Semua Status',['OK','NG'])}${fltRst('G')}
-</div></div></div>${apBan(a)}${calView()}${pieCard(a)}${chBtn()}${G.hc?'':vwSw()}${`${G.hc?'':G.view=='loc'?(LG.length?LG.map((g,k)=>`${k==0||LG[k-1].loc!=g.loc?`<h3 class="font-bold pt-2">Lokasi: ${esc(g.loc||'-')}</h3>`:''}<div class="c gc">${chHd(g.all,g.mat,g.loc)}${gzBtn('cl',k)}<div style="overflow-x:auto"><canvas id="cl${k}" height="360"></canvas></div></div>`).join(''):'<div class="c text-sm opacity-60">Belum ada data untuk lokasi ini</div>'):matList().map((m,k)=>`<div class="c gc">${chHd(cats(gData().filter(i=>i.mat==m)),m,null)}${gzBtn('cv',k)}<div style="overflow-x:auto"><canvas id="cv${k}" height="360"></canvas></div></div>`).join('')}
+</div></div></div>${apBan(a)}${calView()}${pieCard(a)}${chBtn()}${G.hc?'':vwSw()}${`${G.hc?'':G.view=='loc'?(LG.length?LG.map((g,k)=>`${k==0||LG[k-1].loc!=g.loc?`<h3 class="font-bold pt-2">Lokasi: ${esc(g.loc||'-')}</h3>`:''}<div class="c gc">${chHd(g.all,g.mat,g.loc)}${gzBtn('cl',k)}<div style="overflow-x:auto"><canvas id="cl${k}" height="360"></canvas></div>${chLg(g.all,g.mat,g.loc)}</div>`).join(''):'<div class="c text-sm opacity-60">Belum ada data untuk lokasi ini</div>'):matList().map((m,k)=>`<div class="c gc">${chHd(cats(gData().filter(i=>i.mat==m)),m,null)}${gzBtn('cv',k)}<div style="overflow-x:auto"><canvas id="cv${k}" height="360"></canvas></div>${chLg(cats(gData().filter(i=>i.mat==m)),m,null)}</div>`).join('')}
 <button type="button" class="b w-full" style="margin:10px 0" onclick="G.tbl=!G.tbl;render()">${G.tbl?'&#9650; Hide Data':'&#9660; Show Data'}</button>${G.tbl?chkTbl(a):''}`}`}
 const tLang=(a,b)=>LG=='en'?b:a;
 /* Tabel Data Check (tab Grafik): No, Sub, Material, Judge (OK/NG), Approval (Pending/Approved), Remarks */
@@ -2040,6 +2046,8 @@ function cmPop(id){const i=D.insp.find(x=>x.id==id);if(!i)return;document.queryS
  d.innerHTML=`<div class="c text-sm" style="max-width:380px;width:100%;position:relative;margin:0"><button style="position:absolute;top:8px;right:12px;font-size:18px;line-height:1" onclick="this.closest('.cmpop').remove()">&#10005;</button><b style="font-size:16px">&#9650; Counter Measure</b><div class="text-xs opacity-70 mt-1">${esc(i.main)} - ${esc(i.sub)} &middot; ${esc(i.mat)}</div><div style="display:flex;gap:8px;align-items:center;margin-top:10px"><div style="flex:1;border:1px solid var(--bd);border-radius:10px;padding:8px"><div class="text-xs opacity-60">Before</div><b style="font-size:20px">${f1(i.kA)}</b> kA<div><span class="bg ${ok(i)?'ok':'no'}" style="margin:4px 0 0">${ok(i)?'OK':'NG'}</span></div></div><span style="font-size:18px;opacity:.6">&#10140;</span><div style="flex:1;border:1px solid #639922;border-radius:10px;padding:8px"><div class="text-xs opacity-60">After C/M</div><b style="font-size:20px">${k==null?'-':f1(k)}</b> kA<div>${cmJh(i,k)}</div></div></div><div class="text-xs opacity-60 mt-2">Std ${f1(s.min)} - ${f1(s.max)} kA</div><div class="mt-2"><div class="text-xs opacity-60">Tindakan</div><div style="white-space:pre-wrap;word-break:break-word">${esc(i.cm||'-')}</div></div>${cmSolved(i)?`<div style="margin-top:8px">${slvB()}</div>`:''}<button class="b w-full mt-3" onclick="this.closest('.cmpop').remove();detail('${i.id}')">Buka detail data</button></div>`;document.body.appendChild(d)}
 
 /* Kurva Aktual halus (monotone cubic, tidak overshoot) + isian gradasi ke bawah */
+try{document.fonts&&document.fonts.load('12px Questrial').then(()=>{try{if(typeof scr!=='undefined'&&scr=='app'&&tab=='grafik')render()}catch(e){}})}catch(e){}
+const GF="'Century Gothic',CenturyGothic,'Questrial',AppleGothic,sans-serif";
 function smoothLine(x,P,sc,T,base){const n=P.length;if(!n)return;const m=new Array(n).fill(0),d=[];
  for(let i=0;i<n-1;i++){const dx=P[i+1][0]-P[i][0];d.push(dx>0?(P[i+1][1]-P[i][1])/dx:0)}
  if(n>1){m[0]=d[0];m[n-1]=d[n-2];for(let i=1;i<n-1;i++)m[i]=d[i-1]*d[i]<=0?0:(d[i-1]+d[i])/2;
@@ -2049,35 +2057,38 @@ function smoothLine(x,P,sc,T,base){const n=P.length;if(!n)return;const m=new Arr
   path();x.strokeStyle='#2b8cff';x.lineWidth=4*sc;x.lineJoin='round';x.lineCap='round';x.setLineDash([]);x.stroke()}}
 /* Header di dalam gambar PDF: judul 3 baris, legenda pil, kotak Checker */
 function pdfHdr(x,h,W,sc){const rr=(X0,Y0,w,hh,r)=>{x.beginPath();x.moveTo(X0+r,Y0);x.arcTo(X0+w,Y0,X0+w,Y0+hh,r);x.arcTo(X0+w,Y0+hh,X0,Y0+hh,r);x.arcTo(X0,Y0+hh,X0,Y0,r);x.arcTo(X0,Y0,X0+w,Y0,r);x.closePath()};
- x.save();x.textAlign='left';x.fillStyle='#fff';x.font='bold '+17*sc+'px sans-serif';h.l.forEach((t,i)=>x.fillText(t,10*sc,(20+i*21)*sc));
+ x.save();x.textAlign='left';x.fillStyle='#fff';x.font='bold '+17*sc+'px '+GF;h.l.forEach((t,i)=>x.fillText(t,10*sc,(20+i*21)*sc));
  const bw=150*sc,bx=W-bw-12*sc,rows=Math.max(1,h.ck.length),bh=(26+rows*17+6)*sc;rr(bx,8*sc,bw,bh,10*sc);x.fillStyle='#3b4a63';x.fill();x.strokeStyle='#4f7bd8';x.lineWidth=2.5*sc;x.stroke();
  x.save();rr(bx,8*sc,bw,bh,10*sc);x.clip();x.fillStyle='#4f7bd8';x.fillRect(bx,8*sc,bw,24*sc);x.restore();
- x.textAlign='center';x.fillStyle='#fff';x.font='bold '+14*sc+'px sans-serif';x.fillText('Checker:',bx+bw/2,26*sc);x.font='bold '+13*sc+'px sans-serif';(h.ck.length?h.ck:['-']).forEach((n,i)=>x.fillText(n,bx+bw/2,(46+i*17)*sc));
- const pill=(px,w,t,f,st)=>{rr(px,76*sc,w,24*sc,12*sc);x.fillStyle=f;x.fill();x.strokeStyle=st;x.lineWidth=2.5*sc;x.stroke();x.fillStyle='#fff';x.font='bold '+11*sc+'px sans-serif';x.textAlign='center';x.fillText(t,px+w/2,92*sc)};
- let px=10*sc;[['Std Min','#6b0000','#ff1a1a'],['Std Max','#6b0000','#ff1a1a'],['Actual','#2a3b66','#4f7bd8']].concat(h.cm?[['After C/M','#173d0a','#62b82a']]:[]).forEach(a=>{const w=(a[0].length*7+30)*sc;pill(px,w,a[0],a[1],a[2]);px+=w+8*sc});x.restore()}
-function draw(c,lt,mat,o){if(!c)return;o=o||{};const sc0=o.sc||1,z=o.z||1,pr=!!o.W,ct=o.sub||cats(gData().filter(i=>i.mat==mat)),n=ct.length,p0=44*sc0,pcW=(!o.W&&document.documentElement.dataset.view=='pc'&&c.parentElement)?c.parentElement.clientWidth-2:0,fw=(o.fit&&c.parentElement)?c.parentElement.clientWidth-2:0,W0=fw>0?fw/z:(o.W||Math.max(400,n*60+p0+20,pcW)),H0=o.fit?o.fit.H0:(o.H||(document.documentElement.dataset.view=='pc'&&!o.W?420:360)),sc=sc0*z,p=44*sc,W=Math.round(W0*z),H=Math.round(H0*z);c.width=W;c.height=H;c.style.width=W+'px';c.style.maxWidth='none';
-const x=c.getContext('2d'),dk=true,fg='#fff';x.clearRect(0,0,W,H);c._h=[];c._rd=()=>draw(c,lt,mat,o);if(!lt&&!pr)cmBind(c);x.fillStyle='#141414';x.fillRect(0,0,W,H);x.fillStyle=fg;x.font=12*sc+'px sans-serif';
+ x.textAlign='center';x.fillStyle='#fff';x.font='bold '+14*sc+'px '+GF;x.fillText('Checker:',bx+bw/2,26*sc);x.font='bold '+13*sc+'px '+GF;(h.ck.length?h.ck:['-']).forEach((n,i)=>x.fillText(n,bx+bw/2,(46+i*17)*sc));
+ const pill=(px,w,t,f,st)=>{rr(px,76*sc,w,24*sc,12*sc);x.fillStyle=f;x.fill();x.strokeStyle=st;x.lineWidth=2.5*sc;x.stroke();x.fillStyle='#fff';x.font='bold '+11*sc+'px '+GF;x.textAlign='center';x.fillText(t,px+w/2,92*sc)};
+ let px=10*sc;chLoc(h.lc).forEach(n=>{const w=(n.length*7+30)*sc;pill(px,w,n,'#0b4a4a','#2dd4bf');px+=w+8*sc});x.restore()}
+function pdfLg(x,h,W,H,sc){const rr=(X0,Y0,w,hh,r)=>{x.beginPath();x.moveTo(X0+r,Y0);x.arcTo(X0+w,Y0,X0+w,Y0+hh,r);x.arcTo(X0+w,Y0+hh,X0,Y0+hh,r);x.arcTo(X0,Y0+hh,X0,Y0,r);x.arcTo(X0,Y0,X0+w,Y0,r);x.closePath()};
+ const L=[['Std Min','#6b0000','#ff1a1a'],['Std Max','#6b0000','#ff1a1a'],['Actual','#2a3b66','#4f7bd8']].concat(h.cm?[['After C/M','#173d0a','#62b82a']]:[]),ws=L.map(a=>(a[0].length*7+30)*sc),tot=ws.reduce((u,v)=>u+v,0)+8*sc*(L.length-1);
+ x.save();let px=(W-tot)/2;const y=H-32*sc;L.forEach((a,i)=>{rr(px,y,ws[i],24*sc,12*sc);x.fillStyle=a[1];x.fill();x.strokeStyle=a[2];x.lineWidth=2.5*sc;x.stroke();x.fillStyle='#fff';x.font='bold '+11*sc+'px '+GF;x.textAlign='center';x.fillText(a[0],px+ws[i]/2,y+16*sc);px+=ws[i]+8*sc});x.restore()}
+function draw(c,lt,mat,o){if(!c)return;o=o||{};const sc0=o.sc||1,z=o.z||1,pr=!!o.W,ct=o.sub||cats(gData().filter(i=>i.mat==mat)),n=ct.length,p0=44*sc0,pcW=(!o.W&&document.documentElement.dataset.view=='pc'&&c.parentElement)?c.parentElement.clientWidth-2:0,fw=(o.fit&&c.parentElement)?c.parentElement.clientWidth-2:0,W0=fw>0?fw/z:(o.W||Math.max(400,n*60+p0+20,pcW)),H0=o.fit?o.fit.H0:(o.H||(document.documentElement.dataset.view=='pc'&&!o.W?(pcW>0?Math.max(380,Math.min(520,Math.round(pcW*.43))):420):360)),sc=sc0*z,p=44*sc,W=Math.round(W0*z),H=Math.round(H0*z);c.width=W;c.height=H;c.style.width=W+'px';c.style.maxWidth='none';
+const x=c.getContext('2d'),dk=true,fg='#fff';x.clearRect(0,0,W,H);c._h=[];c._rd=()=>draw(c,lt,mat,o);if(!lt&&!pr)cmBind(c);x.fillStyle='#141414';x.fillRect(0,0,W,H);x.fillStyle=fg;x.font=12*sc+'px '+GF;
 {const ft=x.fillText.bind(x);x.fillText=(t,...a)=>ft(tr(String(t)),...a)}
 if(!n){x.fillText('Belum ada data '+mat,16,H/2);return}
 const lw=(W-p-10*sc)/n-6*sc,lf=(pr?9:10)*sc,lh=lf*1.15;
 const wrapT=(t,w)=>{const ws=String(t||'').split(/\s+/).filter(Boolean),o2=[];let cur='';for(const wd of ws){const t2=cur?cur+' '+wd:wd;if(x.measureText(t2).width<=w){cur=t2;continue}if(cur){o2.push(cur);cur=''}let pt='';for(const ch of wd){if(pt&&x.measureText(pt+ch).width>w){o2.push(pt);pt=ch}else pt+=ch}cur=pt}if(cur)o2.push(cur);return o2.length?o2:['-']};
 const clampL=(a,m)=>{if(a.length<=m)return a;const r=a.slice(0,m);let t=r[m-1];while(t&&x.measureText(t+'\u2026').width>lw)t=t.slice(0,-1);r[m-1]=t+'\u2026';return r};
-x.font='bold '+lf+'px sans-serif';const LB=ct.map(k=>({m:clampL(wrapT(k.main,lw),3)}));x.font=lf+'px sans-serif';LB.forEach((b,i)=>b.s=clampL(wrapT(ct[i].sub,lw),2));x.font=12*sc+'px sans-serif';
-const mL=Math.max(...LB.map(b=>b.m.length)),sL=Math.max(...LB.map(b=>b.s.length)),B=Math.round(10*sc+lf+(mL+sL-1)*lh+3*sc);
+x.font='bold '+lf+'px '+GF;const LB=ct.map(k=>({m:clampL(wrapT(k.main,lw),3)}));x.font=lf+'px '+GF;LB.forEach((b,i)=>b.s=clampL(wrapT(ct[i].sub,lw),2));x.font=12*sc+'px '+GF;
+const mL=Math.max(...LB.map(b=>b.m.length)),sL=Math.max(...LB.map(b=>b.s.length)),B=Math.round(10*sc+lf+(mL+sL-1)*lh+3*sc)+(pr?40*sc:0);
 const sd=ct.map(k=>stdOf(k.rows[0])),vs=[].concat(...ct.map(k=>k.rows.map(i=>i.kA)),...ct.map(k=>k.rows.map(cmV).filter(v=>v!=null)),sd.map(s=>s.min),sd.map(s=>s.max)),lo=Math.min(...vs)-1,hi=Math.max(...vs)+1,T=(pr?106*sc:0)+30*sc,Y=v=>H-B-(v-lo)/(hi-lo)*(H-B-T),cw=(W-p-10*sc)/n,X=i=>p+(i+.5)*cw,g=pr?8:4;
 x.strokeStyle='#4a4a4a';x.lineWidth=sc;x.setLineDash([5*sc,5*sc]);for(let k=0;k<=g;k++){const v=lo+(hi-lo)*k/g;x.beginPath();x.moveTo(p,Y(v));x.lineTo(W-10*sc,Y(v));x.stroke();x.fillStyle='#aaa';x.fillText(v.toFixed(1),2,Y(v)+4*sc)}x.fillStyle=fg;
 x.strokeStyle='#3d3d3d';x.setLineDash([3*sc,6*sc]);ct.forEach((k,i)=>{x.beginPath();x.moveTo(X(i),T);x.lineTo(X(i),H-B);x.stroke()});x.setLineDash([]);x.strokeStyle='#777';x.beginPath();x.moveTo(p,H-B);x.lineTo(W-10*sc,H-B);x.stroke();
 const pts=[];ct.forEach((k,i)=>{const s=sd[i],rs=[...k.rows].sort((u,w)=>new Date(u.dt)-new Date(w.dt)),st=Math.min(10*sc,cw*.8/rs.length);rs.forEach((o2,j)=>pts.push({px:X(i)+(j-(rs.length-1)/2)*st,o:o2,min:s.min,max:s.max}));
-{const b=LB[i],y0=H-B+4*sc+lf;x.save();x.textAlign='center';x.fillStyle=fg;x.font='bold '+lf+'px sans-serif';b.m.forEach((t,j)=>x.fillText(t,X(i),y0+j*lh));x.fillStyle=dk?'#cbd5e1':'#475569';x.font=lf+'px sans-serif';b.s.forEach((t,j)=>x.fillText(t,X(i),y0+(mL+j)*lh+3*sc));x.restore()}});
+{const b=LB[i],y0=H-B+4*sc+lf;x.save();x.textAlign='center';x.fillStyle=fg;x.font='bold '+lf+'px '+GF;b.m.forEach((t,j)=>x.fillText(t,X(i),y0+j*lh));x.fillStyle=dk?'#cbd5e1':'#475569';x.font=lf+'px '+GF;b.s.forEach((t,j)=>x.fillText(t,X(i),y0+(mL+j)*lh+3*sc));x.restore()}});
 const ln=(f,col,dash,w)=>{x.strokeStyle=col;x.lineWidth=w*sc;x.setLineDash(dash.map(d=>d*sc));x.lineJoin='round';x.beginPath();pts.forEach((q,j)=>{const yy=Y(f(q));j?x.lineTo(q.px,yy):x.moveTo(q.px,yy)});x.stroke();x.setLineDash([])};
 const ls=f=>{if(pts.length>1)return ln(f,'#dc2626',[8,5],3.5);const q=pts[0],yy=Y(f(q)),hw=Math.min(cw*.45,70*sc);x.strokeStyle='#dc2626';x.lineWidth=3.5*sc;x.setLineDash([8*sc,5*sc]);x.beginPath();x.moveTo(q.px-hw,yy);x.lineTo(q.px+hw,yy);x.stroke();x.setLineDash([])};ls(q=>q.min);ls(q=>q.max);smoothLine(x,pts.map(q=>[q.px,Y(q.o.kA)]),sc,T,H-B);
 pts.forEach(q=>{const bad=!ok(q.o);x.fillStyle='#141414';x.strokeStyle=bad?'#ff3b3b':'#fff';x.lineWidth=3*sc;x.beginPath();x.arc(q.px,Y(q.o.kA),6*sc,0,7);x.fill();x.stroke();if(bad){x.strokeStyle='#dc2626';x.lineWidth=2.5*sc;x.beginPath();x.arc(q.px,Y(q.o.kA),11*sc,0,7);x.stroke()}
-x.fillStyle=fg;x.font='bold '+13*sc+'px sans-serif';x.textAlign='center';x.fillText(f1(q.o.kA),q.px,Y(q.o.kA)-13*sc)});
+x.fillStyle=fg;x.font='bold '+13*sc+'px '+GF;x.textAlign='center';x.fillText(f1(q.o.kA),q.px,Y(q.o.kA)-13*sc)});
 if(!lt&&!pr)ngPulse(c,pts.filter(q=>!ok(q.o)).map(q=>({x:q.px,y:Y(q.o.kA)})),W,H,sc);
 const nb=[];pts.forEach(q=>{if(ok(q.o))return;const py=Y(q.o.kA),w=28*sc,h=16*sc;let up=q.o.kA>q.max,gap=(up?32:16)*sc,by=up?py-gap-h:py+gap;if(up&&by<2*sc){up=false;by=py+16*sc}
 const bx=Math.max(2,Math.min(W-w-2,q.px-w/2));nb.push([bx,by,w,h]);x.fillStyle='#dc2626';x.beginPath();x.rect(bx,by,w,h);x.fill();x.beginPath();
 if(up){x.moveTo(q.px-4*sc,by+h);x.lineTo(q.px+4*sc,by+h);x.lineTo(q.px,py-12*sc)}else{x.moveTo(q.px-4*sc,by);x.lineTo(q.px+4*sc,by);x.lineTo(q.px,py+12*sc)}x.closePath();x.fill();
-x.fillStyle='#fff';x.font='bold '+10*sc+'px sans-serif';x.textAlign='center';x.fillText('NG',bx+w/2,by+h*.75)});
+x.fillStyle='#fff';x.font='bold '+10*sc+'px '+GF;x.textAlign='center';x.fillText('NG',bx+w/2,by+h*.75)});
 /* After C/M: segitiga hijau + garis putus ke titik Before + kartu callout (kanan-bawah; kalau bentrok pindah ke atas, lalu versi ringkas) */
 {const ZG='#639922',ZD='#27500A',sec=dk?'#cbd5e1':'#475569',T0=24*sc,yB=H-B-2*sc,hit=(a,b)=>a[0]<b[0]+b[2]&&a[0]+a[2]>b[0]&&a[1]<b[1]+b[3]&&a[1]+a[3]>b[1],
  rr=(X0,Y0,w,h,r)=>{x.beginPath();x.moveTo(X0+r,Y0);x.arcTo(X0+w,Y0,X0+w,Y0+h,r);x.arcTo(X0+w,Y0+h,X0,Y0+h,r);x.arcTo(X0,Y0+h,X0,Y0,r);x.arcTo(X0,Y0,X0+w,Y0,r);x.closePath()},
@@ -2095,14 +2106,14 @@ x.fillStyle='#fff';x.font='bold '+10*sc+'px sans-serif';x.textAlign='center';x.f
    rr(X0,Y0,w,h,9*sc);x.fillStyle=dk?'#1e293b':'#fff';x.fill();x.strokeStyle=ZG;x.lineWidth=1.2*sc;x.stroke();
    const okk=a.jd=='OK',pw=(pl.cp?24:26)*sc,ph=(pl.cp?14:12)*sc,pyy=pl.cp?Y0+h/2-ph/2:Y0+4*sc;
    rr(X0+w-5*sc-pw,pyy,pw,ph,ph/2);x.fillStyle=okk?'#dcfce7':'#fee2e2';x.fill();
-   x.fillStyle=okk?'#15803d':'#b91c1c';x.font='bold '+(pl.cp?9:8.5)*sc+'px sans-serif';x.textAlign='center';x.fillText(a.jd,X0+w-5*sc-pw/2,pyy+(pl.cp?10.5:9.2)*sc);x.textAlign='left';
+   x.fillStyle=okk?'#15803d':'#b91c1c';x.font='bold '+(pl.cp?9:8.5)*sc+'px '+GF;x.textAlign='center';x.fillText(a.jd,X0+w-5*sc-pw/2,pyy+(pl.cp?10.5:9.2)*sc);x.textAlign='left';
    if(!pl.cp){x.beginPath();x.moveTo(X0+9*sc,Y0+8*sc);x.lineTo(X0+5.5*sc,Y0+14*sc);x.lineTo(X0+12.5*sc,Y0+14*sc);x.closePath();x.fillStyle=ZG;x.fill();
-    x.fillStyle=sec;x.font=9*sc+'px sans-serif';x.fillText('After C/M',X0+16*sc,Y0+14*sc);
-    const vt=f1(a.k),by2=Y0+h-6*sc;x.fillStyle=fg;x.font='bold '+16*sc+'px sans-serif';x.fillText(vt,X0+8*sc,by2);const tw=x.measureText(vt).width;
-    x.fillStyle=sec;x.font=9*sc+'px sans-serif';x.fillText('kA',X0+11*sc+tw,by2);
-    const d=a.k-a.q.o.kA;x.textAlign='right';x.fillStyle=okk?'#4ade80':'#f87171';x.font='bold '+9.5*sc+'px sans-serif';x.fillText((d>0?'+':'')+d.toFixed(1),X0+w-6*sc,by2);x.textAlign='left'}
-   else{x.fillStyle=fg;x.font='bold '+14*sc+'px sans-serif';x.fillText(f1(a.k),X0+7*sc,Y0+h/2+5*sc)}})}}
-x.textAlign='left';if(pr)pdfHdr(x,chHdrData(ct,mat,o.loc!=null?o.loc:null),W,sc)}
+    x.fillStyle=sec;x.font=9*sc+'px '+GF;x.fillText('After C/M',X0+16*sc,Y0+14*sc);
+    const vt=f1(a.k),by2=Y0+h-6*sc;x.fillStyle=fg;x.font='bold '+16*sc+'px '+GF;x.fillText(vt,X0+8*sc,by2);const tw=x.measureText(vt).width;
+    x.fillStyle=sec;x.font=9*sc+'px '+GF;x.fillText('kA',X0+11*sc+tw,by2);
+    const d=a.k-a.q.o.kA;x.textAlign='right';x.fillStyle=okk?'#4ade80':'#f87171';x.font='bold '+9.5*sc+'px '+GF;x.fillText((d>0?'+':'')+d.toFixed(1),X0+w-6*sc,by2);x.textAlign='left'}
+   else{x.fillStyle=fg;x.font='bold '+14*sc+'px '+GF;x.fillText(f1(a.k),X0+7*sc,Y0+h/2+5*sc)}})}}
+x.textAlign='left';if(pr){const hd=chHdrData(ct,mat,o.loc!=null?o.loc:null);pdfHdr(x,hd,W,sc);pdfLg(x,hd,W,H,sc)}}
 
 /* ---------- MASTER ---------- */
 const r2=v=>Math.round(v*100)/100,tgOf=x=>x.tg!=null&&x.tg!==''?x.tg:r2((x.min+x.max)/2),alOf=x=>x.al!=null&&x.al!==''?x.al:(tgOf(x)>0?r2((x.max-x.min)/2/tgOf(x)*100):'');
