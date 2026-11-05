@@ -1003,6 +1003,15 @@ html[data-view=pc] nav::-webkit-scrollbar-thumb{background:#38bdf8;border-radius
 
 .ms-pd{position:absolute;top:-8px;left:calc(50% + 62px);pointer-events:none;box-shadow:0 2px 6px #0004}
 
+/* ===== BAR AKSI MENEMPEL DI BAWAH (detail data & form edit) ===== */
+.ab-card{position:relative;padding:0!important;display:flex;flex-direction:column;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:hidden;margin-top:0;margin-bottom:0}
+.ab-hd{flex:none;padding:12px 12px 8px}
+.ab-bd{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 12px 12px}
+.ab-bar{flex:none;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--bd);background:var(--cd)}
+.ab-bar .b{flex:1 1 0;min-width:0;height:40px;margin:0;padding:0 8px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+.ab-bar .ab-s{flex:2 1 0}
+.ab-bar .ab-e{background:transparent!important;color:#2563EB;border:1.5px solid #2563EB;box-shadow:none}
+.ab-bar .ab-g{background:#16a34a!important;color:#fff;box-shadow:none}
 </style><style id="tw-static">/* Tailwind 3.4.17 preflight + utilitas yang dipakai (build manual, tanpa CDN) */
 *,::before,::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}
 html,:host{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}
@@ -1647,7 +1656,7 @@ const hd='<h1 class="text-lg font-extrabold py-3 text-blue-600">WELDING MONITORI
 if(F.step!=2)return hd+`<div class="c"><div class="flex justify-between items-start gap-2"><div><b>Langkah 1 - Info Pengecekan</b><div class="text-xs opacity-60 mb-2">Diisi sekali, berlaku untuk semua data yang diinput berikutnya.</div></div>${cpDrop()}</div>
 ${fld('Checker 1',`<select class="i" onchange="F.c1=this.value">${opts(D.M.checkers,F.c1,'- pilih -')}</select>`)}
 ${fld('Checker 2',`<select class="i" onchange="F.c2=this.value">${opts(D.M.checkers,F.c2,'- pilih -')}</select>`)}
-${fld('Tanggal & Waktu Pengecekan',`<input type="datetime-local" class="i" value="${F.dt}" oninput="F.dt=this.value">`)}
+${fld('Tanggal & Waktu Pengecekan',`<input id="fdt" type="datetime-local" class="i" value="${F.dt}" oninput="F.dt=this.value">`)}
 ${fld('Shift',`<select class="i" onchange="F.shift=this.value">${opts(D.M.shifts,F.shift,'- pilih -')}</select>`)}
 ${fld('Job',`<select class="i" onchange="F.job=this.value">${opts(D.M.jobs,F.job,D.M.jobs.length?'- pilih -':'- belum ada, tambah di Setting -')}</select>`)}
 ${fld('Deskripsi',`<select class="i" onchange="F.desc=this.value">${opts(D.M.descs,F.desc,'- pilih -')}</select>`)}
@@ -1754,7 +1763,17 @@ function cpDrop(){const a=cpGet(),on=a.findIndex(p=>cpSame(p,F));
 function cpTog(){CPO=!CPO;const m=document.getElementById('cpm');if(m)m.classList.toggle('show',CPO)}
 document.addEventListener('click',e=>{if(CPO&&!(e.target.closest&&e.target.closest('#cpd'))){CPO=false;const m=document.getElementById('cpm');if(m)m.classList.remove('show')}});
 function cpDel(i){const a=cpGet();a.splice(i,1);cpSet(a);render()}
-function cekOutput(){if(!F.c1)return toast('Pilih Checker 1');if(!F.dt)return toast('Isi tanggal pengecekan');if(!F.shift)return toast('Pilih Shift');saveProf();PUS={};F.step=2;scrollTo(0,0);render()}
+function cekOutput(){if(!F.c1)return toast('Pilih Checker 1');if(!F.dt)return toast('Isi tanggal pengecekan');if(!F.shift)return toast('Pilih Shift');const day=String(F.dt).slice(0,10),n=D.insp.filter(i=>dtIn(i.dt).slice(0,10)==day).length;if(day==ymd(new Date())||n>0)return tglAsk(day,n);cekGo()}
+function cekGo(){saveProf();PUS={};F.step=2;scrollTo(0,0);render()}
+/* Popup konfirmasi tanggal sebelum masuk Langkah 2: muncul kalau tanggal = hari ini atau di tanggal itu sudah ada data */
+function tglAsk(day,n){document.querySelectorAll('.tglq').forEach(x=>x.remove());
+ const dt=new Date(day+'T00:00:00'),lbl=isNaN(dt)?day:dt.toLocaleDateString(LC(),{weekday:'long',day:'numeric',month:'short',year:'numeric'}),td=day==ymd(new Date()),sub=[td?TT('Hari ini','Today'):'',F.shift||''].filter(Boolean).join(' - ');
+ const d=document.createElement('div');d.className='tglq fixed inset-0 z-50 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.6)';
+ d.onclick=e=>{if(e.target===d)tglBack()};
+ d.innerHTML=`<div class="c w-full" style="max-width:340px;margin:0;text-align:center;padding:18px"><div style="width:44px;height:44px;border-radius:50%;background:#fef3c7;color:#92400e;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px">&#128197;</div><b style="font-size:17px">${TT('Yakin tanggalnya sudah benar?','Is the date correct?')}</b><p class="text-sm opacity-70 mt-1 mb-3">${TT('Data akan tersimpan dengan tanggal di bawah ini.','Data will be saved with the date below.')}</p><div style="background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 12px"><div class="text-xs opacity-60">${TT('Tanggal pengecekan','Inspection date')}</div><div style="font-size:19px;font-weight:700;margin-top:2px">${esc(lbl)}</div>${sub?`<div class="text-xs" style="color:#b45309;margin-top:2px">${esc(sub)}</div>`:''}</div>${n>0?`<div class="text-xs mt-3 p-2" style="border-radius:8px;background:#fef3c7;color:#92400e;text-align:left">&#9888; ${TT('Sudah ada '+n+' data tersimpan di tanggal ini. Salah tanggal bisa membuat input ganda.',n+' records already saved on this date. A wrong date can cause duplicate input.')}</div>`:''}<div class="flex gap-2 mt-4"><button type="button" class="b b2 flex-1" onclick="tglBack()">${TT('Ubah tanggal','Change date')}</button><button type="button" class="b flex-1" onclick="tglGo()">${TT('Lanjutkan','Continue')}</button></div></div>`;
+ document.body.appendChild(d)}
+function tglGo(){document.querySelectorAll('.tglq').forEach(x=>x.remove());cekGo()}
+function tglBack(){document.querySelectorAll('.tglq').forEach(x=>x.remove());const e=$('#fdt');if(!e)return;try{e.scrollIntoView({block:'center',behavior:'smooth'})}catch(x){}e.focus();try{e.showPicker&&e.showPicker()}catch(x){}}
 let CBALL=true;
 const cbMv=()=>{try{return localStorage.getItem('wms_mv')=='grid'?'grid':'list'}catch(e){return'list'}};
 function cbView(v){try{localStorage.setItem('wms_mv',v)}catch(e){}cbFill(CBALL)}
@@ -1930,7 +1949,13 @@ function cmSave(id){const i=D.insp.find(x=>x.id==id);if(!i)return;if(!canEdit(i)
 function detail(id){const i=D.insp.find(x=>x.id==id),d=document.createElement('div');d.className='fixed inset-0 z-40 overflow-auto p-4';d.style.background='rgba(0,0,0,.7)';
 d.onclick=e=>{if(e.target.closest('button[onclick^="editInsp"]')||e.target.closest('.cmx'))return;d.remove()};
 const sv=stD(i),slv=cmSolved(i);
-d.innerHTML=`<div class="c max-w-xl mx-auto text-sm" style="position:relative"><button style="position:absolute;top:8px;right:12px;font-size:18px;line-height:1" onclick="this.closest('.fixed').remove()">&#10005;</button><div style="display:flex;align-items:center;gap:8px;padding-right:26px"><b style="flex:1;min-width:0;font-size:17px;line-height:1.25;word-break:break-word">${esc(i.main)} - ${esc(i.sub)}</b>${slv?`<span class="dtS"><span class="bg no old">NG</span><span class="ar">&#10140;</span><span class="bg ok nw">OK</span></span>`:`<span class="bg ${sv=='OK'?'ok':'no'}" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:0;border-radius:12px;font-size:20px;font-weight:800">${sv}</span>`}</div>${slv?`<div style="margin-top:6px">${slvB()}</div>`:''}<table class="w-full mt-2">${[['Waktu',new Date(i.dt).toLocaleString(LC())],['Type',i.subType],['Material',i.mat],['Standar',f1(i.min)+' - '+f1(i.max)],['Shift',i.shift],['Checker',i.c1+' / '+i.c2],['Lokasi',i.loc],['Description',i.desc],['Job',i.job],['Keterangan',i.ket],['Counter Measure','CM@@'],['Approval',apTxt(i)]].concat([['Diinput oleh',inpShow(i)]]).concat(isDev()&&i.ea?[['Terakhir diedit',(i.editedByName||i.editedBy||'-')+' - '+new Date(i.ea).toLocaleString(LC())]]:[]).map(r=>r[1]==='CM@@'?cmRow(i):`<tr><td class="opacity-60 py-1">${r[0]}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>${i.photo?`<img src="${i.photo}" class="w-full rounded-lg mt-2">`:''}${canEdit(i)?`<button class="b w-full mt-3" onclick="editInsp('${i.id}')">&#9998; Edit Data</button>`:''}${apBtn(i)}</div>`;trDom(d);document.body.appendChild(d)}
+d.innerHTML=`<div class="c max-w-xl mx-auto text-sm ab-card"><button style="position:absolute;top:8px;right:12px;z-index:2;font-size:18px;line-height:1" onclick="this.closest('.fixed').remove()">&#10005;</button><div class="ab-hd"><div style="display:flex;align-items:center;gap:8px;padding-right:26px"><b style="flex:1;min-width:0;font-size:17px;line-height:1.25;word-break:break-word">${esc(i.main)} - ${esc(i.sub)}</b>${slv?`<span class="dtS"><span class="bg no old">NG</span><span class="ar">&#10140;</span><span class="bg ok nw">OK</span></span>`:`<span class="bg ${sv=='OK'?'ok':'no'}" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:0;border-radius:12px;font-size:20px;font-weight:800">${sv}</span>`}</div>${slv?`<div style="margin-top:6px">${slvB()}</div>`:''}</div><div class="ab-bd"><table class="w-full mt-2">${[['Waktu',new Date(i.dt).toLocaleString(LC())],['Type',i.subType],['Material',i.mat],['Standar',f1(i.min)+' - '+f1(i.max)],['Shift',i.shift],['Checker',i.c1+' / '+i.c2],['Lokasi',i.loc],['Description',i.desc],['Job',i.job],['Keterangan',i.ket],['Counter Measure','CM@@'],['Approval',apTxt(i)]].concat([['Diinput oleh',inpShow(i)]]).concat(isDev()&&i.ea?[['Terakhir diedit',(i.editedByName||i.editedBy||'-')+' - '+new Date(i.ea).toLocaleString(LC())]]:[]).map(r=>r[1]==='CM@@'?cmRow(i):`<tr><td class="opacity-60 py-1">${r[0]}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>${i.photo?`<img src="${i.photo}" class="w-full rounded-lg mt-2">`:''}</div>${abBar(i)}</div>`;trDom(d);document.body.appendChild(d)}
+/* Bar aksi menempel di dasar kotak detail: Edit (penginput / Developer) + Approve atau Batalkan Approval (sesuai hak akses). Kosong = bar tidak tampil */
+function abBar(i){const a=[];
+ if(canEdit(i))a.push(`<button type="button" class="b ab-e" onclick="editInsp('${i.id}')">&#9998; Edit</button>`);
+ if(canAp1(i))a.push(`<button type="button" class="b ab-g" onclick="apDo('${i.id}')">&#10003; Approve</button>`);
+ else if(i.ap=='a'&&(isDev()||String(i.apBy||'').toLowerCase()==myEm()))a.push(`<button type="button" class="b b2" onclick="apUndo('${i.id}')">Batalkan Approval</button>`);
+ return a.length?`<div class="ab-bar">${a.join('')}</div>`:''}
 
 /* ---------- GRAFIK ---------- */
 /* Tombol Show/Hide Chart (di bawah pie chart): menyembunyikan kartu grafik per material/lokasi */
@@ -2574,7 +2599,8 @@ function edDraw(){
   let d=$('#edm');if(!d){d=document.createElement('div');d.id='edm';d.className='fixed inset-0 z-40 overflow-auto p-4';d.style.background='rgba(0,0,0,.7)';document.body.appendChild(d)}
   const m=mainBy(EF.mid),sub=subBy(m,EF.sid),sb=m?m.subs.map(x=>[x.id,`${x.name} (${x.type})`]):[],mt=sub?sub.mats.map(x=>x.mt):[];
   const sel=(k,list,ph)=>`<select class="i" onchange="EF.${k}=this.value">${opts(withCur(list,EF[k]),EF[k],ph||'- pilih -')}</select>`;
-  d.innerHTML=`<div class="c max-w-xl mx-auto text-sm"><div class="flex justify-between"><b>&#9998; Edit Data</b><button onclick="edClose()">&#10005;</button></div>
+  const ob=d.querySelector('.ab-bd'),st=ob?ob.scrollTop:0;
+  d.innerHTML=`<div class="c max-w-xl mx-auto text-sm ab-card"><div class="ab-hd"><div class="flex justify-between items-center"><b>&#9998; Edit Data</b><button onclick="edClose()" aria-label="Tutup">&#10005;</button></div></div><div class="ab-bd">
 ${fld('Tanggal & Waktu Pengecekan',`<input type="datetime-local" class="i" value="${esc(EF.dt)}" oninput="EF.dt=this.value">`)}
 ${fld('Main Equipment',`<select class="i" onchange="EF.mid=this.value;EF.sid='';EF.mat='';edDraw()">${opts(D.mains.map(x=>[x.id,x.code]),EF.mid,'- pilih -')}</select>`)}
 ${fld('Sub Equipment',`<select class="i" onchange="EF.sid=this.value;EF.mat='';edDraw()">${opts(sb,EF.sid,'- pilih -')}</select>`)}
@@ -2590,7 +2616,8 @@ ${fld('Keterangan',`<textarea class="i" rows="2" oninput="EF.ket=this.value">${e
 ${fld('Counter Measure',`<textarea class="i" rows="2" placeholder="Tindakan perbaikan / counter measure" oninput="EF.cm=this.value">${esc(EF.cm)}</textarea>`)}
 <label>Foto</label><div class="flex gap-2 my-1"><label class="b flex-1 text-center">Buka Kamera<input type="file" accept="image/*" capture="environment" hidden onchange="edPick(this.files[0])"></label><label class="b b2 flex-1 text-center">Pilih Galeri<input type="file" accept="image/*" hidden onchange="edPick(this.files[0])"></label></div>
 ${EF.photo?`<img src="${EF.photo}" style="max-height:260px" class="rounded-lg my-2"><button class="b bd" onclick="EF.photo='';EF.pc=1;edDraw()">Hapus Foto</button>`:''}
-<div class="flex gap-2 mt-3"><button id="edsv" class="b flex-1" onclick="edSave()">Simpan Perubahan</button><button class="b b2" onclick="edClose()">Batal</button></div></div>`;
+</div><div class="ab-bar"><button type="button" class="b b2" onclick="edClose()">Batal</button><button type="button" id="edsv" class="b ab-s" onclick="edSave()">Simpan Perubahan</button></div></div>`;
+  const nb=d.querySelector('.ab-bd');if(nb)nb.scrollTop=st;
   if(typeof trDom==='function')trDom(d)}
 function edEnter(e){if(e.key!='Enter')return;e.preventDefault();if(!EF)return;const m=mainBy(EF.mid),sub=subBy(m,EF.sid),mat=sub&&sub.mats.find(x=>x.mt==EF.mat);EF.kA=e.target.value;if(!mat)return toast('Pilih Main, Sub & Material dulu');if(isNaN(parseFloat(EF.kA)))return toast('Isi nilai Arus (kA)');kFmt(e.target,EF);e.target.blur();setTimeout(()=>{const b=$('#edsv');if(b)b.scrollIntoView({block:'center',behavior:'smooth'})},200)}
 function edPick(f){if(!f||!EF)return;compress(f,x=>{EF.photo=x;EF.pc=1;edDraw()})}
