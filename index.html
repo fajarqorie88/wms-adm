@@ -524,27 +524,30 @@ html[data-view=pc] #pdb .pdb-t i{font-size:13px}
 .gc .gz{position:static;justify-content:flex-end;margin:4px 2px 6px}
 .gc .gz button{width:32px;height:32px;border-radius:50%;background:#2a3b66;color:#fff;border:1.5px solid #4f7bd8}
 .gc .gz button:hover{background:#2563EB}
-.gh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
-.gh-t{flex:1 1 200px;min-width:0;font-weight:800;line-height:1.28;font-size:17px;color:#fff;word-break:break-word}
-.gh-t div{font-size:inherit}
-.gh-t .gh-s{font-size:13px;font-weight:700;color:#cfd3da;margin-top:2px}
+.gh{display:block}
+.gh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.gh-ti{flex:1;min-width:0;padding-top:4px;font-weight:800;line-height:1.28;font-size:17px;color:#fff;word-break:break-word}
+.gc .gh-top .gz{flex:none;margin:0}
+.gh-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-top:8px}
+.gh-t{flex:1 1 150px;min-width:0;color:#fff}
+.gh-t .gh-s{font-size:13px;font-weight:700;color:#cfd3da;line-height:1.28}
 .gh-r{display:flex;gap:8px;align-items:stretch;flex:none}
-.gh-bx{flex:none;min-width:92px;border:2.5px solid #4f7bd8;border-radius:12px;background:rgba(79,123,216,.22);overflow:hidden;text-align:center;display:flex;flex-direction:column}
-.gh-bx b{display:block;background:rgba(79,123,216,.45);border-bottom:2.5px solid #4f7bd8;color:#fff;font-size:13px;padding:3px 8px}
-.gh-ck{min-width:104px;max-width:42%}
-.gh-ck span{display:block;color:#fff;font-weight:700;font-size:12px;padding:1px 8px;line-height:1.5}
-.gh-ck i{display:block;height:4px}
-.gh-dt{min-width:92px;justify-content:center}
-.gh-dt .d1{display:block;color:#fff;font-weight:700;font-size:11px;padding:6px 6px 0;line-height:1.2}
-.gh-dt .d2{display:block;color:#fff;font-weight:800;font-size:20px;padding:0 6px 6px;line-height:1.15}
-.gh-dd{margin:8px 0 2px;display:block;font-weight:700}
+.gh-bx{flex:none;width:96px;box-sizing:border-box;border:2.5px solid #4f7bd8;border-radius:12px;background:rgba(79,123,216,.22);overflow:hidden;text-align:center;display:flex;flex-direction:column}
+.gh-bx b{display:block;background:rgba(79,123,216,.45);border-bottom:2.5px solid #4f7bd8;color:#fff;font-size:13px;padding:3px 4px}
+.gh-bd{flex:1;display:flex;flex-direction:column;justify-content:center;padding:3px 4px}
+.gh-bd span{display:block;color:#fff;font-weight:700}
+.gh-ck .gh-bd span{font-size:11px;line-height:1.35}
+.gh-dt .d1{font-size:11px;line-height:1.2}
+.gh-dt .d2{font-size:20px;font-weight:800;line-height:1.15}
+.gh-dd{position:relative;display:block;height:24px;margin:8px 0 2px;font-weight:700}
 .gh-dd summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 12px;border-radius:999px;border:2.5px solid #2dd4bf;background:#0b4a4a;color:#fff;font-size:11px;max-width:100%;box-sizing:border-box}
 .gh-dd summary::-webkit-details-marker{display:none}
 .gh-dd summary::after{content:'\25BE'}
 .gh-dd[open] summary::after{content:'\25B4'}
-.gh-dd>div{margin-top:4px;border:2.5px solid #2dd4bf;background:#0b4a4a;border-radius:14px;padding:2px 12px;max-height:150px;overflow-y:auto}
-.gh-dd>div span{display:block;color:#fff;font-size:11px;padding:5px 0;border-bottom:.5px solid rgba(45,212,191,.25)}
+.gh-dd>div{position:absolute;left:0;top:28px;z-index:6;min-width:200px;max-width:90vw;max-height:170px;overflow-y:auto;border:2px solid #2dd4bf;background:rgba(11,74,74,.45);border-radius:14px;padding:2px 12px;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.gh-dd>div span{display:block;cursor:pointer;color:#fff;font-size:11px;padding:6px 0;border-bottom:.5px solid rgba(45,212,191,.25);text-shadow:0 0 3px #000,0 0 6px #000}
 .gh-dd>div span:last-child{border-bottom:0}
+.gh-dd>div span.on{color:#5eead4}
 .gh-p{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}
 .gh-p span{height:24px;padding:0 12px;border-radius:999px;border:2.5px solid;color:#fff;font-weight:700;font-size:11px;display:inline-flex;align-items:center}
 .gh-p .pl.cur{background:#2dd4bf;border-color:#2dd4bf;color:#06231f}
@@ -552,8 +555,10 @@ html[data-view=pc] #pdb .pdb-t i{font-size:13px}
 .gh-lg{justify-content:center;margin:6px 0 4px}
 .gc,.gc *{font-family:'Century Gothic',CenturyGothic,'Questrial',AppleGothic,sans-serif}
 .gh-p .pr{background:#6b0000;border-color:#ff1a1a}.gh-p .pb{background:#2a3b66;border-color:#4f7bd8}.gh-p .pg{background:#173d0a;border-color:#62b82a}
-html[data-view=pc] .gh-t{font-size:24px}
-html[data-view=pc] .gh-ck{min-width:150px}html[data-view=pc] .gh-bx b{font-size:16px}html[data-view=pc] .gh-ck span{font-size:15px}html[data-view=pc] .gh-t .gh-s{font-size:16px}html[data-view=pc] .gh-dt{min-width:130px}html[data-view=pc] .gh-dt .d1{font-size:14px}html[data-view=pc] .gh-dt .d2{font-size:28px}html[data-view=pc] .gh-dd summary,html[data-view=pc] .gh-dd>div span{font-size:13px}
+html[data-view=pc] .gh-ti{font-size:24px}
+html[data-view=pc] .gh-t .gh-s{font-size:16px}
+html[data-view=pc] .gh-bx{width:130px}html[data-view=pc] .gh-bx b{font-size:16px}html[data-view=pc] .gh-ck .gh-bd span{font-size:14px}html[data-view=pc] .gh-dt .d1{font-size:14px}html[data-view=pc] .gh-dt .d2{font-size:28px}
+html[data-view=pc] .gh-dd summary,html[data-view=pc] .gh-dd>div span{font-size:13px}
 html[data-view=pc] .gh-p span{height:28px;font-size:13px}
 html[data-view=pc] .gh-p .pl{line-height:23px}
 .gz{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:2}
@@ -1936,14 +1941,17 @@ function dtParts(){const s=dateTxt();if(s=='Semua')return{a:'Semua',b:''};const 
 function chHdrData(ct,mat,loc){const rows=[].concat(...ct.map(k=>k.rows)),ck=[],hl=loc!=null||!!G.loc,lr=loc!=null?loc:(G.loc||''),
  lc=[...new Set(rows.map(i=>i.loc||'-'))];let mt=hl?matList().filter(m=>gData().some(i=>i.mat==m&&(i.loc||'')==lr)):[];if(hl&&!mt.length)mt=[mat];
  rows.forEach(i=>[i.c1,i.c2].forEach(n=>{n=String(n||'').trim();if(n&&!ck.includes(n))ck.push(n)}));
- return{t:'DATA OUTPUT AMPERE WELDING DOOR-ASSY D40D',sub:hl?'Lokasi: '+(lr||'-')+' - Material:':'Material: '+mat,kind:hl?'mat':'loc',pl:hl?mt:lc,lc,cur:mat,ck:ck.slice(0,6),cm:rows.some(i=>cmV(i)!=null),dt:dtParts()}}
-const chPills=h=>h.kind=='loc'?`<details class="gh-dd"><summary>${esc(h.pl.length>1?'Semua ('+h.pl.length+')':(h.pl[0]||'-'))}</summary><div>${h.pl.map(n=>`<span>${esc(n)}</span>`).join('')}</div></details>`:`<div class="gh-p">${h.pl.map(n=>`<span class="pl${n==h.cur?' cur':''}" title="${esc(n)}">${esc(n)}</span>`).join('')}</div>`;
-function chHd(ct,mat,loc){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-t"><div>${esc(h.t)}</div><div class="gh-s">${esc(h.sub)}</div>${chPills(h)}</div><div class="gh-r"><div class="gh-bx gh-dt"><b>Date:</b><span class="d1">${esc(h.dt.a)}</span>${h.dt.b?`<span class="d2">${esc(h.dt.b)}</span>`:''}</div><div class="gh-bx gh-ck"><b>Checker:</b>${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}<i></i></div></div></div>`}
+ return{t:'DATA OUTPUT AMPERE WELDING DOOR-ASSY D40D',sub:hl?'Lokasi: '+(lr||'-')+' - Material:':'Material: '+mat,hl,lr,kind:hl?'mat':'loc',pl:hl?mt:lc,lc,cur:mat,ck:ck.slice(0,6),cm:rows.some(i=>cmV(i)!=null),dt:dtParts()}}
+const lcAll=()=>{const ls=[...D.M.locs];D.insp.forEach(i=>{const l=i.loc||'';if(l&&!ls.includes(l))ls.push(l)});return ls};
+function gSetLoc(k){G.loc=k<0?'':(lcAll()[k]||'');render()}
+document.addEventListener('click',e=>document.querySelectorAll('.gh-dd[open]').forEach(d=>{if(!d.contains(e.target))d.removeAttribute('open')}));
+const chDd=h=>`<details class="gh-dd"><summary>${esc(h.hl?(h.lr||'-'):'Semua Lokasi')}</summary><div><span class="${h.hl?'':'on'}" onclick="gSetLoc(-1)">Semua Lokasi</span>${lcAll().map((n,k)=>`<span class="${h.hl&&n==h.lr?'on':''}" onclick="gSetLoc(${k})">${esc(n)}</span>`).join('')}</div></details>`;
+function chHd(ct,mat,loc,zb){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-top"><div class="gh-ti">${esc(h.t)}</div>${zb||''}</div><div class="gh-row"><div class="gh-t"><div class="gh-s">${esc(h.sub)}</div>${chDd(h)}${h.hl?`<div class="gh-p">${h.pl.map(n=>`<span class="pl${n==h.cur?' cur':''}" title="${esc(n)}">${esc(n)}</span>`).join('')}</div>`:''}</div><div class="gh-r"><div class="gh-bx gh-dt"><b>Date:</b><div class="gh-bd"><span class="d1">${esc(h.dt.a)}</span>${h.dt.b?`<span class="d2">${esc(h.dt.b)}</span>`:''}</div></div><div class="gh-bx gh-ck"><b>Checker:</b><div class="gh-bd">${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}</div></div></div></div></div>`}
 const chLg=(ct,mat,loc)=>`<div class="gh-p gh-lg"><span class="pr">Std Min</span><span class="pr">Std Max</span><span class="pb">Actual</span>${chHdrData(ct,mat,loc).cm?'<span class="pg">After C/M</span>':''}</div>`;
 function grafikView(){calInit();const a=gData(),v=a.map(i=>i.kA),n=v.length,LG=G.view=='loc'?locGroups(a):[];
 const S=(k,ph,o)=>`<select class="i" style="width:48%;display:inline-block" onchange="G.${k}=this.value;render()">${opts(o,G[k],ph)}</select>`;
 return`<div class="flex justify-between items-center flex-wrap"><h2 class="font-bold py-3">Grafik</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;max-width:420px;position:relative"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap" onclick="gpOpen('dl')">&#11015; Unduh PDF ${GP.open&&GP.mode=='dl'?'&#9652;':'&#9662;'}</button><button class="b b2" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap" onclick="gpOpen('share')">Bagikan ke... ${GP.open&&GP.mode=='share'?'&#9652;':'&#9662;'}</button>${GP.open?`<div class="c" id="gpbox" style="position:absolute;left:0;top:100%;margin-top:6px;z-index:20;width:285px;max-height:75vh;overflow-y:auto;box-shadow:0 6px 20px #0004"><div class="flex justify-between items-center mb-1"><b class="text-sm">${GP.mode=='dl'?'Pilih grafik untuk diunduh':'Pilih grafik untuk dibagikan'}</b><button class="text-blue-600 text-xs" onclick="gpAll()">${GP.sel.length==matList().length?'Hapus semua':'Pilih semua'}</button></div>${matList().map((m,k)=>`<label class="flex items-center gap-2 py-1 text-sm" style="margin:0"><input type="checkbox" ${GP.sel.includes(m)?'checked':''} onchange="gpT(${k})"> Material ${esc(m)}</label>`).join('')}${gpSec('Equipment',eqList(),GP.eq,'gpTe',eqNm,'gpAllE','gpe')}${gpSec('Lokasi',lcList(),GP.lc,'gpTl',lcNm,'gpAllL','gpl')}<div class="flex gap-1 mt-2"><button class="b flex-1" style="padding:8px;font-size:13px" onclick="gpGo()">${GP.mode=='dl'?'Unduh':'Bagikan ke...'} (${GP.sel.length})</button><button class="b b2" style="padding:8px 10px;font-size:13px" onclick="GP.open=0;render()">Batal</button></div></div>`:''}</div></div><div class="c"><div class="flex gap-1 mb-2"><button class="b ${G.view=='loc'?'b2':''}" style="flex:1;padding:8px;font-size:13px" onclick="G.view='mat';render()">Per Material</button><button class="b ${G.view=='loc'?'':'b2'}" style="flex:1;padding:8px;font-size:13px" onclick="G.view='loc';render()">Per Lokasi</button></div><div id="cb_fltg" style="margin-top:2px"><button type="button" class="flex justify-between items-center w-full" style="text-align:left;cursor:pointer" onclick="bxTog('fltg')"><b>Filters${fltN(G,['s','main','type','mat','loc','st'])?' <span class="bg or">'+fltN(G,['s','main','type','mat','loc','st'])+'</span>':''}</b>${bxIcon(BXO.fltg)}</button><div class="cbb" style="display:${BXO.fltg?'block':'none'}"><input class=\"i\" placeholder=\"Cari...\" value=\"${esc(G.s||'')}\" onchange=\"G.s=this.value;render()\">${S('main','Semua Equipment',D.mains.map(m=>[m.id,m.code]))}${S('type','Semua Type',tyAll())}${S('mat','Semua Material',D.M.mats)}${S('loc','Semua Lokasi',D.M.locs)}${S('st','Semua Status',['OK','NG'])}${fltRst('G')}
-</div></div></div>${apBan(a)}${calView()}${pieCard(a)}${chBtn()}${G.hc?'':vwSw()}${`${G.hc?'':G.view=='loc'?(LG.length?LG.map((g,k)=>`${k==0||LG[k-1].loc!=g.loc?`<h3 class="font-bold pt-2">Lokasi: ${esc(g.loc||'-')}</h3>`:''}<div class="c gc">${chHd(g.all,g.mat,g.loc)}${gzBtn('cl',k)}<div style="overflow-x:auto"><canvas id="cl${k}" height="360"></canvas></div>${chLg(g.all,g.mat,g.loc)}</div>`).join(''):'<div class="c text-sm opacity-60">Belum ada data untuk lokasi ini</div>'):matList().map((m,k)=>`<div class="c gc">${chHd(cats(gData().filter(i=>i.mat==m)),m,null)}${gzBtn('cv',k)}<div style="overflow-x:auto"><canvas id="cv${k}" height="360"></canvas></div>${chLg(cats(gData().filter(i=>i.mat==m)),m,null)}</div>`).join('')}
+</div></div></div>${apBan(a)}${calView()}${pieCard(a)}${chBtn()}${G.hc?'':vwSw()}${`${G.hc?'':G.view=='loc'?(LG.length?LG.map((g,k)=>`${k==0||LG[k-1].loc!=g.loc?`<h3 class="font-bold pt-2">Lokasi: ${esc(g.loc||'-')}</h3>`:''}<div class="c gc">${chHd(g.all,g.mat,g.loc,gzBtn('cl',k))}<div style="overflow-x:auto"><canvas id="cl${k}" height="360"></canvas></div>${chLg(g.all,g.mat,g.loc)}</div>`).join(''):'<div class="c text-sm opacity-60">Belum ada data untuk lokasi ini</div>'):matList().map((m,k)=>`<div class="c gc">${chHd(cats(gData().filter(i=>i.mat==m)),m,null,gzBtn('cv',k))}<div style="overflow-x:auto"><canvas id="cv${k}" height="360"></canvas></div>${chLg(cats(gData().filter(i=>i.mat==m)),m,null)}</div>`).join('')}
 <button type="button" class="b w-full" style="margin:10px 0" onclick="G.tbl=!G.tbl;render()">${G.tbl?'&#9650; Hide Data':'&#9660; Show Data'}</button>${G.tbl?chkTbl(a):''}`}`}
 const tLang=(a,b)=>LG=='en'?b:a;
 /* Tabel Data Check (tab Grafik): No, Sub, Material, Judge (OK/NG), Approval (Pending/Approved), Remarks */
@@ -2076,11 +2084,11 @@ function smoothLine(x,P,sc,T,base){const n=P.length;if(!n)return;const m=new Arr
 /* Header di dalam gambar PDF: judul, baris Material/Lokasi + pil kecil, kotak Date dan Checker */
 function pdfHdr(x,h,W,sc){const rr=(X0,Y0,w,hh,r)=>{x.beginPath();x.moveTo(X0+r,Y0);x.arcTo(X0+w,Y0,X0+w,Y0+hh,r);x.arcTo(X0+w,Y0+hh,X0,Y0+hh,r);x.arcTo(X0,Y0+hh,X0,Y0,r);x.arcTo(X0,Y0,X0+w,Y0,r);x.closePath()};
  x.save();x.textAlign='left';
- const bw=150*sc,dw=118*sc,gp=8*sc,rows=Math.max(1,h.ck.length),bh=Math.max(26+rows*17+6,70)*sc,cx=W-bw-12*sc,dx=cx-gp-dw,lim=dx-16*sc,hb=24*sc;
+ const bw=118*sc,dw=118*sc,gp=8*sc,rows=Math.max(1,h.ck.length),bh=Math.max(26+rows*17+6,70)*sc,cx=W-bw-12*sc,dx=cx-gp-dw,lim=dx-16*sc,hb=24*sc;
  let fs=17;x.font='bold '+fs*sc+'px '+GF;while(fs>9&&x.measureText(h.t).width>lim-10*sc){fs-=.5;x.font='bold '+fs*sc+'px '+GF}
  x.fillStyle='#fff';x.fillText(h.t,10*sc,20*sc);x.font='bold '+14*sc+'px '+GF;x.fillStyle='#cfd3da';x.fillText(h.sub,10*sc,40*sc);
  const box=(bx,w,t)=>{rr(bx,8*sc,w,bh,10*sc);x.fillStyle='rgba(79,123,216,.22)';x.fill();x.save();rr(bx,8*sc,w,bh,10*sc);x.clip();x.fillStyle='rgba(79,123,216,.45)';x.fillRect(bx,8*sc,w,hb);x.fillStyle='#4f7bd8';x.fillRect(bx,8*sc+hb-1.25*sc,w,2.5*sc);x.restore();rr(bx,8*sc,w,bh,10*sc);x.strokeStyle='#4f7bd8';x.lineWidth=2.5*sc;x.stroke();x.textAlign='center';x.fillStyle='#fff';x.font='bold '+14*sc+'px '+GF;x.fillText(t,bx+w/2,26*sc)};
- box(cx,bw,'Checker:');x.font='bold '+13*sc+'px '+GF;(h.ck.length?h.ck:['-']).forEach((n,i)=>x.fillText(n,cx+bw/2,(46+i*17)*sc));
+ box(cx,bw,'Checker:');(h.ck.length?h.ck:['-']).forEach((n,i)=>{let f=13;x.font='bold '+f*sc+'px '+GF;while(f>7&&x.measureText(n).width>bw-14*sc){f-=.5;x.font='bold '+f*sc+'px '+GF}x.fillText(n,cx+bw/2,(46+i*17)*sc)});
  box(dx,dw,'Date:');const bt=8*sc+hb,bH=bh-hb;x.fillStyle='#fff';
  if(h.dt.b){x.font='bold '+12*sc+'px '+GF;x.fillText(h.dt.a,dx+dw/2,bt+bH*.4);x.font='bold '+24*sc+'px '+GF;x.fillText(h.dt.b,dx+dw/2,bt+bH*.86)}else{x.font='bold '+14*sc+'px '+GF;x.fillText(h.dt.a,dx+dw/2,bt+bH*.58)}
  const ph=15*sc,rg=18*sc,pcap=Math.min(230*sc,lim-10*sc-14*sc);let px=10*sc,py=50*sc;
