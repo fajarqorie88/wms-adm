@@ -529,16 +529,17 @@ html[data-view=pc] #pdb .pdb-t i{font-size:13px}
 .gh-ti{flex:1;min-width:0;padding-top:4px;font-weight:800;line-height:1.28;font-size:17px;color:#fff;word-break:break-word}
 .gc .gh-top .gz{flex:none;margin:0}
 .gh-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-top:8px}
-.gh-t{flex:1 1 150px;min-width:0;color:#fff}
+.gh-t{flex:1 1 110px;min-width:0;color:#fff}
 .gh-t .gh-s{font-size:13px;font-weight:700;color:#cfd3da;line-height:1.28}
-.gh-r{display:flex;gap:8px;align-items:stretch;flex:none}
-.gh-bx{flex:none;width:96px;box-sizing:border-box;border:2.5px solid #4f7bd8;border-radius:12px;background:rgba(79,123,216,.22);overflow:hidden;text-align:center;display:flex;flex-direction:column}
-.gh-bx b{display:block;background:rgba(79,123,216,.45);border-bottom:2.5px solid #4f7bd8;color:#fff;font-size:13px;padding:3px 4px}
-.gh-bd{flex:1;display:flex;flex-direction:column;justify-content:center;padding:3px 4px}
+.gh-r{display:flex;gap:6px;align-items:stretch;flex:none}
+.gh-bx{flex:none;width:64px;box-sizing:border-box;border:2.5px solid #4f7bd8;border-radius:12px;background:rgba(79,123,216,.22);overflow:hidden;text-align:center;display:flex;flex-direction:column}
+.gh-bx b{display:block;background:rgba(79,123,216,.45);border-bottom:2.5px solid #4f7bd8;color:#fff;font-size:12px;padding:3px 2px}
+.gh-bd{flex:1;display:flex;flex-direction:column;justify-content:center;padding:3px 2px}
 .gh-bd span{display:block;color:#fff;font-weight:700}
-.gh-ck .gh-bd span{font-size:11px;line-height:1.35}
-.gh-dt .d1{font-size:11px;line-height:1.2}
-.gh-dt .d2{font-size:20px;font-weight:800;line-height:1.15}
+.gh-ck .gh-bd span{font-size:11px;line-height:1.35;overflow-wrap:anywhere}
+.gh-dt .d1{font-size:15px;font-weight:800;line-height:1.15}
+.gh-dt .d2{font-size:11px;line-height:1.2}
+.gh-sh .gh-bd span{font-size:22px;font-weight:800;line-height:1.1}.gh-sh .gh-bd span.s2{font-size:17px}.gh-sh .gh-bd span.s3{font-size:13px}
 .gh-dd{position:relative;display:block;height:24px;margin:8px 0 2px;font-weight:700}
 .gh-dd summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 12px;border-radius:999px;border:2.5px solid #2dd4bf;background:#0b4a4a;color:#fff;font-size:11px;max-width:100%;box-sizing:border-box}
 .gh-dd summary::-webkit-details-marker{display:none}
@@ -557,7 +558,7 @@ html[data-view=pc] #pdb .pdb-t i{font-size:13px}
 .gh-p .pr{background:#6b0000;border-color:#ff1a1a}.gh-p .pb{background:#2a3b66;border-color:#4f7bd8}.gh-p .pg{background:#173d0a;border-color:#62b82a}
 html[data-view=pc] .gh-ti{font-size:24px}
 html[data-view=pc] .gh-t .gh-s{font-size:16px}
-html[data-view=pc] .gh-bx{width:130px}html[data-view=pc] .gh-bx b{font-size:16px}html[data-view=pc] .gh-ck .gh-bd span{font-size:14px}html[data-view=pc] .gh-dt .d1{font-size:14px}html[data-view=pc] .gh-dt .d2{font-size:28px}
+html[data-view=pc] .gh-bx{width:100px}html[data-view=pc] .gh-bx b{font-size:16px}html[data-view=pc] .gh-ck .gh-bd span{font-size:14px}html[data-view=pc] .gh-dt .d1{font-size:22px}html[data-view=pc] .gh-dt .d2{font-size:14px}html[data-view=pc] .gh-sh .gh-bd span{font-size:30px}html[data-view=pc] .gh-sh .gh-bd span.s2{font-size:24px}html[data-view=pc] .gh-sh .gh-bd span.s3{font-size:18px}
 html[data-view=pc] .gh-dd summary,html[data-view=pc] .gh-dd>div span{font-size:13px}
 html[data-view=pc] .gh-p span{height:28px;font-size:13px}
 html[data-view=pc] .gh-p .pl{line-height:23px}
@@ -1962,16 +1963,19 @@ function abBar(i){const a=[];
 const chBtn=()=>`<button type="button" class="b w-full" style="margin:10px 0" onclick="G.hc=!G.hc;render()">${G.hc?'&#9660; Show Chart':'&#9650; Hide Chart'}</button>`;
 
 /* ---------- HEADER GRAFIK (format baru: judul 3 baris + legenda pil + kotak Checker) ---------- */
-function dtParts(){const s=dateTxt();if(s=='Semua')return{a:'Semua',b:''};const m=s.match(/^(.*?)[\s,]*(\d{4})$/);return m&&m[1]?{a:m[1],b:m[2]}:{a:s,b:''}}
+function dtParts(){if(!G.cal)return{a:'Semua',b:''};const p=G.cal.split('-').map(Number),d=new Date(p[0],p[1]-1,p[2]);if(isNaN(d))return{a:'Semua',b:''};return{a:p[2]+' '+d.toLocaleDateString(LC(),{month:'short'}).replace(/\.$/,''),b:String(p[0])}}
+/* Shift untuk kotak grafik: Shift 1/2/3 -> A/B/C (data & master tidak berubah) */
+const shL=v=>{v=String(v||'').trim();if(!v)return'';let m=v.match(/(\d+)\s*$/);if(m&&+m[1]>=1&&+m[1]<=26)return String.fromCharCode(64+ +m[1]);m=v.match(/(?:^|\s)([A-Za-z])$/);return m?m[1].toUpperCase():v};
+const shTxt=sh=>sh.length?sh.join(sh.length>2?'\u00b7':' \u00b7 '):'-';
 function chHdrData(ct,mat,loc){const rows=[].concat(...ct.map(k=>k.rows)),ck=[],hl=loc!=null||!!G.loc,lr=loc!=null?loc:(G.loc||''),
  lc=[...new Set(rows.map(i=>i.loc||'-'))];let mt=hl?matList().filter(m=>gData().some(i=>i.mat==m&&(i.loc||'')==lr)):[];if(hl&&!mt.length)mt=[mat];
  rows.forEach(i=>[i.c1,i.c2].forEach(n=>{n=String(n||'').trim();if(n&&!ck.includes(n))ck.push(n)}));
- return{t:'DATA OUTPUT AMPERE WELDING DOOR-ASSY D40D',sub:hl?'Lokasi: '+(lr||'-')+' - Material:':'Material: '+mat,hl,lr,kind:hl?'mat':'loc',pl:hl?mt:lc,lc,cur:mat,ck:ck.slice(0,6),cm:rows.some(i=>cmV(i)!=null),dt:dtParts()}}
+ return{t:'DATA OUTPUT AMPERE WELDING DOOR-ASSY D40D',sub:hl?'Lokasi: '+(lr||'-')+' - Material:':'Material: '+mat,hl,lr,kind:hl?'mat':'loc',pl:hl?mt:lc,lc,cur:mat,ck:ck.slice(0,6),sh:[...new Set(rows.map(i=>shL(i.shift)).filter(Boolean))].sort().slice(0,6),cm:rows.some(i=>cmV(i)!=null),dt:dtParts()}}
 const lcAll=()=>{const ls=[...D.M.locs];D.insp.forEach(i=>{const l=i.loc||'';if(l&&!ls.includes(l))ls.push(l)});return ls};
 function gSetLoc(k){G.loc=k<0?'':(lcAll()[k]||'');render()}
 document.addEventListener('click',e=>document.querySelectorAll('.gh-dd[open]').forEach(d=>{if(!d.contains(e.target))d.removeAttribute('open')}));
 const chDd=h=>`<details class="gh-dd"><summary>${esc(h.hl?(h.lr||'-'):'Semua Lokasi')}</summary><div><span class="${h.hl?'':'on'}" onclick="gSetLoc(-1)">Semua Lokasi</span>${lcAll().map((n,k)=>`<span class="${h.hl&&n==h.lr?'on':''}" onclick="gSetLoc(${k})">${esc(n)}</span>`).join('')}</div></details>`;
-function chHd(ct,mat,loc,zb){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-top"><div class="gh-ti">${esc(h.t)}</div>${zb||''}</div><div class="gh-row"><div class="gh-t"><div class="gh-s">${esc(h.sub)}</div>${chDd(h)}${h.hl?`<div class="gh-p">${h.pl.map(n=>`<span class="pl${n==h.cur?' cur':''}" title="${esc(n)}">${esc(n)}</span>`).join('')}</div>`:''}</div><div class="gh-r"><div class="gh-bx gh-dt"><b>Date:</b><div class="gh-bd"><span class="d1">${esc(h.dt.a)}</span>${h.dt.b?`<span class="d2">${esc(h.dt.b)}</span>`:''}</div></div><div class="gh-bx gh-ck"><b>Checker:</b><div class="gh-bd">${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}</div></div></div></div></div>`}
+function chHd(ct,mat,loc,zb){const h=chHdrData(ct,mat,loc);return`<div class="gh"><div class="gh-top"><div class="gh-ti">${esc(h.t)}</div>${zb||''}</div><div class="gh-row"><div class="gh-t"><div class="gh-s">${esc(h.sub)}</div>${chDd(h)}${h.hl?`<div class="gh-p">${h.pl.map(n=>`<span class="pl${n==h.cur?' cur':''}" title="${esc(n)}">${esc(n)}</span>`).join('')}</div>`:''}</div><div class="gh-r"><div class="gh-bx gh-dt"><b>Date:</b><div class="gh-bd"><span class="d1">${esc(h.dt.a)}</span>${h.dt.b?`<span class="d2">${esc(h.dt.b)}</span>`:''}</div></div><div class="gh-bx gh-ck"><b>Checker:</b><div class="gh-bd">${h.ck.length?h.ck.map(n=>`<span>${esc(n)}</span>`).join(''):'<span>-</span>'}</div></div><div class="gh-bx gh-sh"><b>Shift:</b><div class="gh-bd"><span class="s${Math.min(h.sh.length,3)}">${esc(shTxt(h.sh))}</span></div></div></div></div></div>`}
 const chLg=(ct,mat,loc)=>`<div class="gh-p gh-lg"><span class="pr">Std Min</span><span class="pr">Std Max</span><span class="pb">Actual</span>${chHdrData(ct,mat,loc).cm?'<span class="pg">After C/M</span>':''}</div>`;
 function grafikView(){calInit();const a=gData(),v=a.map(i=>i.kA),n=v.length,LG=G.view=='loc'?locGroups(a):[];
 const S=(k,ph,o)=>`<select class="i" style="width:48%;display:inline-block" onchange="G.${k}=this.value;render()">${opts(o,G[k],ph)}</select>`;
@@ -2109,13 +2113,14 @@ function smoothLine(x,P,sc,T,base){const n=P.length;if(!n)return;const m=new Arr
 /* Header di dalam gambar PDF: judul, baris Material/Lokasi + pil kecil, kotak Date dan Checker */
 function pdfHdr(x,h,W,sc){const rr=(X0,Y0,w,hh,r)=>{x.beginPath();x.moveTo(X0+r,Y0);x.arcTo(X0+w,Y0,X0+w,Y0+hh,r);x.arcTo(X0+w,Y0+hh,X0,Y0+hh,r);x.arcTo(X0,Y0+hh,X0,Y0,r);x.arcTo(X0,Y0,X0+w,Y0,r);x.closePath()};
  x.save();x.textAlign='left';
- const bw=118*sc,dw=118*sc,gp=8*sc,rows=Math.max(1,h.ck.length),bh=Math.max(26+rows*17+6,70)*sc,cx=W-bw-12*sc,dx=cx-gp-dw,lim=dx-16*sc,hb=24*sc;
+ const bw=100*sc,dw=92*sc,sw=64*sc,gp=6*sc,rows=Math.max(1,h.ck.length),bh=Math.max(26+rows*17+6,70)*sc,sx=W-sw-12*sc,cx=sx-gp-bw,dx=cx-gp-dw,lim=dx-16*sc,hb=24*sc;
  let fs=17;x.font='bold '+fs*sc+'px '+GF;while(fs>9&&x.measureText(h.t).width>lim-10*sc){fs-=.5;x.font='bold '+fs*sc+'px '+GF}
  x.fillStyle='#fff';x.fillText(h.t,10*sc,20*sc);x.font='bold '+14*sc+'px '+GF;x.fillStyle='#cfd3da';x.fillText(h.sub,10*sc,40*sc);
  const box=(bx,w,t)=>{rr(bx,8*sc,w,bh,10*sc);x.fillStyle='rgba(79,123,216,.22)';x.fill();x.save();rr(bx,8*sc,w,bh,10*sc);x.clip();x.fillStyle='rgba(79,123,216,.45)';x.fillRect(bx,8*sc,w,hb);x.fillStyle='#4f7bd8';x.fillRect(bx,8*sc+hb-1.25*sc,w,2.5*sc);x.restore();rr(bx,8*sc,w,bh,10*sc);x.strokeStyle='#4f7bd8';x.lineWidth=2.5*sc;x.stroke();x.textAlign='center';x.fillStyle='#fff';x.font='bold '+14*sc+'px '+GF;x.fillText(t,bx+w/2,26*sc)};
  box(cx,bw,'Checker:');(h.ck.length?h.ck:['-']).forEach((n,i)=>{let f=13;x.font='bold '+f*sc+'px '+GF;while(f>7&&x.measureText(n).width>bw-14*sc){f-=.5;x.font='bold '+f*sc+'px '+GF}x.fillText(n,cx+bw/2,(46+i*17)*sc)});
  box(dx,dw,'Date:');const bt=8*sc+hb,bH=bh-hb;x.fillStyle='#fff';
- if(h.dt.b){x.font='bold '+12*sc+'px '+GF;x.fillText(h.dt.a,dx+dw/2,bt+bH*.4);x.font='bold '+24*sc+'px '+GF;x.fillText(h.dt.b,dx+dw/2,bt+bH*.86)}else{x.font='bold '+14*sc+'px '+GF;x.fillText(h.dt.a,dx+dw/2,bt+bH*.58)}
+ if(h.dt.b){x.font='bold '+20*sc+'px '+GF;x.fillText(h.dt.a,dx+dw/2,bt+bH*.52);x.font='bold '+12*sc+'px '+GF;x.fillText(h.dt.b,dx+dw/2,bt+bH*.86)}else{x.font='bold '+14*sc+'px '+GF;x.fillText(h.dt.a,dx+dw/2,bt+bH*.58)}
+ box(sx,sw,'Shift:');{const t=h.sh.length?h.sh.join(h.sh.length>2?'\u00b7':' \u00b7 '):'-',fz=h.sh.length>2?15:h.sh.length>1?20:28;x.fillStyle='#fff';x.font='bold '+fz*sc+'px '+GF;x.fillText(t,sx+sw/2,bt+bH*.66)}
  const ph=15*sc,rg=18*sc,pcap=Math.min(230*sc,lim-10*sc-14*sc);let px=10*sc,py=50*sc;
  h.pl.forEach(n=>{let f=8.5;x.font='bold '+f*sc+'px '+GF;while(f>5.5&&x.measureText(n).width>pcap){f-=.25;x.font='bold '+f*sc+'px '+GF}
   const w=x.measureText(n).width+14*sc;if(px>10*sc&&px+w>lim){px=10*sc;py+=rg}
