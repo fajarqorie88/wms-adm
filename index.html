@@ -1030,6 +1030,29 @@ html[data-view=pc] .pgd{display:none}
 .qgpill.on{background:#14b8a6;color:#fff}
 .qgev{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
 .qgev img{width:84px;height:62px;object-fit:cover;border-radius:8px;border:1px solid rgba(148,163,184,.5)}
+/* ===== Quality Gate: pill modern & transparan (kaca), warna mengikuti tema kartu ===== */
+.qgb,.qg-t,.qg-k,.qg-b,.qg-l,.qg-o,.qg-s,.qg-in,.qgh span,.qge,.qg-sv,.qgpill,.qgch{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14);border:1px solid transparent;color:inherit;transition:background .2s,border-color .2s}
+.qgb{background:rgba(56,139,253,.22);border-color:rgba(96,165,250,.5);color:#eaf4ff}
+.qgb:active{background:rgba(56,139,253,.34)}
+.qgn{background:rgba(255,255,255,.07);border:1.5px dashed rgba(255,255,255,.4);color:#bfdbfe;box-shadow:none}
+.qge{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#bfdbfe}
+.qg-t{background:rgba(56,139,253,.18);border-color:rgba(96,165,250,.45)}
+.qg-t i{border-bottom:1px solid currentColor;opacity:.8}
+.qg-t b{color:inherit}
+.qg-k,.qg-l,.qgh .lb{background:rgba(148,163,184,.18);border-color:rgba(148,163,184,.42)}
+.qg-b{background:rgba(56,139,253,.2);border-color:rgba(96,165,250,.45)}
+select.qg-b{color:inherit}
+.qgh .mg,.qg-in.m,.qg-o{background:rgba(236,72,153,.18);border-color:rgba(236,72,153,.5)}
+.qgh .og,.qg-in.d,.qg-s.ny{background:rgba(249,115,22,.2);border-color:rgba(249,115,22,.55)}
+.qgh .cg,.qg-in.c{background:rgba(20,184,166,.2);border-color:rgba(20,184,166,.5)}
+.qgh .bl,.qg-in.j{background:rgba(99,102,241,.18);border-color:rgba(99,102,241,.45)}
+.qg-in.j.OK,.qg-s.ok,.qg-sv{background:rgba(34,197,94,.22);border-color:rgba(34,197,94,.55)}
+.qg-in.j.NG{background:rgba(239,68,68,.26);border-color:rgba(239,68,68,.6)}
+.qg-s.ok,.qg-s.ny{color:inherit}
+.qgpill{background:rgba(20,184,166,.2);border-color:rgba(20,184,166,.55)}
+.qgpill.on{background:rgba(20,184,166,.38);color:inherit}
+.qgch{background:rgba(148,163,184,.16);border-color:rgba(148,163,184,.38)}
+.qg-in::placeholder{color:inherit;opacity:.45}
 .qgch{font-size:12px;padding:4px 10px;border-radius:999px;background:rgba(148,163,184,.2)}
 .qge{width:46px;flex:none;border-radius:14px;background:rgba(255,255,255,.12);color:#bfdbfe;font-size:17px;border:1px solid rgba(255,255,255,.18)}
 .qgn{justify-content:center;background:rgba(255,255,255,.08);border:1.5px dashed rgba(255,255,255,.4);color:#bfdbfe}
@@ -1228,8 +1251,8 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 198. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=198;
+   Revisi ini = 199. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=199;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2408,14 +2431,18 @@ let QG={day:'',part:'',pal:0,draft:null,dirty:0,df:null,cm:null};
 /* Daftar item Quality Gate: D.M.qgp = [{k,n}] (ikut sync master). Kalau belum pernah diubah, pakai bawaan QG_PARTS (RH, LH). */
 const qgParts=()=>Array.isArray(D.M.qgp)?D.M.qgp:QG_PARTS.map(([k,n])=>({k,n}));
 const qgCommit=()=>{D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}};
-function qgItemDlg(k){document.querySelectorAll('.qgdlg').forEach(x=>x.remove());const it=k?qgParts().find(x=>x.k==k):null;if(k&&!it)return;
+let QG_IT={k:'',img:'',changed:0};
+function qgPanelEnc(f,cb){if(!f)return;if(!/^image\//.test(f.type))return toast('File harus berupa gambar');const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const enc=(mx,q)=>{const sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)};let u=enc(900,.65);if(u.length>300000)u=enc(700,.5);cb(u)};im.onerror=()=>toast('Gambar tidak bisa dibaca');im.src=rd.result};rd.readAsDataURL(f)}
+function qgItUp(inp){const f=inp.files&&inp.files[0];inp.value='';qgPanelEnc(f,u=>{QG_IT.img=u;QG_IT.changed=1;const im=$('#qgItImg'),d=$('#qgItDel');if(im){im.src=u;im.style.display=''}if(d)d.style.display=''})}
+function qgItImgDel(){QG_IT.img='';QG_IT.changed=1;const im=$('#qgItImg'),d=$('#qgItDel');if(im){im.removeAttribute('src');im.style.display='none'}if(d)d.style.display='none'}
+function qgItemDlg(k){document.querySelectorAll('.qgdlg').forEach(x=>x.remove());const it=k?qgParts().find(x=>x.k==k):null;if(k&&!it)return;QG_IT={k:k||'',img:k?qgImg(k):'',changed:0};
 const d=document.createElement('div');d.className='qgdlg fixed inset-0 z-50 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.55)';d.onclick=e=>{if(e.target===d)d.remove()};
-d.innerHTML=`<div class="c" style="max-width:340px;width:100%;margin:0"><b style="font-size:16px">${it?'Edit Item':'New Item'}</b><label class="text-xs opacity-70 mt-2" style="display:block">Nama item</label><input id="qgNm" class="i" maxlength="40" value="${esc(it?it.n:'')}" placeholder="contoh: S/A Rear Door RH" onkeydown="if(event.key=='Enter')qgItemOk('${k||''}')"><div class="flex gap-2 mt-3">${it?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgItemDel('${k}')">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="this.closest('.qgdlg').remove()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgItemOk('${k||''}')">Simpan</button></div></div>`;
+d.innerHTML=`<div class="c" style="max-width:340px;width:100%;margin:0"><b style="font-size:16px">${it?'Edit Item':'New Item'}</b><label class="text-xs opacity-70 mt-2" style="display:block">Nama item</label><input id="qgNm" class="i" maxlength="40" value="${esc(it?it.n:'')}" placeholder="contoh: S/A Rear Door RH" onkeydown="if(event.key=='Enter')qgItemOk('${k||''}')"><label class="text-xs opacity-70 mt-2" style="display:block">Foto panel</label><div class="qgev"><button type="button" class="qgpill" onclick="document.getElementById('qgItFile').click()">&#128247; Foto panel</button>${QG_IT.img?`<img id="qgItImg" alt="Foto panel" src="${QG_IT.img}">`:'<img id="qgItImg" alt="Foto panel" style="display:none">'}<button type="button" id="qgItDel" class="b b2" style="flex:none;color:#dc2626;${QG_IT.img?'':'display:none'}" onclick="qgItImgDel()">Hapus</button></div><input type="file" id="qgItFile" accept="image/*" hidden onchange="qgItUp(this)"><div class="text-xs" style="opacity:.7;margin-top:4px">Dipakai di pill Defect semua palet item ini.</div><div class="flex gap-2 mt-3">${it?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgItemDel('${k}')">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="this.closest('.qgdlg').remove()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgItemOk('${k||''}')">Simpan</button></div></div>`;
 document.body.appendChild(d);setTimeout(()=>{const e=$('#qgNm');if(e)e.focus()},50)}
 function qgItemOk(k){const e=$('#qgNm');if(!e)return;const n=e.value.trim().replace(/\s+/g,' ');if(!n)return toast('Nama item tidak boleh kosong');
 if(qgParts().some(x=>x.k!=k&&x.n.toLowerCase()==n.toLowerCase()))return toast('Nama item sudah ada');
-const l=qgParts().map(x=>({k:x.k,n:x.n}));if(k){const it=l.find(x=>x.k==k);if(it)it.n=n}else l.push({k:'p'+Date.now().toString(36),n});
-D.M.qgp=l;document.querySelectorAll('.qgdlg').forEach(x=>x.remove());qgCommit()}
+const l=qgParts().map(x=>({k:x.k,n:x.n})),kk=k||'p'+Date.now().toString(36);if(k){const it=l.find(x=>x.k==k);if(it)it.n=n}else l.push({k:kk,n});
+D.M.qgp=l;if(QG_IT.changed){D.M.qgimg=D.M.qgimg||{};if(QG_IT.img)D.M.qgimg[kk]=QG_IT.img;else delete D.M.qgimg[kk]}document.querySelectorAll('.qgdlg').forEach(x=>x.remove());qgCommit()}
 function qgItemDel(k){if(!confirm('Hapus item ini beserta semua datanya?'))return;D.M.qgp=qgParts().filter(x=>x.k!=k);if(D.M.qgimg)delete D.M.qgimg[k];const q=D.M.qg||{};Object.keys(q).forEach(d=>{delete q[d][k];if(!Object.keys(q[d]).length)delete q[d]});if(QG.part==k){QG.part='';QG.pal=0;QG.draft=null;QG.dirty=0}document.querySelectorAll('.qgdlg').forEach(x=>x.remove());qgCommit()}
 const qgDay=()=>QG.day||(QG.day=ymd(new Date()));
 const qgP=(day,k)=>((((D.M||{}).qg||{})[day]||{})[k])||{s:1,p:{}};
@@ -2449,18 +2476,17 @@ function qgMkOk(){const e=$('#qgMk'),t=e?e.value.trim():'';if(!t)return toast('I
 function qgMkDel(){const d=QG.df;if(d.ed>=0)d.m.splice(d.ed,1);d.ed=-2;render()}
 function qgMkCancel(){QG.df.ed=-2;render()}
 function qgMkPick(t){const e=$('#qgMk');if(e){e.value=t;e.focus()}}
-function qgUpImg(inp){const f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(!/^image\//.test(f.type))return toast('File harus berupa gambar');const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const enc=(mx,q)=>{const sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)};let u=enc(900,.65);if(u.length>300000)u=enc(700,.5);D.M.qgimg=D.M.qgimg||{};D.M.qgimg[QG.part]=u;qgCommit();toast('Gambar panel tersimpan')};im.onerror=()=>toast('Gambar tidak bisa dibaca');im.src=rd.result};rd.readAsDataURL(f)}
 function qgDfView(){const d=QG.df,k=QG.part,img=qgImg(k),m=d.m,row=QG.draft[d.i];
 let dots='';m.forEach((x,n)=>{if(x.x==null)return;dots+=`<span class="qgd" data-m="${n}" style="left:${x.x}%;top:${x.y}%">${n+1}</span><span class="qgco${x.x>55?' l':''}" data-m="${n}" style="left:${x.x}%;top:${x.y}%">${esc(x.t)}</span>`});
 if(d.ed==-1&&d.nx!=null)dots+=`<span class="qgd new" style="left:${d.nx}%;top:${d.ny}%">+</span>`;
-const box=img?`<div class="qgim" onclick="qgImgTap(event)"><img src="${img}" alt="Panel" draggable="false">${dots}</div><p class="text-xs" style="opacity:.7;margin:4px 0 0">Ketuk gambar untuk menandai titik defect, ketuk titik merah untuk mengubah.</p>`:`<div class="qgim0">Belum ada gambar panel untuk item ini.<br>Upload dulu, atau tambah defect tanpa titik.</div>`;
+const box=img?`<div class="qgim" onclick="qgImgTap(event)"><img src="${img}" alt="Panel" draggable="false">${dots}</div><p class="text-xs" style="opacity:.7;margin:4px 0 0">Ketuk gambar untuk menandai titik defect, ketuk titik merah untuk mengubah.</p>`:`<div class="qgim0">Belum ada foto panel untuk item ini.<br>Upload lewat ikon pensil di halaman Quality Gate, atau tambah defect tanpa titik.</div>`;
 const list=m.length?m.map((x,n)=>`<div class="qgdl" onclick="qgDfEdit(${n})"><span class="qgd s">${n+1}</span><span style="flex:1;min-width:0">${esc(x.t)}</span><span class="text-xs" style="opacity:.6">${x.x==null?'tanpa titik':'titik'}</span></div>`).join(''):'<p class="text-sm" style="opacity:.6;text-align:center;padding:8px 0">Belum ada defect.</p>';
 let pop='';if(d.ed!=-2){const cur=d.ed>=0&&m[d.ed]?m[d.ed].t:'',ch=qgRecent(k).map(t=>`<button type="button" class="qgch" data-t="${esc(t)}" onclick="qgMkPick(this.dataset.t)">${esc(t)}</button>`).join('');
 pop=`<div class="qgov t4" onclick="if(event.target===this)qgMkCancel()"><div class="c qgc" style="max-width:340px"><b style="font-size:15px">${d.ed>=0?'Edit Defect '+(d.ed+1):'Defect Baru'}</b><input id="qgMk" class="i" maxlength="60" value="${esc(cur)}" placeholder="Nama defect (contoh: Spatter)" style="margin:8px 0" autocomplete="off" onkeydown="if(event.key=='Enter')qgMkOk()">${ch?`<div class="qgchs">${ch}</div>`:''}<div class="flex gap-2 mt-3">${d.ed>=0?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgMkDel()">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="qgMkCancel()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgMkOk()">Simpan</button></div></div></div>`}
 return`<div class="qgov t3" onclick="if(event.target===this)qgDfCancel()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDfCancel()">&times;</button>
 <div class="qg-ttl"><b>Defect - Part ${d.i+1}</b><span>${esc(row[0]||'')}</span></div>
 ${box}
-<div class="flex gap-2 mt-2"><button type="button" class="b b2" style="flex:1" onclick="document.getElementById('qgFile').click()">${img?'Ganti gambar':'Upload gambar panel'}</button><button type="button" class="b b2" style="flex:1" onclick="qgDfAdd()">+ Tanpa titik</button></div><input type="file" id="qgFile" accept="image/*" hidden onchange="qgUpImg(this)">
+<div class="flex gap-2 mt-2"><button type="button" class="b b2" style="flex:1" onclick="qgDfAdd()">+ Tanpa titik</button></div>
 <hr class="qg-hr"><b class="text-sm">List defect (${m.length})</b><div class="mt-2">${list}</div>
 <button type="button" class="b w-full mt-3" onclick="qgDfDone()">Selesai</button></div></div>${pop}`}
 
@@ -2490,7 +2516,7 @@ return`<div class="qgov t3" onclick="if(event.target===this)qgCmCancel()"><div c
 function qgView(){const day=qgDay(),tot=qgPals(day);
 return`<div class="lg"><div class="in"><button class="text-sm mb-4 self-start" style="color:#93c5fd" onclick="openMenu('home')">&#8249; Kembali ke Menu</button>
 <div class="glass"><h2 class="font-bold text-lg text-center">Quality Gate</h2><label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Tanggal</label><input type="date" class="i" value="${esc(day)}" onchange="QG.day=this.value||ymd(new Date());render()">
-${qgParts().map(({k,n})=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<div class="qgi"><button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${esc(n)}</span><em>${dn}/${tot} palet</em></button><button type="button" class="qge" aria-label="Edit item" onclick="qgItemDlg('${k}')">&#9998;</button></div>`}).join('')}
+${qgParts().map(({k,n})=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<div class="qgi"><button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${esc(n)}${qgImg(k)?' &#128247;':''}</span><em>${dn}/${tot} palet</em></button><button type="button" class="qge" aria-label="Edit item" onclick="qgItemDlg('${k}')">&#9998;</button></div>`}).join('')}
 <button type="button" class="qgb qgn" onclick="qgItemDlg('')">+ New Item</button>
 ${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.part?qgPart():''}${QG.pal?qgPal():''}${QG.df?qgDfView():''}${QG.cm?qgCmView():''}`}
 function qgPart(){const day=qgDay(),k=QG.part,P=qgP(day,k),Pr=qgProd(day),t=prNum(Pr.t),v=prNum(Pr.v),pk=t!=null&&v!=null?t-v:null,tot=qgPals(day),nm=(qgParts().find(x=>x.k==k)||{}).n||k;
