@@ -988,6 +988,11 @@ html[data-view=pc] nav button span{display:inline}
 html[data-view=pc] nav::-webkit-scrollbar{width:6px}
 html[data-view=pc] nav::-webkit-scrollbar-track{background:rgba(56,189,248,.10);border-radius:6px}
 html[data-view=pc] nav::-webkit-scrollbar-thumb{background:#38bdf8;border-radius:6px}
+html:not([data-view=pc]) nav button[data-k=developer]{display:none}
+html[data-view=pc] nav button[data-k=developer]{margin-top:10px;color:#f59e0b;border-top-color:rgba(245,158,11,.30)}
+html[data-view=pc] nav button[data-k=developer]:hover{color:#fde68a;background:rgba(245,158,11,.10)}
+html[data-view=pc] nav button[data-k=developer].on{color:#fde68a;background:linear-gradient(90deg,rgba(245,158,11,.28),rgba(245,158,11,.08));border-color:rgba(245,158,11,.60);box-shadow:0 0 18px rgba(245,158,11,.25),inset 3px 0 0 #f59e0b}
+html[data-view=pc] .pgd{display:none}
 
 .up-wrap{display:flex;justify-content:center;padding:18px 0 10px}
 .up-btn{position:relative;overflow:hidden;width:232px;height:52px;padding:0;border:2px solid #3AB54A;border-radius:999px;background:#fff;cursor:pointer;--p:100%;box-shadow:0 10px 26px rgba(58,181,74,.42);transition:transform .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
@@ -1145,14 +1150,15 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const uid8=()=>Math.random().toString(36).slice(2,9);
 let NAVR=null,BOOT=Date.now(),IG=false,IH={open:false},U=null,D=null,scr='home',tab='input',F={},Q={sort:'new'},G={days:'30'},draft=null,saveT,syncT,ss={k:'dt',d:-1};
 const NI={"input": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 20h9\"/><path d=\"M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z\"/></svg>", "data": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M8 6h13M8 12h13M8 18h13\"/><path d=\"M3 6h.01M3 12h.01M3 18h.01\"/></svg>", "grafik": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 3v18h18\"/><path d=\"m7 15 4-5 3 3 5-7\"/><path d=\"M15 6h4v4\"/></svg>", "master": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><ellipse cx=\"12\" cy=\"5\" rx=\"8\" ry=\"3\"/><path d=\"M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5\"/><path d=\"M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6\"/></svg>", "setting": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"/></svg>"};
+NI.developer='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>';
 const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Master'],['setting','Setting']];
 /* Tab 'developer' sengaja TIDAK ada di TABS (bar bawah tetap 5 icon). Hanya developer, dibuka dengan swipe kiri dari Setting. */
 /* ================= NOMOR REVISI APLIKASI - WAJIB DIBACA AGENT / CLAUDE =================
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting: "WMS V3.<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 190. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=190;
+   Revisi ini = 191. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=191;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2347,7 +2353,7 @@ function render(){const y=scrollY;document.body.classList.toggle('wn',!!U&&scr==
 if(scr!='app'){const n0=$('nav');if(n0)n0.remove();$('#app').innerHTML=scr=='qg'?qgView():homeView();trDom($('#app'));return}
 if(!tabOK(tab))tab='input';const v={input:inputView,data:dataView,grafik:grafikView,master:masterView,setting:settingView,developer:devView}[tab]();
 $('#app').innerHTML=backBar()+'<div class="vw vw-'+tab+(vmOf()?' vm-'+vmOf():'')+(SLD?' sld-'+SLD:'')+'">'+v+'</div>';SLD='';let n=$('nav');if(!n){n=document.createElement('nav');document.body.appendChild(n)}
-const sl=n.scrollLeft,vt=visTabs(),bw=vt.length<4?100/vt.length:25;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('');n.scrollLeft=sl;
+const sl=n.scrollLeft,vt=visTabs(),bw=vt.length<=5?100/vt.length:20;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('')+(isDev()?`<button data-k="developer" class="${tab=='developer'?'on':''}" onclick="go('developer')">${NI.developer}<span>Developer</span></button>`:'');n.scrollLeft=sl;
 trDom($('#app'));trDom(n);
 if(tab=='grafik'){if(G.view=='loc')locGroups(gData()).forEach((g,k)=>gzDraw('cl',k));else matList().forEach((m,k)=>gzDraw('cv',k));if(G.fitAll&&!G.hc)gzFitAll()}if((tab=='setting'||tab=='developer')&&isDev())acLoad();if(tab=='data'||tab=='grafik')calFix();scrollTo(0,y)}
 function go(t){if(!tabOK(t))return toast('Akses ditolak: khusus Developer / Admin');tab=t;PS.ak=null;scrollTo(0,0);render();const b=document.querySelector('nav button.on');if(b&&b.scrollIntoView)try{b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}catch(e){}}
