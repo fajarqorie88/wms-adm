@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- PENTING UNTUK AGENT / CLAUDE: file ini punya nomor revisi di konstanta APP_REV (cari 'const APP_REV' di script). Setiap revisi/deploy WAJIB naikkan APP_REV +1, tidak boleh turun. Baca nilainya dulu sebelum mulai. -->
 <html lang="id"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WMS - Welding Monitoring System</title>
@@ -264,6 +265,10 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(64px + env(saf
 label{font-size:12px;font-weight:600;opacity:.8}
 nav{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:20}
 nav button{flex:1;padding:10px 0;color:#94a3b8;font-size:11px}nav button.on{color:#2563EB;font-weight:700}
+.pgd{display:flex;justify-content:center;gap:6px;padding:14px 0 6px}.pgd i{display:block;width:6px;height:6px;border-radius:50%;background:#94a3b8;opacity:.45}.pgd i.a{background:#2563EB;opacity:1}.pgd i.d{background:#f59e0b;opacity:1}
+.sld-l{animation:sldL .22s ease-out}.sld-r{animation:sldR .22s ease-out}
+@keyframes sldL{from{transform:translateX(28px);opacity:.4}to{transform:none;opacity:1}}@keyframes sldR{from{transform:translateX(-28px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sld-l,.sld-r{animation:none}}
 #t{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:8px 16px;border-radius:99px;z-index:950;display:none;font-size:13px}
 .lg{position:fixed;inset:0;overflow:auto;z-index:30;color:#f1f5f9;background:radial-gradient(circle at 20% 10%,#1e40af 0,transparent 45%),radial-gradient(circle at 85% 90%,#0ea5e9 0,transparent 40%),#020617;padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px))}
 .lg .in{max-width:380px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center}
@@ -341,7 +346,7 @@ html[data-view=pc] nav button.on{color:#e0f2fe;font-weight:700;background:linear
 html[data-view=pc] .vw{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;align-items:start}
 html[data-view=pc] .vw>*{grid-column:1/-1;margin:0}
 html[data-view=pc] .vw>.c{grid-column:span 6}
-html[data-view=pc] .vw-data>.c,html[data-view=pc] .vw-setting>.c{grid-column:span 4}
+html[data-view=pc] .vw-data>.c,html[data-view=pc] .vw-setting>.c,html[data-view=pc] .vw-developer>.c{grid-column:span 4}
 html[data-view=pc] .vw>.c:has(>select.i),html[data-view=pc] .vw>.c.grid-cols-4,html[data-view=pc] .vw>.c.overflow-x-auto{grid-column:1/-1}
 html[data-view=pc] .vw-input{max-width:1040px;margin:0 auto}
 html[data-view=pc] .vw-input>.c{grid-column:1/-1}
@@ -463,7 +468,7 @@ html[data-view=pc] .fixbar .b{max-width:560px;margin:0 auto;display:block}
 html[data-view=pc] ::-webkit-scrollbar{width:10px;height:10px}
 html[data-view=pc] ::-webkit-scrollbar-thumb{background:rgba(56,189,248,.35);border-radius:8px}
 html[data-view=pc] ::-webkit-scrollbar-track{background:transparent}
-@media(max-width:1500px){html[data-view=pc] .vw-data>.c,html[data-view=pc] .vw-setting>.c{grid-column:span 6}}
+@media(max-width:1500px){html[data-view=pc] .vw-data>.c,html[data-view=pc] .vw-setting>.c,html[data-view=pc] .vw-developer>.c{grid-column:span 6}}
 @media(max-width:1000px){html[data-view=pc] .vw>.c{grid-column:span 12}}
 /* ===== GESER UNTUK HAPUS (tab Data) ===== */
 .sw-c{padding:0!important;overflow:hidden;position:relative}
@@ -956,10 +961,10 @@ html[data-view=hp] #app{max-width:980px!important}
 html[data-view=hp] body{padding-bottom:calc(46px + env(safe-area-inset-bottom,0px))}
 html[data-view=hp] nav button{padding:6px 0}
 html[data-view=hp] .fixbar{bottom:calc(46px + env(safe-area-inset-bottom,0px))!important}
-html[data-view=hp] :is(.vw-setting,.vw-master){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
-html[data-view=hp] :is(.vw-setting,.vw-master)>*{grid-column:1/-1;margin:0}
-html[data-view=hp] :is(.vw-setting,.vw-master)>.c{grid-column:auto}
-html[data-view=hp] :is(.vw-setting,.vw-master)>.c:has(>select.i),html[data-view=hp] :is(.vw-setting,.vw-master)>.c.grid-cols-4,html[data-view=hp] :is(.vw-setting,.vw-master)>.c.overflow-x-auto{grid-column:1/-1}
+html[data-view=hp] :is(.vw-setting,.vw-developer,.vw-master){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+html[data-view=hp] :is(.vw-setting,.vw-developer,.vw-master)>*{grid-column:1/-1;margin:0}
+html[data-view=hp] :is(.vw-setting,.vw-developer,.vw-master)>.c{grid-column:auto}
+html[data-view=hp] :is(.vw-setting,.vw-developer,.vw-master)>.c:has(>select.i),html[data-view=hp] :is(.vw-setting,.vw-developer,.vw-master)>.c.grid-cols-4,html[data-view=hp] :is(.vw-setting,.vw-developer,.vw-master)>.c.overflow-x-auto{grid-column:1/-1}
 }
 @media (max-width:1000px){
 html[data-view=pc] body.wn{padding-left:84px}
@@ -1141,6 +1146,13 @@ const uid8=()=>Math.random().toString(36).slice(2,9);
 let NAVR=null,BOOT=Date.now(),IG=false,IH={open:false},U=null,D=null,scr='home',tab='input',F={},Q={sort:'new'},G={days:'30'},draft=null,saveT,syncT,ss={k:'dt',d:-1};
 const NI={"input": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 20h9\"/><path d=\"M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z\"/></svg>", "data": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M8 6h13M8 12h13M8 18h13\"/><path d=\"M3 6h.01M3 12h.01M3 18h.01\"/></svg>", "grafik": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 3v18h18\"/><path d=\"m7 15 4-5 3 3 5-7\"/><path d=\"M15 6h4v4\"/></svg>", "master": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><ellipse cx=\"12\" cy=\"5\" rx=\"8\" ry=\"3\"/><path d=\"M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5\"/><path d=\"M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6\"/></svg>", "setting": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"/></svg>"};
 const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Master'],['setting','Setting']];
+/* Tab 'developer' sengaja TIDAK ada di TABS (bar bawah tetap 5 icon). Hanya developer, dibuka dengan swipe kiri dari Setting. */
+/* ================= NOMOR REVISI APLIKASI - WAJIB DIBACA AGENT / CLAUDE =================
+   APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting: "WMS V3.<APP_REV>".
+   ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
+   Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
+   Revisi ini = 190. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=190;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -1226,7 +1238,7 @@ async function scLoad(force){
     Object.assign(SC,{files:fn,fb,docs:dn,db});SC.t=Date.now();
     if((fb+db)/scCap()>=0.8)toast('Peringatan: kapasitas server sudah '+Math.round((fb+db)/scCap()*100)+'%')
   }catch(e){SC.err=(e&&e.message)||String(e);SC.t=Date.now()}
-  SC.busy=false;if(tab=='setting')render()}
+  SC.busy=false;if(tab=='setting'||tab=='developer')render()}
 function scEdit(){const v=prompt('Total kapasitas server (GB)',String(scCap()/1073741824));if(v===null)return;const n=parseFloat(String(v).replace(',','.'));if(!(n>0))return toast('Angka tidak valid');L.woms_srvcap=String(n);render()}
 function scCard(){
   const used=SC.fb+SC.db,cap=scCap(),pc=Math.min(100,used/cap*100),warn=pc>=80,col=pc>=90?'#dc2626':warn?'#f59e0b':'#16a34a';
@@ -1463,7 +1475,7 @@ else{body=`<p class="text-center font-bold mb-3" style="color:#fff">${reg?T('Daf
 return`<div class="lg"><div class="in"><div class="text-right text-xs mb-3" style="color:#93c5fd"><button class="underline" style="font-weight:${LG=='id'?700:400}" onclick="setLang('id')">ID</button> | <button class="underline" style="font-weight:${LG=='en'?700:400}" onclick="setLang('en')">EN</button></div>
 <div class="text-center mb-4">${wmsAnim()}</div>
 <div class="glass">${body}</div>
-<p class="text-center text-xs mt-4" style="color:#64748b">Data tersimpan terpisah per akun - v3.0</p>
+<p class="text-center text-xs mt-4" style="color:#64748b">Data tersimpan terpisah per akun - V3.${APP_REV}</p>
 <p class="text-center text-xs mt-1" style="color:#94a3b8">Developed by Fajar Q.</p></div></div>`}
 /* ---------- LUPA PASSWORD: link reset via email (Appwrite Auth) ---------- */
 const AW_HOME='https://fajarqorie88.github.io/wms-adm/';
@@ -1802,7 +1814,7 @@ function dtOk(i,q){if(!q.cal)return true;return dtIn(i.dt).slice(0,10)==q.cal}
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const fltN=(q,k)=>k.filter(x=>q[x]).length;
 const AQ={};
-const CF=()=>tab=='grafik'?G:tab=='setting'?AQ:Q;
+const CF=()=>tab=='grafik'?G:(tab=='setting'||tab=='developer')?AQ:Q;
 let calSw=0;
 /* Tampilan Grid / List (khusus mode PC): Data default Grid, Grafik default List (sama seperti tampilan sebelumnya) */
 const vmPc=()=>document.documentElement.dataset.view=='pc';
@@ -2286,14 +2298,7 @@ ${P('name','Nama')}${P('nip','NIP')}${P('dept','Dept')}${fld('Role',`<input clas
 <div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:12px"><b>Akun</b><div class="text-sm">${esc(U.name)} (${U.provider=='google'?'email':U.provider})<br>Data milik: ${esc(U.id)}<br>Hak akses: <b>${roleLabel()}</b></div><button class="b bd mt-2" onclick="logout()">Logout</button></div>
 ${isDev()&&bioOK?`<div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:12px"><b>Biometrik Login</b><p class="text-xs opacity-70 my-2">Masuk tanpa mengetik password di perangkat ini.</p>${bioOn(bioKey())?`<button class="b bd" onclick="bioOff(bioKey());render()">Nonaktifkan</button>`:`<button class="b" onclick="bioAsk(bioKey())">Aktifkan</button>`}</div>`:''}
 ${SERVER?`<div id="pwbox" style="border-top:1px solid var(--bd);margin-top:14px;padding-top:12px"><button type="button" class="flex justify-between items-center w-full" style="text-align:left;cursor:pointer" onclick="PWO?pwClose():pwOpen()"><b>Ganti Password</b><span style="display:inline-block;transition:transform .2s;transform:rotate(${PWO?180:0}deg)">&#9662;</span></button><div id="pwbody" style="display:${PWO?'block':'none'}"><p class="text-xs opacity-70 my-2">Masukkan password baru dan konfirmasinya (min. 8 karakter).</p><input id="pn" class="i" type="password" placeholder="Password baru" autocomplete="new-password"><input id="pn2" class="i" type="password" placeholder="Konfirmasi password baru" autocomplete="new-password"><div class="flex gap-2"><button class="b" onclick="fbPass()">Ubah Password</button>${SRV.resetUrl?`<button class="b b2" onclick="fbReset(U.email)">Kirim link via email</button>`:''}</div></div></div>`:accs()[U.id]?`<div id="pwbox" style="border-top:1px solid var(--bd);margin-top:14px;padding-top:12px"><button type="button" class="flex justify-between items-center w-full" style="text-align:left;cursor:pointer" onclick="PWO?pwClose():pwOpen()"><b>Ganti Password</b><span style="display:inline-block;transition:transform .2s;transform:rotate(${PWO?180:0}deg)">&#9662;</span></button><div id="pwbody" style="display:${PWO?'block':'none'}"><p class="text-xs opacity-70 my-2">Masukkan password baru dan konfirmasinya (min. 8 karakter).</p><input id="pn" class="i" type="password" placeholder="Password baru (min. 8)" autocomplete="new-password"><input id="pn2" class="i" type="password" placeholder="Konfirmasi password baru" autocomplete="new-password"><button class="b" onclick="pwChange()">Ubah Password</button></div></div>`:''}</div></div>
-${isDev()?apPanel():''}${isDev()?acCard():''}
-${isDev()?wcCard():''}
-${isDev()?`<div class="c text-sm"><b>Data &amp; Storage</b><p>${D.insp.length} data pengecekan - ${(sz/1024).toFixed(1)} KB</p><p class="text-xs opacity-60">Data tersimpan otomatis di perangkat ini dan tidak hilang saat refresh.</p>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" class="my-2"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="xl()">Export Excel</button><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="bk()">Backup JSON</button><label class="b b2" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box;cursor:pointer">Restore JSON<input type="file" accept=".json" hidden onchange="rs(this.files[0])"></label><button class="b bd" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="wipe()">Hapus Semua</button></div>
-<p>Update server terakhir: ${D.sync.last||'belum pernah'}</p><div class="mt-2"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box;background:#16a34a" onclick="awUpdateServer()">&#11014; Update Data Server</button><div id="spw" class="spw" style="${SP.show?'':'visibility:hidden'}"><div id="spb" style="width:${SP.p}%;background:${SP.err?'#ef4444':'#22c55e'}"></div></div></div>
-<p class="text-xs opacity-60 mt-1">Mengirim data setting (lokasi, checker, material, shift, deskripsi), master equipment, dan data pengecekan ke server Appwrite, lalu mengambil data baru dari server. Perangkat lain menerima pembaruan saat aplikasi dibuka kembali.</p></div>`:''}
-${isDev()?(setTimeout(scLoad,0),scCard()):''}
-<div class="c text-sm text-center">WMS v3.0 - Welding Monitoring System<p class="text-xs opacity-60 mt-1">Developed by Fajar Q.</p></div>`}
+<div class="c text-sm text-center">WMS V3.${APP_REV} - Welding Monitoring System<p class="text-xs opacity-60 mt-1">Developed by Fajar Q.</p></div>${devDots('setting')}`}
 function curView(){return L.woms_view||(innerWidth>=1024?'pc':'hp')}
 function setView(v){L.woms_view=v;document.documentElement.dataset.view=v;render()}
 function theme(){const n=document.documentElement.dataset.theme=='dark'?'light':'dark';document.documentElement.dataset.theme=n;L.woms_theme=n;render()}
@@ -2324,15 +2329,41 @@ function qgView(){return`<div class="lg"><div class="in"><button class="text-sm 
 function openMenu(k){scr=k=='cow'?'app':k;if(k=='cow')tab='input';scrollTo(0,0);render()}
 function backBar(){return`<div class="pt-3"><button class="text-sm text-blue-600 font-semibold" onclick="openMenu('home')">&#8249; Kembali ke Menu</button></div>`}
 
+/* ---------- TAB DEVELOPER (tersembunyi, khusus Developer, dibuka dengan swipe kiri dari Setting) ---------- */
+function devDots(a){if(!isDev())return'';let d='';for(let k=0;k<6;k++)d+='<i class="'+(k==5?(a=='developer'?'d':''):(k==4&&a=='setting'?'a':''))+'"></i>';return'<div class="pgd" aria-hidden="true">'+d+'</div>'}
+function devView(){const sz=(L['woms_data_'+U.id]||'').length;
+return`<div class="flex justify-between items-center py-3"><h2 class="font-bold">Developer</h2>${roleBadge()}</div>
+${isDev()?apPanel():''}${isDev()?acCard():''}
+${isDev()?wcCard():''}
+${isDev()?`<div class="c text-sm"><b>Data &amp; Storage</b><p>${D.insp.length} data pengecekan - ${(sz/1024).toFixed(1)} KB</p><p class="text-xs opacity-60">Data tersimpan otomatis di perangkat ini dan tidak hilang saat refresh.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" class="my-2"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="xl()">Export Excel</button><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="bk()">Backup JSON</button><label class="b b2" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box;cursor:pointer">Restore JSON<input type="file" accept=".json" hidden onchange="rs(this.files[0])"></label><button class="b bd" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="wipe()">Hapus Semua</button></div>
+<p>Update server terakhir: ${D.sync.last||'belum pernah'}</p><div class="mt-2"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box;background:#16a34a" onclick="awUpdateServer()">&#11014; Update Data Server</button><div id="spw" class="spw" style="${SP.show?'':'visibility:hidden'}"><div id="spb" style="width:${SP.p}%;background:${SP.err?'#ef4444':'#22c55e'}"></div></div></div>
+<p class="text-xs opacity-60 mt-1">Mengirim data setting (lokasi, checker, material, shift, deskripsi), master equipment, dan data pengecekan ke server Appwrite, lalu mengambil data baru dari server. Perangkat lain menerima pembaruan saat aplikasi dibuka kembali.</p></div>`:''}
+${isDev()?(setTimeout(scLoad,0),scCard()):''}
+${devDots('developer')}`}
+
 /* ---------- RENDER ---------- */
 function render(){const y=scrollY;document.body.classList.toggle('wn',!!U&&scr=='app');if(!U){$('#app').innerHTML=loginView();trDom($('#app'));return}
 if(scr!='app'){const n0=$('nav');if(n0)n0.remove();$('#app').innerHTML=scr=='qg'?qgView():homeView();trDom($('#app'));return}
-if(!tabOK(tab))tab='input';const v={input:inputView,data:dataView,grafik:grafikView,master:masterView,setting:settingView}[tab]();
-$('#app').innerHTML=backBar()+'<div class="vw vw-'+tab+(vmOf()?' vm-'+vmOf():'')+'">'+v+'</div>';let n=$('nav');if(!n){n=document.createElement('nav');document.body.appendChild(n)}
+if(!tabOK(tab))tab='input';const v={input:inputView,data:dataView,grafik:grafikView,master:masterView,setting:settingView,developer:devView}[tab]();
+$('#app').innerHTML=backBar()+'<div class="vw vw-'+tab+(vmOf()?' vm-'+vmOf():'')+(SLD?' sld-'+SLD:'')+'">'+v+'</div>';SLD='';let n=$('nav');if(!n){n=document.createElement('nav');document.body.appendChild(n)}
 const sl=n.scrollLeft,vt=visTabs(),bw=vt.length<4?100/vt.length:25;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('');n.scrollLeft=sl;
 trDom($('#app'));trDom(n);
-if(tab=='grafik'){if(G.view=='loc')locGroups(gData()).forEach((g,k)=>gzDraw('cl',k));else matList().forEach((m,k)=>gzDraw('cv',k));if(G.fitAll&&!G.hc)gzFitAll()}if(tab=='setting'&&isDev())acLoad();if(tab=='data'||tab=='grafik')calFix();scrollTo(0,y)}
+if(tab=='grafik'){if(G.view=='loc')locGroups(gData()).forEach((g,k)=>gzDraw('cl',k));else matList().forEach((m,k)=>gzDraw('cv',k));if(G.fitAll&&!G.hc)gzFitAll()}if((tab=='setting'||tab=='developer')&&isDev())acLoad();if(tab=='data'||tab=='grafik')calFix();scrollTo(0,y)}
 function go(t){if(!tabOK(t))return toast('Akses ditolak: khusus Developer / Admin');tab=t;PS.ak=null;scrollTo(0,0);render();const b=document.querySelector('nav button.on');if(b&&b.scrollIntoView)try{b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}catch(e){}}
+/* ---------- SWIPE: Setting <-> Developer (khusus Developer) ---------- */
+let SLD='';
+(function(){let sx=0,sy=0,t0=0,ok=false;
+const blk=t=>{for(let e=t;e&&e!==document.body;e=e.parentElement){const n=e.tagName;if(n=='INPUT'||n=='TEXTAREA'||n=='SELECT'||n=='CANVAS'||n=='TABLE')return true;if(e.scrollWidth>e.clientWidth+4){const o=getComputedStyle(e).overflowX;if(o=='auto'||o=='scroll')return true}}return false};
+const dn=(x,y,t)=>{ok=!!U&&scr=='app'&&((tab=='setting'&&isDev())||tab=='developer')&&!document.querySelector('.fixed')&&!blk(t);sx=x;sy=y;t0=Date.now()};
+const up=(x,y,min)=>{if(!ok)return;ok=false;const dx=x-sx,dy=y-sy;if(Date.now()-t0>700||Math.abs(dx)<min||Math.abs(dy)>Math.abs(dx)*.6)return;
+ if(dx<0&&tab=='setting'&&isDev()){SLD='l';go('developer')}else if(dx>0&&tab=='developer'){SLD='r';go('setting')}};
+addEventListener('touchstart',e=>{const t=e.touches[0];dn(t.clientX,t.clientY,e.target)},{passive:true});
+addEventListener('touchend',e=>{const t=e.changedTouches[0];up(t.clientX,t.clientY,70)},{passive:true});
+addEventListener('mousedown',e=>{if(e.button===0)dn(e.clientX,e.clientY,e.target)});
+addEventListener('mouseup',e=>up(e.clientX,e.clientY,140));
+})();
+
 /* ---------- SINKRON MASTER KE APPWRITE ---------- */
 const AW_MT="6ad9e3270004fcc8e26d", AW_CH=15000;
 /* Collection khusus akun/role/presence (u_, v_, p_). Default = AW_MT supaya tetap jalan; ganti ke ID collection baru setelah dibuat di console (lihat SECURITY.md) */
@@ -2468,7 +2499,7 @@ const isDev=()=>!!U&&isDevEm(myEm())&&!devBad;
 const rlGet=()=>{try{return L['woms_rl_'+myEm()]||''}catch(e){return ''}};
 const isAdmRole=()=>!!U&&rlGet()==='admin';
 const canAdm=()=>isDev()||(ADM_TABS&&isAdmRole());
-const tabOK=t=>t!='master'||canAdm();
+const tabOK=t=>t=='developer'?isDev():(t!='master'||canAdm());
 const visTabs=()=>TABS.filter(([k])=>tabOK(k));
 const roleBadge=()=>isDev()?'<span style="background:#f59e0b;color:#111;font-weight:700;font-size:11px;letter-spacing:.06em;padding:4px 12px;border-radius:999px">&#9733; Developer</span>':'<span style="background:#475569;color:#fff;font-weight:700;font-size:11px;letter-spacing:.06em;padding:4px 12px;border-radius:999px">User</span>';
 const roleLabel=()=>isDev()?'Developer / Master Admin':isAdmRole()?'Admin':'User';
@@ -2587,7 +2618,7 @@ async function acDel(h){if(!isDev())return;
     awSuccess('Akun dihapus','');acLoad()}catch(e){acErrT(e)}}
 async function acRestore(h){if(!isDev())return;
   try{const id='u_'+h,u=await rdGet(id);if(!u)return;delete u.x;delete u.xt;delete u.xb;await rdSet(id,u);awSuccess('Akun dipulihkan','');acLoad()}catch(e){acErrT(e)}}
-setInterval(()=>{if(U&&scr=='app'&&tab=='setting'&&isDev()&&document.visibilityState=='visible')acLoad()},30000);
+setInterval(()=>{if(U&&scr=='app'&&(tab=='setting'||tab=='developer')&&isDev()&&document.visibilityState=='visible')acLoad()},30000);
 /* ---------- UNDO (hapus data & approve data, maksimal 3 langkah) ---------- */
 let UNDOS=[];
 const UNDO_MAX=3;
@@ -2740,7 +2771,7 @@ const appUrl=()=>/^https?:$/.test(location.protocol)?location.origin+location.pa
 async function shareApp(){const url='https://tinyurl.com/wps-adm-app',msg='WMS - Welding Monitoring System\n'+url;
   if(navigator.share){try{await navigator.share({text:msg});return}catch(e){if(e&&e.name=='AbortError')return}}
   try{await navigator.clipboard.writeText(msg);toast('Link aplikasi disalin')}catch(e){prompt('Salin link aplikasi:',msg)}}
-(function init(){initLock();try{const n=JSON.parse(L.woms_nav||'null');if(n&&L.woms_user&&!L.woms_lock&&['home','app','qg'].includes(n.s)&&['input','data','grafik','master','setting'].includes(n.t))NAVR=n}catch(e){}
+(function init(){initLock();try{const n=JSON.parse(L.woms_nav||'null');if(n&&L.woms_user&&!L.woms_lock&&['home','app','qg'].includes(n.s)&&['input','data','grafik','master','setting','developer'].includes(n.t))NAVR=n}catch(e){}
 document.documentElement.dataset.theme=L.woms_theme||'light';document.documentElement.dataset.view=curView();try{screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock()}catch(e){}
 let rzT,lastW=innerWidth;const onRot=()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(innerWidth==lastW)return;lastW=innerWidth;if(!L.woms_view){const v=curView();if(document.documentElement.dataset.view!=v)document.documentElement.dataset.view=v}if(U)render()},250)};addEventListener('resize',onRot);addEventListener('orientationchange',onRot);
 if(!SERVER&&!RC)try{const u=JSON.parse(L.woms_user||'null');if(u&&!L.woms_lock){U=u;load(u.id);if(NAVR&&String(NAVR.u)==String(u.id)){scr=NAVR.s;tab=NAVR.t;navIn(NAVR)}NAVR=null}}catch(e){}
