@@ -1018,6 +1018,18 @@ html[data-view=pc] .pgd{display:none}
 .qgco.l{transform:translate(calc(-100% - 14px),-50%)}
 .qgdl{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;background:rgba(148,163,184,.14);margin-bottom:6px;font-size:13px;cursor:pointer}
 .qgchs{display:flex;flex-wrap:wrap;gap:6px}
+.qgh .og{background:#ED7D31;color:#fff}.qgh .cg{background:#14b8a6;color:#fff}
+.qgr.p{grid-template-columns:34px minmax(0,1.1fr) minmax(0,.8fr) minmax(0,1fr) minmax(0,1fr) 46px;gap:4px}
+.qgr.p .qg-l{height:34px;display:flex;align-items:center;justify-content:center;padding:0;font-size:12px}
+.qgr.p .qg-in{height:34px;padding:0 5px;font-size:12px}
+.qgr.p .qg-in.j{padding:0 2px}
+.qgr.p.qgh span{font-size:10.5px;line-height:1.15;padding:3px 1px;min-height:34px;display:flex;align-items:center;justify-content:center}
+.qg-in.c{background:#99e0cf}
+.qgov.t2 .qgc{max-width:500px}
+.qgpill{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;background:#99e0cf;color:#0f3d34;border:1px solid #14b8a6;flex:none}
+.qgpill.on{background:#14b8a6;color:#fff}
+.qgev{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+.qgev img{width:84px;height:62px;object-fit:cover;border-radius:8px;border:1px solid rgba(148,163,184,.5)}
 .qgch{font-size:12px;padding:4px 10px;border-radius:999px;background:rgba(148,163,184,.2)}
 .qge{width:46px;flex:none;border-radius:14px;background:rgba(255,255,255,.12);color:#bfdbfe;font-size:17px;border:1px solid rgba(255,255,255,.18)}
 .qgn{justify-content:center;background:rgba(255,255,255,.08);border:1.5px dashed rgba(255,255,255,.4);color:#bfdbfe}
@@ -1039,7 +1051,6 @@ html[data-view=pc] .pgd{display:none}
 select.qg-b{appearance:none;-webkit-appearance:none;text-align-last:center;color:#1f3864}
 .qg-sl{font-size:26px;font-weight:700;line-height:1}
 .qgr{display:grid;grid-template-columns:44px 44px 1fr 96px;gap:6px;align-items:center;margin-bottom:6px}
-.qgr.p{grid-template-columns:42px 1.5fr .9fr 1.1fr 64px}
 .qgh span{border-radius:10px;padding:6px 2px;text-align:center;font-size:12px;color:#1f3864}
 .qgh .lb{background:#B4C7E7}.qgh .mg{background:#E91AB9;color:#fff}.qgh .or{background:#ED7D31;color:#fff}.qgh .bl{background:#8FAADC}
 .qg-l{background:#B4C7E7;color:#1f3864;border-radius:10px;padding:7px 2px;text-align:center;font-size:13px}
@@ -1217,8 +1228,8 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 197. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=197;
+   Revisi ini = 198. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=198;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2393,7 +2404,7 @@ ${MENUS.map(([k,t,d,ic])=>`<button class="glass w-full text-left flex items-cent
 <button class="text-xs underline mt-4 mx-auto" style="color:#93c5fd" onclick="logout()">Logout</button></div></div>`}
 /* ---------- QUALITY GATE: pilih part -> daftar palet (Shikake) -> detail palet. Data di D.M.qg[tanggal][RH|LH] (ikut sync master, simpan 45 hari) ---------- */
 const QG_PARTS=[['RH','S/A Front Door RH'],['LH','S/A Front Door LH']],QG_N=10,QG_CYC=10;
-let QG={day:'',part:'',pal:0,draft:null,dirty:0,df:null};
+let QG={day:'',part:'',pal:0,draft:null,dirty:0,df:null,cm:null};
 /* Daftar item Quality Gate: D.M.qgp = [{k,n}] (ikut sync master). Kalau belum pernah diubah, pakai bawaan QG_PARTS (RH, LH). */
 const qgParts=()=>Array.isArray(D.M.qgp)?D.M.qgp:QG_PARTS.map(([k,n])=>({k,n}));
 const qgCommit=()=>{D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}};
@@ -2416,12 +2427,12 @@ const qgDone=(P,n)=>{const r=P.p[n];return!!r&&r.length==QG_N&&r.every(x=>x[3]==
 function qgDate(day){const d=new Date(day+'T00:00:00');return isNaN(d)?day:String(d.getDate()).padStart(2,'0')+'-'+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+'-'+String(d.getFullYear()).slice(2)}
 function qgWrite(day,k,fn){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}}
 function qgOpen(k){QG.part=k;QG.pal=0;render()}
-function qgClose(){QG.part='';QG.pal=0;QG.draft=null;QG.df=null;QG.dirty=0;render()}
-function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.df=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3]]:['','',[],'']});QG.dirty=0;render()}
-function qgClosePal(){if(QG.dirty&&!confirm('Perubahan belum disimpan. Tutup tanpa simpan?'))return;QG.pal=0;QG.draft=null;QG.df=null;QG.dirty=0;render()}
+function qgClose(){QG.part='';QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;render()}
+function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.df=null;QG.cm=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3],qgCm(r[4])]:['','',[],'',qgCm(null)]});QG.dirty=0;render()}
+function qgClosePal(){if(QG.dirty&&!confirm('Perubahan belum disimpan. Tutup tanpa simpan?'))return;QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;render()}
 function qgIn(i,k,v){QG.draft[i][k]=v;QG.dirty=1}
 function qgStart(v){qgWrite(qgDay(),QG.part,P=>{P.s=+v||1})}
-function qgSavePal(){const day=qgDay(),k=QG.part,n=QG.pal,d=QG.draft.map(x=>[String(x[0]).trim(),String(x[1]).trim(),qgDef(x[2]),x[3]]),blank=d.every(x=>!x[0]&&!x[1]&&!x[2].length&&!x[3]);QG.pal=0;QG.draft=null;QG.df=null;QG.dirty=0;qgWrite(day,k,P=>{if(blank)delete P.p[n];else P.p[n]=d});toast('Palet '+n+' tersimpan')}
+function qgSavePal(){const day=qgDay(),k=QG.part,n=QG.pal,d=QG.draft.map(x=>[String(x[0]).trim(),String(x[1]).trim(),qgDef(x[2]),x[3],qgCm(x[4])]),blank=d.every(x=>!x[0]&&!x[1]&&!x[2].length&&!x[3]&&!x[4].t&&!x[4].i);QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;qgWrite(day,k,P=>{if(blank)delete P.p[n];else P.p[n]=d});toast('Palet '+n+' tersimpan')}
 /* ---------- DEFECT per part: gambar panel (upload manual, per item) + titik merah + callout + popup isi defect. Disimpan di baris palet: x[2] = [{x,y,t}] (x,y dalam persen gambar, null = tanpa titik). Gambar di D.M.qgimg[item] ---------- */
 const qgDef=v=>Array.isArray(v)?v.map(m=>({x:m.x==null?null:m.x,y:m.y==null?null:m.y,t:String(m.t||'')})):(v?[{x:null,y:null,t:String(v)}]:[]);
 const qgDefLbl=a=>!a.length?'-':a.length==1?(a[0].t||'1 defect'):a.length+' defect';
@@ -2453,12 +2464,35 @@ ${box}
 <hr class="qg-hr"><b class="text-sm">List defect (${m.length})</b><div class="mt-2">${list}</div>
 <button type="button" class="b w-full mt-3" onclick="qgDfDone()">Selesai</button></div></div>${pop}`}
 
+/* ---------- C/M (Counter Measure) per part: action + foto Evidence (dikompres otomatis maks 100 KB). Disimpan di baris palet: x[4] = {t:action, i:fotoDataURL} ---------- */
+const qgCm=v=>({t:String(v&&v.t||''),i:String(v&&v.i||'')});
+const qgCmLbl=c=>!c.t&&!c.i?'-':esc(c.t||'Evidence')+(c.t&&c.i?' &#128247;':'');
+const qgBytes=u=>Math.floor((u.length-u.indexOf(',')-1)*3/4);
+function qgCmOpen(i){const c=qgCm(QG.draft[i][4]);QG.df=null;QG.cm={i,t:c.t,img:c.i,o:0};render();setTimeout(()=>{const e=$('#qgCmT');if(e)e.focus()},40)}
+function qgCmDone(){const c=QG.cm;QG.draft[c.i][4]={t:c.t.trim(),i:c.img};QG.dirty=1;QG.cm=null;render()}
+function qgCmCancel(){const c=QG.cm,s=qgCm(QG.draft[c.i][4]);if((c.t.trim()!=s.t||c.img!=s.i)&&!confirm('Perubahan C/M belum disimpan. Tutup?'))return;QG.cm=null;render()}
+function qgCmDelImg(){QG.cm.img='';QG.cm.o=0;render()}
+function qgCmUp(inp){const f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(!/^image\//.test(f.type))return toast('File harus berupa gambar');const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const MAX=100000;let u='',ok=false;
+outer:for(const mx of [1000,800,640,480,360,280]){const sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);for(const q of [.72,.6,.5,.4,.3]){u=c.toDataURL('image/jpeg',q);if(qgBytes(u)<=MAX){ok=true;break outer}}}
+if(!ok)return toast('Foto tidak bisa dikecilkan sampai 100 KB, coba foto lain');
+if(QG.cm){QG.cm.img=u;QG.cm.o=f.size;render();toast('Evidence siap ('+Math.round(qgBytes(u)/1024)+' KB)')}};im.onerror=()=>toast('Gambar tidak bisa dibaca');im.src=rd.result};rd.readAsDataURL(f)}
+function qgCmView(){const c=QG.cm,x=QG.draft[c.i],kb=c.img?qgBytes(c.img):0,orig=c.o?(c.o>1048576?(c.o/1048576).toFixed(1).replace('.',',')+' MB':Math.round(c.o/1024)+' KB'):'',dfs=x[2].map(m=>m.t).filter(Boolean).join(', ')||'-';
+return`<div class="qgov t3" onclick="if(event.target===this)qgCmCancel()"><div class="c qgc" style="max-width:380px"><button type="button" class="qgx" aria-label="Tutup" onclick="qgCmCancel()">&times;</button>
+<div class="qg-ttl"><b>C/M - Part ${c.i+1}</b><span>${esc(x[0]||'')}</span></div>
+<div class="text-xs" style="opacity:.7">Defect: ${esc(dfs)}</div>
+<label class="text-xs opacity-70 mt-2" style="display:block">Action (Counter Measure)</label>
+<textarea id="qgCmT" class="i" rows="3" maxlength="200" placeholder="Action yang dilakukan saat defect" oninput="QG.cm.t=this.value">${esc(c.t)}</textarea>
+<label class="text-xs opacity-70 mt-2" style="display:block">Evidence</label>
+<div class="qgev"><button type="button" class="qgpill${c.img?' on':''}" onclick="document.getElementById('qgCmFile').click()">&#128247; Evidence</button>${c.img?`<img src="${c.img}" alt="Evidence"><span class="text-xs" style="opacity:.75;line-height:1.5">${orig?orig+' &rarr; ':''}${Math.round(kb/1024)} KB<br>Ketuk Evidence untuk ganti</span>`:'<span class="text-xs" style="opacity:.7">Foto dikompres otomatis maks 100 KB.</span>'}</div>
+<input type="file" id="qgCmFile" accept="image/*" hidden onchange="qgCmUp(this)">
+<div class="flex gap-2 mt-3">${c.img?'<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgCmDelImg()">Hapus foto</button>':''}<button type="button" class="b b2" style="flex:1" onclick="qgCmCancel()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgCmDone()">Simpan</button></div></div></div>`}
+
 function qgView(){const day=qgDay(),tot=qgPals(day);
 return`<div class="lg"><div class="in"><button class="text-sm mb-4 self-start" style="color:#93c5fd" onclick="openMenu('home')">&#8249; Kembali ke Menu</button>
 <div class="glass"><h2 class="font-bold text-lg text-center">Quality Gate</h2><label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Tanggal</label><input type="date" class="i" value="${esc(day)}" onchange="QG.day=this.value||ymd(new Date());render()">
 ${qgParts().map(({k,n})=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<div class="qgi"><button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${esc(n)}</span><em>${dn}/${tot} palet</em></button><button type="button" class="qge" aria-label="Edit item" onclick="qgItemDlg('${k}')">&#9998;</button></div>`}).join('')}
 <button type="button" class="qgb qgn" onclick="qgItemDlg('')">+ New Item</button>
-${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.part?qgPart():''}${QG.pal?qgPal():''}${QG.df?qgDfView():''}`}
+${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.part?qgPart():''}${QG.pal?qgPal():''}${QG.df?qgDfView():''}${QG.cm?qgCmView():''}`}
 function qgPart(){const day=qgDay(),k=QG.part,P=qgP(day,k),Pr=qgProd(day),t=prNum(Pr.t),v=prNum(Pr.v),pk=t!=null&&v!=null?t-v:null,tot=qgPals(day),nm=(qgParts().find(x=>x.k==k)||{}).n||k;
 let act=0;for(let i=1;i<=tot;i++)if(!qgDone(P,i)){act=i;break}if(!act)act=tot||1;
 let rows='';for(let i=1;i<=tot;i++){const dn=qgDone(P,i);rows+=`<div class="qgr"><span class="qg-l">${i}</span><span class="qg-l">${qgSkk(P.s,i)}</span><button type="button" class="qg-o" onclick="qgOpenPal(${i})">Open</button><span class="qg-s ${dn?'ok':'ny'}">${dn?'Finish Check':'Not Yet'}</span></div>`}
@@ -2469,16 +2503,16 @@ return`<div class="qgov" onclick="if(event.target===this)qgClose()"><div class="
 <div class="qg-kv"><span class="qg-k">Shikake:</span><span class="qg-b">${qgSkk(P.s,act)}</span><span class="qg-sl">/</span><span class="qg-b">${QG_CYC}</span></div>
 <div class="qg-kv"><span class="qg-k">Start:</span><select class="qg-b" aria-label="Start Shikake" onchange="qgStart(this.value)">${Array.from({length:QG_CYC},(_,i)=>`<option value="${i+1}"${(P.s||1)==i+1?' selected':''}>${i+1}</option>`).join('')}</select><span class="qg-sl">/</span><span class="qg-b">${QG_CYC}</span></div>
 <hr class="qg-hr">
-<div class="qgr qgh"><span class="lb">Plt no.</span><span class="lb">Skk no.</span><span class="mg">Detail Pallet</span><span class="or">Status</span></div>
+<div class="qgr qgh"><span class="lb">Plt no.</span><span class="lb">Skk no.</span><span class="mg">Detail Pallet</span><span class="og">Status</span></div>
 ${tot?rows:'<p class="text-sm text-center" style="padding:14px 0;opacity:.7">Target tanggal ini belum diisi. Isi di tab Data &gt; Produksi.</p>'}
 </div></div>`}
 function qgPal(){const day=qgDay(),P=qgP(day,QG.part),n=QG.pal,tot=qgPals(day);
-let r='';for(let i=0;i<QG_N;i++){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l">${i+1}</span><input class="qg-in m" value="${esc(x[0])}" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}"><input class="qg-in m" value="${esc(x[1])}" oninput="qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgdb" aria-label="Defect ${i+1}" onclick="qgDf(${i})">${esc(qgDefLbl(x[2]))}</button><select class="qg-in j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option></select></div>`}
+let r='';for(let i=0;i<QG_N;i++){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l">${i+1}</span><input class="qg-in m" value="${esc(x[0])}" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}"><input class="qg-in m" value="${esc(x[1])}" oninput="qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgdb" aria-label="Defect ${i+1}" onclick="qgDf(${i})">${esc(qgDefLbl(x[2]))}</button><button type="button" class="qg-in c qgdb" aria-label="C/M ${i+1}" onclick="qgCmOpen(${i})">${qgCmLbl(qgCm(x[4]))}</button><select class="qg-in j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option></select></div>`}
 return`<div class="qgov t2" onclick="if(event.target===this)qgClosePal()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClosePal()">&times;</button>
 <div class="qg-ph"><b>Pallet no.</b><span class="qg-b">${n}</span><span class="qg-sl">/</span><span class="qg-b">${tot}</span><button type="button" class="qg-sv" aria-label="Simpan palet" onclick="qgSavePal()">&#128190;</button></div>
 <div class="text-xs" style="opacity:.7;margin:-2px 0 6px">Skk ${qgSkk(P.s,n)}/${QG_CYC}</div>
 <hr class="qg-hr">
-<div class="qgr p qgh"><span class="lb">Part no.</span><span class="mg">No. Body</span><span class="mg">Sfx</span><span class="or">Defect</span><span class="bl">Jdg</span></div>
+<div class="qgr p qgh"><span class="lb">Part no.</span><span class="mg">No. Body</span><span class="mg">Sfx</span><span class="og">Defect</span><span class="cg">C/M</span><span class="bl">Jdg</span></div>
 ${r}
 </div></div>`}
 
