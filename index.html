@@ -1019,19 +1019,26 @@ html[data-view=pc] .pgd{display:none}
 .qgdl{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;background:rgba(148,163,184,.14);margin-bottom:6px;font-size:13px;cursor:pointer}
 .qgchs{display:flex;flex-wrap:wrap;gap:6px}
 .qgh .og{background:#ED7D31;color:#fff}.qgh .cg{background:#14b8a6;color:#fff}
-.qgr.p{grid-template-columns:28px minmax(0,1.35fr) 44px minmax(0,1.1fr) minmax(0,1.1fr) 50px;gap:4px}
+.qgr.p{grid-template-columns:22px minmax(0,1.5fr) 34px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 58px;grid-template-areas:"l b s d c k j";gap:3px;padding-bottom:0;margin-bottom:5px;border-bottom:0}
+.qgr.p.qgh{border-bottom:0;padding-bottom:0}
+.qgr.p .qg-in.c{margin:0;border:0;box-shadow:none}
+html[data-view=pc] .qgr.p .qg-in.c{background:#99e0cf}
+.qgr.p .a-l{grid-area:l}.qgr.p .a-b{grid-area:b}.qgr.p .a-s{grid-area:s}.qgr.p .a-d{grid-area:d}.qgr.p .a-c{grid-area:c}.qgr.p .a-k{grid-area:k}.qgr.p .a-j{grid-area:j}
+.qgh .kg{background:#8b5cf6;color:#fff}.qg-in.k{background:#c4b5fd}
+.qg-in.j.OS{background:#fbbf24;color:#111}
 .qg-in.sf{padding:0 2px;text-align:center;text-transform:uppercase}
-.qg-sh{flex:1;min-width:0;-moz-appearance:textfield;appearance:textfield}
-input.qg-b{width:64px;flex:none}input.qg-b.qg-sh{width:auto;flex:1}
+.qg-sh{flex:none;min-width:0;-moz-appearance:textfield;appearance:textfield}
+input.qg-b{width:64px;flex:none}input.qg-b.qg-sh{width:64px;flex:none}
 input.qg-b::-webkit-outer-spin-button,input.qg-b::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .qgjh{position:relative;cursor:pointer;user-select:none}
 .qgbm{position:absolute;top:100%;right:0;margin-top:4px;min-width:170px;background:#fff;color:#1f3864;border:1.5px solid #8FAADC;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.35);z-index:5;overflow:hidden;text-align:left}
 .qgbm button{display:block;width:100%;padding:11px 14px;font-size:14px;font-weight:600;text-align:left;color:#1f3864;background:transparent;border-bottom:1px solid rgba(148,163,184,.35)}
 .qgbm button:last-child{border-bottom:0}.qgbm button:hover{background:#dbe7f7}
-.qgr.p .qg-l{height:34px;display:flex;align-items:center;justify-content:center;padding:0;font-size:11px}
-.qgr.p .qg-in{height:34px;padding:0 5px;font-size:12px}
-.qgr.p .qg-in.j{padding:0 2px}
-.qgr.p.qgh span{font-size:10.5px;line-height:1.15;padding:3px 1px;min-height:34px;display:flex;align-items:center;justify-content:center}
+.qgr.p .qg-l{height:34px;display:flex;align-items:center;justify-content:center;padding:0;font-size:10.5px}
+.qgr.p .qg-in{height:34px;padding:0 3px;font-size:10.5px}
+.qgr.p input.qg-in.m{text-align:center}
+.qgr.p .qg-in.j{padding:0 1px;font-size:9.5px}
+.qgr.p.qgh span{font-size:9.5px;line-height:1.15;padding:3px 1px;min-height:34px;display:flex;align-items:center;justify-content:center}
 .qg-in.c{background:#99e0cf}
 .qgov.t2 .qgc{max-width:500px}
 .qgpill{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;background:#99e0cf;color:#0f3d34;border:1px solid #14b8a6;flex:none}
@@ -1076,6 +1083,18 @@ select.qg-b{appearance:none;-webkit-appearance:none;text-align-last:center;color
 .qg-vb.on{background:#E91AB9;color:#fff}
 .qg-vr .qg-tv{flex:1;font-size:15px}
 .qg-vi{font-size:11.5px;color:#64748b;margin:-2px 0 4px;text-align:right}
+.qg-pv{font-size:11px!important;line-height:1.15}
+.qg-kv{display:grid;grid-template-columns:104px 64px 10px 64px;column-gap:10px;justify-content:end;align-items:center}
+.qg-kv .qg-k{min-width:0;width:104px}
+.qg-kv input.qg-b.qg-sh{grid-column:2/5;width:100%!important}
+html[data-view=pc] .qg-kv{grid-template-columns:130px 84px 14px 84px}html[data-view=pc] .qg-kv .qg-k{width:130px}
+.qg-vr .qg-k.qg-ka{min-width:64px;padding:8px 8px;font-size:13px}html[data-view=pc] .qg-vr .qg-k.qg-ka{min-width:90px}
+.qgmore{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:6px;padding:11px;border-radius:12px;background:#B4C7E7;color:#1f3864;font-weight:700;font-size:14px}.qgmore small{font-weight:600;opacity:.8;font-size:12px}.qgmore .qgar{font-size:12px;display:inline-block;animation:qgbob 1.2s ease-in-out infinite}
+@keyframes qgbob{50%{transform:translateY(3px)}}
+@media (prefers-reduced-motion:reduce){.qgmore .qgar{animation:none}}
+.qsw{height:5px;border-radius:3px;background:rgba(148,163,184,.3);overflow:hidden;margin-top:6px}.qsw .qsb{height:100%;width:0;border-radius:3px;transition:width .35s ease,background .2s}
+.qsl{min-height:16px;font-size:11.5px;margin-top:3px;text-align:right;color:#cbd5e1}
+.qsw.qstop{position:fixed;top:0;left:0;right:0;z-index:95;height:3px;border-radius:0;margin:0;background:transparent;pointer-events:none}
 .qgov.qgsm .qgsmc{background:#fff;color:#1f3864;border-radius:16px;padding:16px;max-width:520px}
 .qgsH{display:flex;flex-direction:column;margin-bottom:12px}.qgsH b{font-size:19px}.qgsH span{font-size:12px;color:#64748b}
 .qgsk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
@@ -1103,11 +1122,11 @@ html[data-view=pc] .qg-ttl{font-size:17px}html[data-view=pc] .qg-ttl span{font-s
 html[data-view=pc] .qg-tp>b{font-size:19px}
 html[data-view=pc] .qg-t{max-width:120px;padding:8px 6px 10px}html[data-view=pc] .qg-t i{font-size:15px}html[data-view=pc] .qg-t b{font-size:18px}
 html[data-view=pc] .qg-k{font-size:16px;padding:11px 18px;min-width:130px}
-html[data-view=pc] .qg-b{font-size:17px;padding:11px;min-width:84px}html[data-view=pc] input.qg-b{width:84px}html[data-view=pc] input.qg-b.qg-sh{width:auto}
+html[data-view=pc] .qg-b{font-size:17px;padding:11px;min-width:84px}html[data-view=pc] input.qg-b{width:84px}html[data-view=pc] input.qg-b.qg-sh{width:84px}
 html[data-view=pc] .qgr{grid-template-columns:60px 60px 1fr 140px;gap:10px;margin-bottom:8px}
 html[data-view=pc] .qg-l,html[data-view=pc] .qg-o,html[data-view=pc] .qg-s{font-size:15px;padding:0;height:42px;display:flex;align-items:center;justify-content:center}
 html[data-view=pc] .qgh span{font-size:14px;padding:0 4px;min-height:42px;display:flex;align-items:center;justify-content:center}
-html[data-view=pc] .qgr.p{grid-template-columns:48px minmax(0,1.5fr) 84px minmax(0,1.3fr) minmax(0,1.3fr) 76px;gap:8px}
+html[data-view=pc] .qgr.p{grid-template-columns:48px minmax(0,1.5fr) 84px minmax(0,1.3fr) minmax(0,1.3fr) minmax(0,1.3fr) 120px;grid-template-areas:"l b s d c k j";gap:8px;padding-bottom:0;margin-bottom:8px;border-bottom:0}
 html[data-view=pc] .qgr.p .qg-l,html[data-view=pc] .qgr.p .qg-in{height:42px;font-size:15px}
 html[data-view=pc] .qgr.p .qg-in{padding:0 10px}html[data-view=pc] .qgr.p .qg-in.sf{padding:0 4px}html[data-view=pc] .qgr.p .qg-in.j{padding:0 4px}
 html[data-view=pc] .qgr.p.qgh span{font-size:14px;min-height:42px}
@@ -1283,7 +1302,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 199. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=199;
+const APP_REV=201;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2456,12 +2475,43 @@ return`<div class="lg"><div class="in"><div class="text-right text-xs mb-3" styl
 <div class="mb-3 text-left homeprod">${prodBox()}</div>
 ${MENUS.map(([k,t,d,ic])=>`<button class="glass w-full text-left flex items-center gap-4 mb-3" onclick="openMenu('${k}')" style="color:#f1f5f9"><span style="width:52px;height:52px;border-radius:14px;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none">${ic}</span><span class="flex-1"><b class="block text-base">${t}</b></span><span style="font-size:22px;color:#93c5fd">&#8250;</span></button>`).join('')}
 <button class="text-xs underline mt-4 mx-auto" style="color:#93c5fd" onclick="logout()">Logout</button></div></div>`}
+/* ---------- SINKRON QUALITY GATE: cepat (hanya master), otomatis tiap ada perubahan + cek berkala, progress bar & animasi centang ---------- */
+const QS={p:0,show:false,err:false,t:0,busy:false,q:0,m:'',pn:0};
+const qsLbl=()=>!QS.show?'':QS.p<100?'Sinkron '+Math.round(QS.p)+'%':QS.err?'Gagal sinkron, coba lagi':'\u2713 Tersinkron';
+const qsSty=()=>`style="width:${QS.p}%;background:${QS.err?'#ef4444':'#22c55e'}"`;
+const qsBar=()=>`<div class="qsw" style="visibility:${QS.show?'visible':'hidden'}"><div class="qsb" ${qsSty()}></div></div><div class="qsl">${qsLbl()}</div>`;
+const qsTop=()=>`<div class="qsw qstop" style="visibility:${QS.show?'visible':'hidden'}"><div class="qsb" ${qsSty()}></div></div>`;
+function qsUpd(){document.querySelectorAll('.qsw').forEach(w=>w.style.visibility=QS.show?'visible':'hidden');document.querySelectorAll('.qsb').forEach(b=>{b.style.width=QS.p+'%';b.style.background=QS.err?'#ef4444':'#22c55e'});document.querySelectorAll('.qsl').forEach(l=>l.textContent=qsLbl())}
+function qsSet(p,err,hide){QS.p=p;QS.err=!!err;QS.show=true;clearTimeout(QS.t);qsUpd();if(hide)QS.t=setTimeout(()=>{QS.show=false;QS.p=0;QS.err=false;qsUpd()},err?2600:1500)}
+/* mode: manual = tombol Update Server (progress + centang), pal = setelah simpan palet (progress + centang), auto = setelah perubahan (progress saja), poll = cek berkala (diam kecuali ada data yang bergerak) */
+async function qgSync(mode){
+  if(!D||!U)return;
+  if(QS.busy){clearTimeout(awT);if(mode!='poll'){QS.q=1;if(mode=='manual'||mode=='pal')QS.m=mode}return}
+  const quiet=mode=='poll',pre=awCheck();
+  if(pre){if(mode=='manual')alert(pre);else if(!quiet)qsSet(100,true,true);return}
+  QS.busy=true;clearTimeout(awT);
+  window.awPg=f=>{if(!quiet||QS.show)qsSet(Math.min(94,22+72*f))};
+  try{
+    if(!quiet)qsSet(8);
+    const res=await awMasterSync();
+    if(res){
+      if(!quiet||res=='pull'||res=='push'){qsSet(100,false,true);D.sync.last=new Date().toLocaleString(LC());_awSave(true)}
+      if(mode=='manual')awSuccess('Update berhasil',res=='pull'?'Data baru diambil dari server':res=='push'?'Data terkirim ke server':'Sudah sinkron dengan server');
+      else if(mode=='pal')awSuccess('Tersimpan & terupdate','Palet '+QS.pn+' terkirim ke server')}
+    else if(!quiet){qsSet(100,true,true);if(mode=='manual')alert('Update gagal. Cek koneksi lalu coba lagi.')}
+  }catch(e){console.error('Sinkron QG gagal:',e);if(!quiet){qsSet(100,true,true);if(mode=='manual')alert('Update gagal: '+((e&&e.message)||e))}}
+  finally{QS.busy=false;window.awPg=null;if(QS.q){QS.q=0;const mm=QS.m||'auto';QS.m='';setTimeout(()=>qgSync(mm),100)}}
+}
+let QAT=0;
+function qgAuto(m){clearTimeout(QAT);if(m=='pal')QS.m='pal';QAT=setTimeout(()=>{const mm=QS.m||'auto';QS.m='';qgSync(mm)},500)}
+setInterval(()=>{const a=document.activeElement;if(U&&D&&document.visibilityState=='visible'&&document.querySelector('.qgus')&&!QG.dirty&&!QS.busy&&!QG.df&&!QG.cm&&!QG.kt&&!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))qgSync('poll')},15000);
 /* ---------- QUALITY GATE: pilih part -> daftar palet (Shikake) -> detail palet. Data di D.M.qg[tanggal][RH|LH] (ikut sync master, simpan 45 hari) ---------- */
 const QG_PARTS=[['RH','S/A Front Door RH'],['LH','S/A Front Door LH']],QG_N=10,QG_CYC=10;
-let QG={day:'',part:'',pal:0,draft:null,dirty:0,df:null,cm:null};
+let QG={day:'',part:'',pal:0,draft:null,dirty:0,df:null,cm:null,kt:null,lim:14};
+const QG_LIM=14;
 /* Daftar item Quality Gate: D.M.qgp = [{k,n}] (ikut sync master). Kalau belum pernah diubah, pakai bawaan QG_PARTS (RH, LH). */
 const qgParts=()=>Array.isArray(D.M.qgp)?D.M.qgp:QG_PARTS.map(([k,n])=>({k,n}));
-const qgCommit=()=>{D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}};
+const qgCommit=()=>{D.masterT=Date.now();save(true);render();qgAuto('auto')};
 function qgItemDlg(k){document.querySelectorAll('.qgdlg').forEach(x=>x.remove());const it=k?qgParts().find(x=>x.k==k):null;if(k&&!it)return;
 const d=document.createElement('div');d.className='qgdlg fixed inset-0 z-50 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.55)';d.onclick=e=>{if(e.target===d)d.remove()};
 d.innerHTML=`<div class="c" style="max-width:340px;width:100%;margin:0"><b style="font-size:16px">${it?'Edit Item':'New Item'}</b><label class="text-xs opacity-70 mt-2" style="display:block">Nama item</label><input id="qgNm" class="i" maxlength="40" value="${esc(it?it.n:'')}" placeholder="contoh: S/A Rear Door RH" onkeydown="if(event.key=='Enter')qgItemOk('${k||''}')"><label class="text-xs opacity-70 mt-3" style="display:block">Berlaku untuk variant</label><div class="flex gap-4 mt-1" style="font-size:14px"><label class="flex items-center gap-2"><input type="checkbox" id="qgVV"${qgVs(it).includes('V')?' checked':''}> Van</label><label class="flex items-center gap-2"><input type="checkbox" id="qgVP"${qgVs(it).includes('P')?' checked':''}> Pickup</label></div><div class="flex gap-2 mt-3">${it?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgItemDel('${k}')">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="this.closest('.qgdlg').remove()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgItemOk('${k||''}')">Simpan</button></div></div>`;
@@ -2487,15 +2537,17 @@ function qgVs(it){if(it&&Array.isArray(it.v)&&it.v.length)return it.v;const n=St
 const qgItem=k=>qgParts().find(x=>x.k==k)||{k,n:k};
 function qgTgt(day,k,v){const Pr=qgProd(day),t=prNum(Pr.t),va=prNum(Pr.v),pk=t!=null&&va!=null?t-va:null,vs=qgVs(qgItem(k));
 if(v=='V')return va;if(v=='P')return pk;const a=vs.includes('V')?va:null,b=vs.includes('P')?pk:null;return a==null&&b==null?null:(a||0)+(b||0)}
-function qgOkN(P,v){let n=0;Object.keys(P.p||{}).forEach(p=>{const tg=(P.pv||{})[p]||'';if(v!='A'&&tg!=v)return;(P.p[p]||[]).forEach(x=>{if(x[3]=='OK')n++})});return n}
+/* Hitung baris per judgement. OK = lolos, NG = tidak lolos, OS = Other Shift (tidak masuk target shift ini). Actual = OK + NG (sudah dijudge di shift ini) */
+function qgCnt(P,v,f){let n=0;Object.keys(P.p||{}).forEach(p=>{const tg=(P.pv||{})[p]||'';if(v!='A'&&tg!=v)return;(P.p[p]||[]).forEach(x=>{if(f(x[3]))n++})});return n}
+const qgOkN=(P,v)=>qgCnt(P,v,j=>j=='OK'),qgOsN=(P,v)=>qgCnt(P,v,j=>j=='OS'),qgActN=(P,v)=>qgCnt(P,v,j=>j=='OK'||j=='NG');
 function qgVar(v){qgWrite(qgDay(),QG.part,P=>{if(v)P.v=v;else delete P.v})}
-const qgDone=(P,n)=>{const r=P.p[n];return!!r&&r.length==QG_N&&r.every(x=>x[3]=='OK'||x[3]=='NG')};
+const qgDone=(P,n)=>{const r=P.p[n];return!!r&&r.length==QG_N&&r.every(x=>x[3]=='OK'||x[3]=='NG'||x[3]=='OS')};
 function qgDate(day){const d=new Date(day+'T00:00:00');return isNaN(d)?day:String(d.getDate()).padStart(2,'0')+'-'+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+'-'+String(d.getFullYear()).slice(2)}
-function qgWrite(day,k,fn){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1&&!P.k&&!P.v)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}}
-function qgOpen(k){QG.part=k;QG.pal=0;render()}
-function qgClose(){QG.part='';QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;render()}
-function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.bm=0;QG.df=null;QG.cm=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3],qgCm(r[4])]:['','',[],'',qgCm(null)]});QG.dirty=0;render()}
-function qgClosePal(){if(QG.dirty&&!confirm('Perubahan belum disimpan. Tutup tanpa simpan?'))return;QG.bm=0;QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;render()}
+function qgWrite(day,k,fn,mode){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1&&!P.k&&!P.v)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();qgAuto(mode||'auto')}
+function qgOpen(k){QG.part=k;QG.pal=0;QG.lim=QG_LIM;render()}
+function qgClose(){QG.part='';QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.kt=null;QG.dirty=0;QG.lim=QG_LIM;render()}
+function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.bm=0;QG.df=null;QG.cm=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3],qgCm(r[4]),qgKt(r[5])]:['','',[],'',qgCm(null),qgKt(null)]});QG.kt=null;QG.dirty=0;render()}
+function qgClosePal(){if(QG.dirty&&!confirm('Perubahan belum disimpan. Tutup tanpa simpan?'))return;QG.bm=0;QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.kt=null;QG.dirty=0;render()}
 function qgIn(i,k,v){QG.draft[i][k]=v;QG.dirty=1}
 function qgStart(v){qgWrite(qgDay(),QG.part,P=>{P.s=Math.min(+v||1,qgCyc(P))})}
 function qgShik(v){const k=parseInt(v);if(!(k>=1&&k<=99)){toast('Shikake harus angka 1 - 99');return render()}qgWrite(qgDay(),QG.part,P=>{if(k==QG_CYC)delete P.k;else P.k=k;if((P.s||1)>k)P.s=k})}
@@ -2503,7 +2555,7 @@ function qgShik(v){const k=parseInt(v);if(!(k>=1&&k<=99)){toast('Shikake harus a
 function qgBulkTog(e){e.stopPropagation();QG.bm=!QG.bm;const m=$('#qgBm');if(m)m.style.display=QG.bm?'block':'none'}
 function qgBulk(a){if(!QG.draft)return;QG.draft.forEach(x=>{if(a=='E'){if(!x[3])x[3]='OK'}else x[3]=a});QG.dirty=1;QG.bm=0;render()}
 document.addEventListener('click',e=>{if(QG.bm&&!(e.target.closest&&e.target.closest('#qgBm'))){QG.bm=0;const m=$('#qgBm');if(m)m.style.display='none'}});
-function qgSavePal(){const day=qgDay(),k=QG.part,n=QG.pal,d=QG.draft.map(x=>[String(x[0]).trim(),String(x[1]).trim(),qgDef(x[2]),x[3],qgCm(x[4])]),blank=d.every(x=>!x[0]&&!x[1]&&!x[2].length&&!x[3]&&!x[4].t&&!x[4].i);QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;qgWrite(day,k,P=>{P.pv=P.pv||{};if(blank){delete P.p[n];delete P.pv[n]}else{P.p[n]=d;if(P.v)P.pv[n]=P.v;else delete P.pv[n]}if(!Object.keys(P.pv).length)delete P.pv});toast('Palet '+n+' tersimpan')}
+function qgSavePal(){const day=qgDay(),k=QG.part,n=QG.pal,d=QG.draft.map(x=>[String(x[0]).trim(),String(x[1]).trim(),qgDef(x[2]),x[3],qgCm(x[4]),qgKs(qgKt(x[5]))]),blank=d.every(x=>!x[0]&&!x[1]&&!x[2].length&&!x[3]&&!x[4].t&&!x[4].i&&!x[5]);QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.kt=null;QG.dirty=0;qgWrite(day,k,P=>{P.pv=P.pv||{};if(blank){delete P.p[n];delete P.pv[n]}else{P.p[n]=d;if(P.v)P.pv[n]=P.v;else delete P.pv[n]}if(!Object.keys(P.pv).length)delete P.pv},'pal');QS.pn=n;toast('Palet '+n+' tersimpan')}
 /* ---------- DEFECT per part: gambar panel (upload manual, per item) + titik merah + callout + popup isi defect. Disimpan di baris palet: x[2] = [{x,y,t}] (x,y dalam persen gambar, null = tanpa titik). Gambar di D.M.qgimg[item] ---------- */
 const qgDef=v=>Array.isArray(v)?v.map(m=>({x:m.x==null?null:m.x,y:m.y==null?null:m.y,t:String(m.t||'')})):(v?[{x:null,y:null,t:String(v)}]:[]);
 const qgDefLbl=a=>!a.length?'-':a.length==1?(a[0].t||'1 defect'):a.length+' defect';
@@ -2535,6 +2587,23 @@ ${box}
 <hr class="qg-hr"><b class="text-sm">List defect (${m.length})</b><div class="mt-2">${list}</div>
 <button type="button" class="b w-full mt-3" onclick="qgDfDone()">Selesai</button></div></div>${pop}`}
 
+/* ---------- KET (Keterangan) per part: tujuan Domestic / Export + detail. Disimpan di baris palet: x[5] = {d:'D'|'E'|'', t:keterangan} (0 kalau kosong) ---------- */
+const qgKt=v=>({d:v&&(v.d=='D'||v.d=='E')?v.d:'',t:String(v&&v.t||'')});
+const qgKs=k=>k.d||k.t?k:0;
+const qgKtLbl=k=>!k.d&&!k.t?'-':esc((k.d=='D'?'Domestic':k.d=='E'?'Export':'')+(k.d&&k.t?': ':'')+k.t);
+function qgKtOpen(i){const c=qgKt(QG.draft[i][5]);QG.df=null;QG.cm=null;QG.kt={i,d:c.d,t:c.t};render();setTimeout(()=>{const e=$('#qgKtT');if(e)e.focus()},40)}
+function qgKtD(d){const c=QG.kt;if(!c)return;c.d=c.d==d?'':d;document.querySelectorAll('.qgktp').forEach(b=>b.classList.toggle('on',b.dataset.d==c.d))}
+function qgKtDone(){const c=QG.kt;QG.draft[c.i][5]={d:c.d,t:c.t.trim()};QG.dirty=1;QG.kt=null;render()}
+function qgKtCancel(){const c=QG.kt,s=qgKt(QG.draft[c.i][5]);if((c.d!=s.d||c.t.trim()!=s.t)&&!confirm('Perubahan Ket belum disimpan. Tutup?'))return;QG.kt=null;render()}
+function qgKtView(){const c=QG.kt,x=QG.draft[c.i];
+return`<div class="qgov t3" onclick="if(event.target===this)qgKtCancel()"><div class="c qgc" style="max-width:380px"><button type="button" class="qgx" aria-label="Tutup" onclick="qgKtCancel()">&times;</button>
+<div class="qg-ttl"><b>Ket - Part ${c.i+1}</b><span>${esc(x[0]||'')}</span></div>
+<label class="text-xs opacity-70 mt-2" style="display:block">Tujuan</label>
+<div class="qgev"><button type="button" class="qgpill qgktp${c.d=='D'?' on':''}" data-d="D" onclick="qgKtD('D')">Domestic</button><button type="button" class="qgpill qgktp${c.d=='E'?' on':''}" data-d="E" onclick="qgKtD('E')">Export</button></div>
+<label class="text-xs opacity-70 mt-2" style="display:block">Keterangan</label>
+<textarea id="qgKtT" class="i" rows="3" maxlength="100" placeholder="Detail Domestic / Export (contoh: negara tujuan)" oninput="QG.kt.t=this.value">${esc(c.t)}</textarea>
+<div class="flex gap-2 mt-3"><button type="button" class="b b2" style="flex:1" onclick="qgKtCancel()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgKtDone()">Simpan</button></div></div></div>`}
+
 /* ---------- C/M (Counter Measure) per part: action + foto Evidence (dikompres otomatis maks 100 KB). Disimpan di baris palet: x[4] = {t:action, i:fotoDataURL} ---------- */
 const qgCm=v=>({t:String(v&&v.t||''),i:String(v&&v.i||'')});
 const qgCmLbl=c=>!c.t&&!c.i?'-':esc(c.t||'Evidence')+(c.t&&c.i?' &#128247;':'');
@@ -2563,16 +2632,16 @@ return`<div class="lg"><div class="in"><button class="text-sm mb-4 self-start" s
 <div class="glass"><h2 class="font-bold text-lg text-center">Quality Gate</h2><label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Tanggal</label><input type="date" class="i" value="${esc(day)}" onchange="QG.day=this.value||ymd(new Date());render()">
 ${qgParts().map(({k,n})=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<div class="qgi"><button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${esc(n)}</span><em>${dn}/${tot} palet</em></button><button type="button" class="qge" aria-label="Edit item" onclick="qgItemDlg('${k}')">&#9998;</button></div>`}).join('')}
 <button type="button" class="qgb qgn" onclick="qgItemDlg('')">+ New Item</button>
-<button type="button" class="qgb qgus" onclick="awUpdateServer()"><span>Update Server</span><em>kirim &amp; sinkron data</em></button>
+<button type="button" class="qgb qgus" onclick="qgSync('manual')"><span>Update Server</span><em>otomatis &middot; ketuk utk paksa</em></button>${qsBar()}
 <button type="button" class="qgb qgsr" onclick="QG.sum=1;render()"><span>Summary Report</span><em>rangkuman pengecekan</em></button>
-${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.sum?qgSumView():''}${QG.part?qgPart():''}${QG.pal?qgPal():''}${QG.df?qgDfView():''}${QG.cm?qgCmView():''}`}
+${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.sum?qgSumView():''}${QG.part?qgPart():''}${QG.pal?qgPal():''}${QG.df?qgDfView():''}${QG.cm?qgCmView():''}${QG.kt?qgKtView():''}${qsTop()}`}
 /* Summary Report: rangkuman semua item untuk tanggal terpilih (target per variant, OK/NG, palet selesai, defect & C/M terbanyak) */
 function qgSumView(){const day=qgDay(),tot=qgPals(day);let gOk=0,gNg=0,gPal=0,gAll=0;
 const blocks=qgParts().map(it=>{const P=qgP(day,it.k),vs=qgVs(it),dfc={};let cm=0,ok=0,ng=0,pal=0;
 Object.keys(P.p||{}).forEach(n=>{if(qgDone(P,+n))pal++;(P.p[n]||[]).forEach(x=>{if(x[3]=='OK')ok++;else if(x[3]=='NG')ng++;(x[2]||[]).forEach(m=>{const t=String(m.t||'').trim()||'(tanpa nama)';dfc[t]=(dfc[t]||0)+1});if(x[4]&&(x[4].t||x[4].i))cm++})});
 gOk+=ok;gNg+=ng;gPal+=pal;gAll+=tot;
-const lines=['A',...vs].map(c=>{const tg=qgTgt(day,it.k,c),o=qgOkN(P,c),pc=tg>0?Math.min(100,Math.round(o/tg*100)):0;let ng2=0;Object.keys(P.p||{}).forEach(n=>{if(c!='A'&&((P.pv||{})[n]||'')!=c)return;(P.p[n]||[]).forEach(x=>{if(x[3]=='NG')ng2++})});
-return`<div class="qgsl"><div class="qgsh"><b>${QG_VN[c]}</b><span>${qgFm(o)} / ${tg==null?'-':qgFm(tg)} OK &middot; sisa ${tg==null?'-':qgFm(Math.max(0,tg-o))}${ng2?` &middot; NG ${ng2}`:''}</span></div><div class="qgsb"><i style="width:${pc}%"></i></div></div>`}).join('');
+const lines=['A',...vs].map(c=>{const tg=qgTgt(day,it.k,c),o=qgOkN(P,c),os=qgOsN(P,c),pc=tg>0?Math.min(100,Math.round(o/tg*100)):0;let ng2=0;Object.keys(P.p||{}).forEach(n=>{if(c!='A'&&((P.pv||{})[n]||'')!=c)return;(P.p[n]||[]).forEach(x=>{if(x[3]=='NG')ng2++})});
+return`<div class="qgsl"><div class="qgsh"><b>${QG_VN[c]}</b><span>${qgFm(o)} / ${tg==null?'-':qgFm(tg)} OK &middot; sisa ${tg==null?'-':qgFm(Math.max(0,tg-o-os))}${os?` &middot; OS ${os}`:''}${ng2?` &middot; NG ${ng2}`:''}</span></div><div class="qgsb"><i style="width:${pc}%"></i></div></div>`}).join('');
 const top=Object.entries(dfc).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([t,c])=>`<span class="qgch">${esc(t)} &times;${c}</span>`).join('');
 return`<div class="qgsc"><div class="qgst"><b>${esc(it.n)}</b><span>${pal}/${tot} palet</span></div>${lines}<div class="qgsd">${top||'<span style="opacity:.6">Tidak ada defect tercatat</span>'}${cm?`<span class="qgch" style="background:#99e0cf;color:#0f3d34">C/M &times;${cm}</span>`:''}</div></div>`}).join('');
 return`<div class="qgov t3 qgsm" onclick="if(event.target===this){QG.sum=0;render()}"><div class="c qgc qgsmc"><button type="button" class="qgx" aria-label="Tutup" onclick="QG.sum=0;render()">&times;</button>
@@ -2582,33 +2651,37 @@ ${blocks||'<p class="text-sm text-center" style="padding:14px 0">Belum ada item.
 <div class="qgsf">Dibuat ${esc(new Date().toLocaleString(LC()))}</div>
 <button type="button" class="qgpb" onclick="qgPrint()">Cetak / PDF</button></div></div>`}
 function qgPrint(){const h=document.documentElement;h.classList.add('qgprn');const f=()=>{h.classList.remove('qgprn');window.removeEventListener('afterprint',f)};window.addEventListener('afterprint',f);setTimeout(()=>window.print(),50)}
+/* Satu baris palet di list; list dibatasi QG_LIM (14) palet, sisanya lewat tombol Load more */
+function qgRow(P,i,cyc){const dn=qgDone(P,i);return`<div class="qgr"><span class="qg-l">${i}</span><span class="qg-l">${qgSkk(P.s,i,cyc)}</span><button type="button" class="qg-o" onclick="qgOpenPal(${i})">Open</button><span class="qg-s ${dn?'ok':'ny'}">${dn?'Finish Check':'Not Yet'}</span></div>`}
+const qgMoreBtn=n=>`<button type="button" class="qgmore" onclick="qgMore(this)">Load more <small>(${n} palet lagi)</small> <span class="qgar">&#9660;</span></button>`;
+function qgMore(b){const day=qgDay(),P=qgP(day,QG.part),tot=qgPals(day),cyc=qgCyc(P),from=Math.min(tot,QG.lim||QG_LIM),to=Math.min(tot,from+QG_LIM);let h='';for(let i=from+1;i<=to;i++)h+=qgRow(P,i,cyc);QG.lim=to;b.insertAdjacentHTML('beforebegin',h);if(to>=tot)b.remove();else{const m=b.querySelector('small');if(m)m.textContent='('+(tot-to)+' palet lagi)'}}
 function qgPart(){const day=qgDay(),k=QG.part,P=qgP(day,k),Pr=qgProd(day),t=prNum(Pr.t),v=prNum(Pr.v),pk=t!=null&&v!=null?t-v:null,tot=qgPals(day),nm=(qgParts().find(x=>x.k==k)||{}).n||k;
 const cyc=qgCyc(P);
-let rows='';for(let i=1;i<=tot;i++){const dn=qgDone(P,i);rows+=`<div class="qgr"><span class="qg-l">${i}</span><span class="qg-l">${qgSkk(P.s,i,cyc)}</span><button type="button" class="qg-o" onclick="qgOpenPal(${i})">Open</button><span class="qg-s ${dn?'ok':'ny'}">${dn?'Finish Check':'Not Yet'}</span></div>`}
+const shown=Math.min(tot,QG.lim||QG_LIM);let rows='';for(let i=1;i<=shown;i++)rows+=qgRow(P,i,cyc);
 return`<div class="qgov" onclick="if(event.target===this)qgClose()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClose()">&times;</button>
 <div class="qg-ttl"><b>${esc(nm)}</b><span>${esc(qgDate(day))}</span></div>
 <div class="qg-tp"><b>Target<br>Process:</b><div class="qg-tl"><div class="qg-t"><i>All</i><b>${qgFm(t)}</b></div><div class="qg-t"><i>Van</i><b>${qgFm(v)}</b></div><div class="qg-t"><i>Pickup</i><b>${pk!=null&&pk>=0?qgFm(pk):'-'}</b></div></div></div>
 <hr class="qg-hr">
 <div class="qg-vr"><span class="qg-k">Variant:</span>${['A',...qgVs(qgItem(k))].map(c=>`<button type="button" class="qg-vb${P.v==c?' on':''}" onclick="qgVar('${P.v==c?'':c}')">${QG_VN[c]}</button>`).join('')}</div>
-${(()=>{const vc=P.v,tg=vc?qgTgt(day,k,vc):null,ok=vc?qgOkN(P,vc):0;return`<div class="qg-vr"><span class="qg-k">Target:</span><span class="qg-b qg-tv">${vc?(tg==null?'-':qgFm(Math.max(0,tg-ok))):'Pilih variant'}</span></div>${vc&&tg!=null?`<div class="qg-vi">Sisa target ${esc(QG_VN[vc])}: ${qgFm(tg)} &minus; ${qgFm(ok)} OK</div>`:''}`})()}
+${(()=>{const vc=P.v,tg=vc?qgTgt(day,k,vc):null,ok=vc?qgOkN(P,vc):0,os=vc?qgOsN(P,vc):0,ac=vc?qgActN(P,vc):0;return`<div class="qg-vr qg-tr"><span class="qg-k">Target:</span><span class="qg-b qg-tv${vc?'':' qg-pv'}">${vc?(tg==null?'-':qgFm(Math.max(0,tg-ok-os))):'Pilih variant'}</span><span class="qg-k qg-ka">Actual:</span><span class="qg-b qg-tv qg-av">${vc?qgFm(ac):'-'}</span></div>${vc&&tg!=null?`<div class="qg-vi">Sisa target ${esc(QG_VN[vc])}: ${qgFm(tg)} &minus; ${qgFm(ok)} OK${os?` &minus; ${qgFm(os)} Other Shift`:''}</div>`:''}`})()}
 <hr class="qg-hr">
 <div class="qg-kv"><span class="qg-k">Shikake:</span><input type="number" class="qg-b qg-sh" inputmode="numeric" min="1" max="99" value="${cyc}" aria-label="Shikake" onchange="qgShik(this.value)"></div>
 <div class="qg-kv"><span class="qg-k">Start:</span><input type="number" class="qg-b" inputmode="numeric" min="1" max="${cyc}" value="${Math.min(P.s||1,cyc)}" aria-label="Start Shikake" onchange="qgStart(this.value)"><span class="qg-sl">/</span><span class="qg-b">${cyc}</span></div>
 <hr class="qg-hr">
-<div class="qgr qgh"><span class="lb">Plt no.</span><span class="lb">Skk no.</span><span class="mg">Detail Pallet</span><span class="og">Status</span></div>
-${tot?rows:'<p class="text-sm text-center" style="padding:14px 0;opacity:.7">Target tanggal ini belum diisi. Isi di tab Data &gt; Produksi.</p>'}
+<div class="qgr qgh"><span class="lb">Plt no.</span><span class="lb">Skk</span><span class="mg">Detail Pallet</span><span class="og">Status</span></div>
+${tot?rows+(tot>shown?qgMoreBtn(tot-shown):''):'<p class="text-sm text-center" style="padding:14px 0;opacity:.7">Target tanggal ini belum diisi. Isi di tab Data &gt; Produksi.</p>'}
 </div></div>`}
 function qgPal(){const day=qgDay(),P=qgP(day,QG.part),n=QG.pal,tot=qgPals(day);
-let r='';for(let i=0;i<QG_N;i++){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l">${i+1}</span><input class="qg-in m" value="${esc(x[0])}" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}"><input class="qg-in m sf" value="${esc(x[1])}" maxlength="3" autocapitalize="characters" oninput="this.value=this.value.toUpperCase().slice(0,3);qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgdb" aria-label="Defect ${i+1}" onclick="qgDf(${i})">${esc(qgDefLbl(x[2]))}</button><button type="button" class="qg-in c qgdb" aria-label="C/M ${i+1}" onclick="qgCmOpen(${i})">${qgCmLbl(qgCm(x[4]))}</button><select class="qg-in j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option></select></div>`}
+let r='';for(let i=0;i<QG_N;i++){const x=QG.draft[i],kt=qgKt(x[5]);r+=`<div class="qgr p"><span class="qg-l a-l">${i+1}</span><input class="qg-in m a-b" value="${esc(x[0])}" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="Body ${i+1}"><input class="qg-in m sf a-s" value="${esc(x[1])}" maxlength="3" autocapitalize="characters" oninput="this.value=this.value.toUpperCase().slice(0,3);qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgdb a-d" aria-label="Defect ${i+1}" onclick="qgDf(${i})">${esc(qgDefLbl(x[2]))}</button><button type="button" class="qg-in c qgdb a-c" aria-label="C/M ${i+1}" onclick="qgCmOpen(${i})">${qgCmLbl(qgCm(x[4]))}</button><button type="button" class="qg-in k qgdb a-k" aria-label="Ket ${i+1}" onclick="qgKtOpen(${i})">${qgKtLbl(kt)}</button><select class="qg-in j a-j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j a-j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option><option value="OS"${x[3]=='OS'?' selected':''}>Other Shift</option></select></div>`}
 return`<div class="qgov t2" onclick="if(event.target===this)qgClosePal()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClosePal()">&times;</button>
 <div class="qg-ph"><b>Pallet no.</b><span class="qg-b">${n}</span><span class="qg-sl">/</span><span class="qg-b">${tot}</span><button type="button" class="qg-sv" aria-label="Simpan palet" onclick="qgSavePal()">&#128190;</button></div>
 <div class="text-xs" style="opacity:.7;margin:-2px 0 6px">Skk ${qgSkk(P.s,n,qgCyc(P))}/${qgCyc(P)}</div>
 <hr class="qg-hr">
-<div class="qgr p qgh"><span class="lb">Part no.</span><span class="mg">No. Body</span><span class="mg">Sfx</span><span class="og">Defect</span><span class="cg">C/M</span><span class="bl qgjh" role="button" tabindex="0" aria-label="Bulk judgement" onclick="qgBulkTog(event)">Jdg &#9662;<div id="qgBm" class="qgbm" style="display:${QG.bm?'block':'none'}" onclick="event.stopPropagation()"><button type="button" onclick="qgBulk('OK')">Semua OK</button><button type="button" onclick="qgBulk('NG')">Semua NG</button><button type="button" onclick="qgBulk('E')">Yang kosong jadi OK</button><button type="button" onclick="qgBulk('')">Reset semua</button></div></span></div>
+<div class="qgr p qgh"><span class="lb a-l">Part no.</span><span class="mg a-b">Body</span><span class="mg a-s">Sfx</span><span class="og a-d">Defect</span><span class="cg a-c">C/M</span><span class="kg a-k">Ket</span><span class="bl qgjh a-j" role="button" tabindex="0" aria-label="Bulk judgement" onclick="qgBulkTog(event)">Jdg &#9662;<div id="qgBm" class="qgbm" style="display:${QG.bm?'block':'none'}" onclick="event.stopPropagation()"><button type="button" onclick="qgBulk('OK')">Semua OK</button><button type="button" onclick="qgBulk('NG')">Semua NG</button><button type="button" onclick="qgBulk('E')">Yang kosong jadi OK</button><button type="button" onclick="qgBulk('')">Reset semua</button></div></span></div>
 ${r}
 </div></div>`}
 
-function openMenu(k){scr=k=='cow'?'app':k;if(k=='cow')tab='input';scrollTo(0,0);render()}
+function openMenu(k){scr=k=='cow'?'app':k;if(k=='cow')tab='input';scrollTo(0,0);render();if(k=='qg')setTimeout(()=>qgSync('poll'),300)}
 function backBar(){return`<div class="pt-3"><button class="text-sm text-blue-600 font-semibold" onclick="openMenu('home')">&#8249; Kembali ke Menu</button></div>`}
 
 /* ---------- TAB DEVELOPER (tersembunyi, khusus Developer, dibuka dengan swipe kiri dari Setting) ---------- */
@@ -2655,13 +2728,32 @@ let awLast=null, awBusy=false, awT=null;
 const _awSave=save, _awLoad=load;
 const awSnap=()=>JSON.stringify({mains:D.mains,M:D.M});
 const awHdr=t=>{const m=/^(\d+)\/(\d+)\|/.exec(t||'');return m?{i:+m[1],n:+m[2],body:t.slice(m[0].length)}:null};
+/* Ambil potongan master_1..n PARALEL (4 sekaligus) */
+async function awChunksGet(n,first){const out=new Array(n);out[0]=first;let k=1,dn=0;
+  await Promise.all(Array.from({length:Math.min(4,Math.max(0,n-1))},async()=>{for(;;){const i=k++;if(i>=n)return;const c=awHdr((await awRetry(()=>awDB.getDocument(AW_DB,AW_MT,'master_'+i))).data);out[i]=c?c.body:'';dn++;if(window.awPg)awPg(dn/n)}}));
+  return out.join('')}
+/* Sinkron master (termasuk data Quality Gate) versi cepat: cek header server dulu, tarik hanya kalau server lebih baru, kirim hanya kalau lokal lebih baru / berubah.
+   Return 'pull' | 'push' | 'same' | false (gagal) */
+async function awMasterSync(){
+  const u=U;for(let k=0;k<30&&awBusy;k++)await awWait(200);
+  let h=null;
+  try{h=awHdr((await awRetry(()=>awDB.getDocument(AW_DB,AW_MT,'master_0'))).data)}catch(e){if(!(e&&e.code==404))throw e}
+  if(U!==u||!D)return false;
+  const m=h&&/^\{"t":(\d+)/.exec(h.body),st=m?+m[1]:null;
+  if(h&&(st==null||st>(D.masterT||0))){
+    const o=JSON.parse(await awChunksGet(h.n,h.body));
+    if(U!==u||!D)return false;
+    if(!D.masterT||o.t>D.masterT){D.mains=o.mains;D.M=o.M;D.masterT=o.t;norm();_awSave(true);awLast=awSnap();render();return 'pull'}
+    if(D.masterT>o.t){awLast='';return (await awMasterPush())?'push':false}
+    awLast=awSnap();return 'same'}
+  if(!h||awSnap()!==awLast||(D.masterT||0)>st){awLast='';return (await awMasterPush())?'push':false}
+  return 'same'}
 async function awMasterPull(){
   const u=U;
   try{
     const h=awHdr((await awDB.getDocument(AW_DB,AW_MT,'master_0')).data);
     if(!h) throw {code:404};
-    let txt=h.body;
-    for(let i=1;i<h.n;i++){const c=awHdr((await awDB.getDocument(AW_DB,AW_MT,'master_'+i)).data);txt+=c?c.body:''}
+    let txt=await awChunksGet(h.n,h.body);
     const o=JSON.parse(txt);
     if(U!==u||!D) return;
     if(!D.masterT||o.t>D.masterT){
@@ -2684,11 +2776,13 @@ async function awMasterPush(){
     const parts=[];for(let i=0;i<json.length;i+=AW_CH)parts.push(json.slice(i,i+AW_CH));
     let oldN=0;
     try{const h=awHdr((await awDB.getDocument(AW_DB,AW_MT,'master_0')).data);if(h)oldN=h.n}catch(e){}
-    for(let i=0;i<parts.length;i++){
-      const id='master_'+i,data={data:i+'/'+parts.length+'|'+parts[i]};
-      try{await awDB.updateDocument(AW_DB,AW_MT,id,data)}
-      catch(e){if(e&&e.code==404)await awDB.createDocument(AW_DB,AW_MT,id,data);else throw e}
-    }
+    /* Kirim potongan master PARALEL (4 sekaligus), header master_0 terakhir supaya perangkat lain tidak menarik data setengah jadi */
+    const put=async i=>{const id='master_'+i,data={data:i+'/'+parts.length+'|'+parts[i]};
+      await awRetry(async()=>{try{await awDB.updateDocument(AW_DB,AW_MT,id,data)}
+      catch(e){if(e&&e.code==404)await awDB.createDocument(AW_DB,AW_MT,id,data);else throw e}})};
+    let nx=1,dn=0;
+    await Promise.all(Array.from({length:Math.min(4,Math.max(0,parts.length-1))},async()=>{for(;;){const i=nx++;if(i>=parts.length)return;await put(i);dn++;if(window.awPg)awPg(dn/parts.length)}}));
+    await put(0);if(window.awPg)awPg(1);
     for(let k=parts.length;k<oldN;k++){try{await awDB.deleteDocument(AW_DB,AW_MT,'master_'+k)}catch(e){}}
     awLast=snap;awBusy=false;return true;
   }catch(e){console.error('Appwrite master (kirim) gagal:',e);toast('Master gagal dikirim: '+((e&&e.message)||e))}
