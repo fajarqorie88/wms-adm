@@ -801,6 +801,15 @@ html[data-view=pc] .pdb-t b{font-size:32px}
 .pdb-mn button{border:0;background:transparent;text-align:left;padding:6px 12px;border-radius:8px;font-weight:700;font-size:13px;color:inherit}
 .pdb-mn button:hover,.pdb-mn button.on{background:rgba(148,163,184,.25)}
 .pdb-in{width:100%;margin:2px 0 8px}
+/* kartu Produksi di halaman depan: transparan (kaca) seperti kartu menu */
+.homeprod #pdb{background:rgba(255,255,255,.08)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.15)!important;border-radius:20px;box-shadow:none!important;color:#f1f5f9}
+.homeprod #pdb .pdb-h b{color:#f1f5f9}
+.homeprod #pdb .pdb-d{color:#cbd5e1;opacity:1}
+.homeprod #pdb .pdb-ed{background:rgba(255,255,255,.14);color:#bfdbfe}
+.homeprod #pdb .pdb-t{background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.18)}
+.homeprod #pdb .pdb-t i{color:#cbd5e1}
+.homeprod #pdb .pdb-t.t1 b{color:#93c5fd}.homeprod #pdb .pdb-t.t2 b{color:#fde68a}.homeprod #pdb .pdb-t.t3 b{color:#86efac}.homeprod #pdb .pdb-t.t3.bad b{color:#fca5a5}
+.homeprod #pdb .pdb-w{color:#fca5a5}
 .slvB{display:inline-flex;align-items:center;gap:3px;background:#16a34a;color:#fff;font-weight:700;font-size:12px;line-height:1;padding:5px 10px;border-radius:5px;white-space:nowrap;margin-top:6px}
 .slvB.sm{margin-top:0;font-size:10px;padding:3px 6px}
 .slvB.pSv{margin-top:0;font-size:13px;padding:5px 12px}
@@ -996,6 +1005,9 @@ html[data-view=pc] nav button[data-k=developer].on{color:#fde68a;background:line
 html[data-view=pc] .pgd{display:none}
 .qgb{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;padding:14px 16px;margin-top:10px;border-radius:14px;background:#5B9BD5;color:#fff;font-weight:700;font-size:15px;text-align:left}
 .qgb em{font-style:normal;font-size:11px;font-weight:600;opacity:.92;white-space:nowrap}
+.qgi{display:flex;gap:6px;align-items:stretch;margin-top:10px}.qgi .qgb{margin-top:0;flex:1;min-width:0}
+.qge{width:46px;flex:none;border-radius:14px;background:rgba(255,255,255,.12);color:#bfdbfe;font-size:17px;border:1px solid rgba(255,255,255,.18)}
+.qgn{justify-content:center;background:rgba(255,255,255,.08);border:1.5px dashed rgba(255,255,255,.4);color:#bfdbfe}
 .qgov{position:fixed;inset:0;overflow-y:auto;background:rgba(0,0,0,.55);padding:20px 12px;z-index:40}
 .qgov.t2{z-index:50}
 .qgc{position:relative;max-width:440px;width:100%;margin:0 auto}
@@ -1192,8 +1204,8 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 194. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=194;
+   Revisi ini = 196. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=196;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2363,12 +2375,24 @@ const MENUS=[['cow','Check Output Welding','','\u26A1'],['qg','Quality Gate','',
 function homeView(){const nm=esc((D.prof&&D.prof.name)||U.name||'');
 return`<div class="lg"><div class="in"><div class="text-right text-xs mb-3" style="color:#93c5fd"><button class="underline" style="font-weight:${LG=='id'?700:400}" onclick="setLang('id')">ID</button> | <button class="underline" style="font-weight:${LG=='en'?700:400}" onclick="setLang('en')">EN</button></div>
 <div class="text-center mb-6">${wmsStatic()}<p class="text-sm mt-3" style="color:#bfdbfe">Selamat datang${nm?', '+nm:''}</p><p class="text-xs mt-1" style="color:#93c5fd">Pilih menu untuk memulai</p></div>
-<div class="mb-3 text-left">${prodBox()}</div>
+<div class="mb-3 text-left homeprod">${prodBox()}</div>
 ${MENUS.map(([k,t,d,ic])=>`<button class="glass w-full text-left flex items-center gap-4 mb-3" onclick="openMenu('${k}')" style="color:#f1f5f9"><span style="width:52px;height:52px;border-radius:14px;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none">${ic}</span><span class="flex-1"><b class="block text-base">${t}</b></span><span style="font-size:22px;color:#93c5fd">&#8250;</span></button>`).join('')}
 <button class="text-xs underline mt-4 mx-auto" style="color:#93c5fd" onclick="logout()">Logout</button></div></div>`}
 /* ---------- QUALITY GATE: pilih part -> daftar palet (Shikake) -> detail palet. Data di D.M.qg[tanggal][RH|LH] (ikut sync master, simpan 45 hari) ---------- */
 const QG_PARTS=[['RH','S/A Front Door RH'],['LH','S/A Front Door LH']],QG_N=10,QG_CYC=10;
 let QG={day:'',part:'',pal:0,draft:null,dirty:0};
+/* Daftar item Quality Gate: D.M.qgp = [{k,n}] (ikut sync master). Kalau belum pernah diubah, pakai bawaan QG_PARTS (RH, LH). */
+const qgParts=()=>Array.isArray(D.M.qgp)?D.M.qgp:QG_PARTS.map(([k,n])=>({k,n}));
+const qgCommit=()=>{D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}};
+function qgItemDlg(k){document.querySelectorAll('.qgdlg').forEach(x=>x.remove());const it=k?qgParts().find(x=>x.k==k):null;if(k&&!it)return;
+const d=document.createElement('div');d.className='qgdlg fixed inset-0 z-50 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.55)';d.onclick=e=>{if(e.target===d)d.remove()};
+d.innerHTML=`<div class="c" style="max-width:340px;width:100%;margin:0"><b style="font-size:16px">${it?'Edit Item':'New Item'}</b><label class="text-xs opacity-70 mt-2" style="display:block">Nama item</label><input id="qgNm" class="i" maxlength="40" value="${esc(it?it.n:'')}" placeholder="contoh: S/A Rear Door RH" onkeydown="if(event.key=='Enter')qgItemOk('${k||''}')"><div class="flex gap-2 mt-3">${it?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgItemDel('${k}')">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="this.closest('.qgdlg').remove()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgItemOk('${k||''}')">Simpan</button></div></div>`;
+document.body.appendChild(d);setTimeout(()=>{const e=$('#qgNm');if(e)e.focus()},50)}
+function qgItemOk(k){const e=$('#qgNm');if(!e)return;const n=e.value.trim().replace(/\s+/g,' ');if(!n)return toast('Nama item tidak boleh kosong');
+if(qgParts().some(x=>x.k!=k&&x.n.toLowerCase()==n.toLowerCase()))return toast('Nama item sudah ada');
+const l=qgParts().map(x=>({k:x.k,n:x.n}));if(k){const it=l.find(x=>x.k==k);if(it)it.n=n}else l.push({k:'p'+Date.now().toString(36),n});
+D.M.qgp=l;document.querySelectorAll('.qgdlg').forEach(x=>x.remove());qgCommit()}
+function qgItemDel(k){if(!confirm('Hapus item ini beserta semua datanya?'))return;D.M.qgp=qgParts().filter(x=>x.k!=k);const q=D.M.qg||{};Object.keys(q).forEach(d=>{delete q[d][k];if(!Object.keys(q[d]).length)delete q[d]});if(QG.part==k){QG.part='';QG.pal=0;QG.draft=null;QG.dirty=0}document.querySelectorAll('.qgdlg').forEach(x=>x.remove());qgCommit()}
 const qgDay=()=>QG.day||(QG.day=ymd(new Date()));
 const qgP=(day,k)=>((((D.M||{}).qg||{})[day]||{})[k])||{s:1,p:{}};
 const qgFm=n=>n==null?'-':n.toLocaleString(LC());
@@ -2388,9 +2412,10 @@ function qgSavePal(){const day=qgDay(),k=QG.part,n=QG.pal,d=QG.draft.map(x=>x.ma
 function qgView(){const day=qgDay(),tot=qgPals(day);
 return`<div class="lg"><div class="in"><button class="text-sm mb-4 self-start" style="color:#93c5fd" onclick="openMenu('home')">&#8249; Kembali ke Menu</button>
 <div class="glass"><h2 class="font-bold text-lg text-center">Quality Gate</h2><label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Tanggal</label><input type="date" class="i" value="${esc(day)}" onchange="QG.day=this.value||ymd(new Date());render()">
-${QG_PARTS.map(([k,n])=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${n}</span><em>${dn}/${tot} palet</em></button>`}).join('')}
+${qgParts().map(({k,n})=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<div class="qgi"><button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${esc(n)}</span><em>${dn}/${tot} palet</em></button><button type="button" class="qge" aria-label="Edit item" onclick="qgItemDlg('${k}')">&#9998;</button></div>`}).join('')}
+<button type="button" class="qgb qgn" onclick="qgItemDlg('')">+ New Item</button>
 ${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.part?qgPart():''}${QG.pal?qgPal():''}`}
-function qgPart(){const day=qgDay(),k=QG.part,P=qgP(day,k),Pr=qgProd(day),t=prNum(Pr.t),v=prNum(Pr.v),pk=t!=null&&v!=null?t-v:null,tot=qgPals(day),nm=(QG_PARTS.find(x=>x[0]==k)||[])[1]||k;
+function qgPart(){const day=qgDay(),k=QG.part,P=qgP(day,k),Pr=qgProd(day),t=prNum(Pr.t),v=prNum(Pr.v),pk=t!=null&&v!=null?t-v:null,tot=qgPals(day),nm=(qgParts().find(x=>x.k==k)||{}).n||k;
 let act=0;for(let i=1;i<=tot;i++)if(!qgDone(P,i)){act=i;break}if(!act)act=tot||1;
 let rows='';for(let i=1;i<=tot;i++){const dn=qgDone(P,i);rows+=`<div class="qgr"><span class="qg-l">${i}</span><span class="qg-l">${qgSkk(P.s,i)}</span><button type="button" class="qg-o" onclick="qgOpenPal(${i})">Open</button><span class="qg-s ${dn?'ok':'ny'}">${dn?'Finish Check':'Not Yet'}</span></div>`}
 return`<div class="qgov" onclick="if(event.target===this)qgClose()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClose()">&times;</button>
