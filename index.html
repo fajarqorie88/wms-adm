@@ -1069,6 +1069,29 @@ select.qg-b{appearance:none;-webkit-appearance:none;text-align-last:center;color
 .qg-in.m{background:#f9a8e6}.qg-in.d{background:#f6b98a}.qg-in.j{background:#8FAADC;font-weight:700;appearance:none;-webkit-appearance:none;text-align:center}
 .qg-in.j.OK{background:#92D050}.qg-in.j.NG{background:#ef4444;color:#fff}
 .qg-ph{display:flex;align-items:center;gap:8px;margin-bottom:8px}.qg-ph>b{font-size:16px;margin-right:2px}
+.qgus{background:#92D050;color:#1b3a07}.qgsr{background:#ED7D31}
+.qg-vr{display:flex;align-items:center;gap:8px;margin:8px 0}
+.qg-vr .qg-k{min-width:84px;padding:8px 10px}
+.qg-vb{flex:1;padding:9px 0;border-radius:12px;background:#B4C7E7;color:#1f3864;font-weight:600;font-size:13px;text-align:center}
+.qg-vb.on{background:#E91AB9;color:#fff}
+.qg-vr .qg-tv{flex:1;font-size:15px}
+.qg-vi{font-size:11.5px;color:#64748b;margin:-2px 0 4px;text-align:right}
+.qgov.qgsm .qgsmc{background:#fff;color:#1f3864;border-radius:16px;padding:16px;max-width:520px}
+.qgsH{display:flex;flex-direction:column;margin-bottom:12px}.qgsH b{font-size:19px}.qgsH span{font-size:12px;color:#64748b}
+.qgsk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.qgsk div{background:#E6EEF9;border-radius:12px;padding:8px 4px;text-align:center}.qgsk i{display:block;font-style:normal;font-size:11px;color:#475569}.qgsk b{font-size:18px}
+.qgsk .ok{background:#e3f4cf}.qgsk .ok b{color:#3b6d11}.qgsk .ng{background:#fde2e2}.qgsk .ng b{color:#b91c1c}
+.qgsc{border:1px solid #cbd5e1;border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.qgst{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}.qgst span{font-size:12px;color:#64748b}
+.qgsh{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;margin-top:6px}.qgsh span{color:#475569;text-align:right}
+.qgsb{height:8px;border-radius:4px;background:#e2e8f0;overflow:hidden;margin-top:3px}.qgsb i{display:block;height:100%;background:#92D050}
+.qgsd{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:12px}
+.qgsm .qgch{background:#fde4cf;color:#7c2d12}
+.qgsf{font-size:11px;color:#94a3b8;text-align:right;margin-bottom:8px}
+.qgpb{display:block;width:100%;padding:12px;border-radius:12px;background:#5B9BD5;color:#fff;font-weight:700}
+@media print{html.qgprn .lg,html.qgprn nav,html.qgprn .qgov:not(.qgsm){display:none!important}html.qgprn .qgov.qgsm{position:static;background:#fff;padding:0;overflow:visible}html.qgprn .qgx,html.qgprn .qgpb{display:none!important}}
+html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
+html[data-view=pc] .qg-vr .qg-k{min-width:110px}html[data-view=pc] .qg-vb{font-size:15px;padding:12px 0}
 /* ===== Mode PC: semua halaman Quality Gate (Target Process, Detail Pallet, Defect, C/M) dibuat lebih lebar & besar. Mode HP tidak berubah ===== */
 html[data-view=pc] .qgc{max-width:640px}
 html[data-view=pc] .qgov.t2 .qgc{max-width:760px}
@@ -2441,11 +2464,12 @@ const qgParts=()=>Array.isArray(D.M.qgp)?D.M.qgp:QG_PARTS.map(([k,n])=>({k,n}));
 const qgCommit=()=>{D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}};
 function qgItemDlg(k){document.querySelectorAll('.qgdlg').forEach(x=>x.remove());const it=k?qgParts().find(x=>x.k==k):null;if(k&&!it)return;
 const d=document.createElement('div');d.className='qgdlg fixed inset-0 z-50 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.55)';d.onclick=e=>{if(e.target===d)d.remove()};
-d.innerHTML=`<div class="c" style="max-width:340px;width:100%;margin:0"><b style="font-size:16px">${it?'Edit Item':'New Item'}</b><label class="text-xs opacity-70 mt-2" style="display:block">Nama item</label><input id="qgNm" class="i" maxlength="40" value="${esc(it?it.n:'')}" placeholder="contoh: S/A Rear Door RH" onkeydown="if(event.key=='Enter')qgItemOk('${k||''}')"><div class="flex gap-2 mt-3">${it?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgItemDel('${k}')">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="this.closest('.qgdlg').remove()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgItemOk('${k||''}')">Simpan</button></div></div>`;
+d.innerHTML=`<div class="c" style="max-width:340px;width:100%;margin:0"><b style="font-size:16px">${it?'Edit Item':'New Item'}</b><label class="text-xs opacity-70 mt-2" style="display:block">Nama item</label><input id="qgNm" class="i" maxlength="40" value="${esc(it?it.n:'')}" placeholder="contoh: S/A Rear Door RH" onkeydown="if(event.key=='Enter')qgItemOk('${k||''}')"><label class="text-xs opacity-70 mt-3" style="display:block">Berlaku untuk variant</label><div class="flex gap-4 mt-1" style="font-size:14px"><label class="flex items-center gap-2"><input type="checkbox" id="qgVV"${qgVs(it).includes('V')?' checked':''}> Van</label><label class="flex items-center gap-2"><input type="checkbox" id="qgVP"${qgVs(it).includes('P')?' checked':''}> Pickup</label></div><div class="flex gap-2 mt-3">${it?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgItemDel('${k}')">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="this.closest('.qgdlg').remove()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgItemOk('${k||''}')">Simpan</button></div></div>`;
 document.body.appendChild(d);setTimeout(()=>{const e=$('#qgNm');if(e)e.focus()},50)}
 function qgItemOk(k){const e=$('#qgNm');if(!e)return;const n=e.value.trim().replace(/\s+/g,' ');if(!n)return toast('Nama item tidak boleh kosong');
 if(qgParts().some(x=>x.k!=k&&x.n.toLowerCase()==n.toLowerCase()))return toast('Nama item sudah ada');
-const l=qgParts().map(x=>({k:x.k,n:x.n}));if(k){const it=l.find(x=>x.k==k);if(it)it.n=n}else l.push({k:'p'+Date.now().toString(36),n});
+const vs=[];if($('#qgVV')&&$('#qgVV').checked)vs.push('V');if($('#qgVP')&&$('#qgVP').checked)vs.push('P');if(!vs.length)return toast('Pilih minimal satu variant');
+const l=qgParts().map(x=>x.v?{k:x.k,n:x.n,v:x.v}:{k:x.k,n:x.n});if(k){const it=l.find(x=>x.k==k);if(it){it.n=n;it.v=vs}}else l.push({k:'p'+Date.now().toString(36),n,v:vs});
 D.M.qgp=l;document.querySelectorAll('.qgdlg').forEach(x=>x.remove());qgCommit()}
 function qgItemDel(k){if(!confirm('Hapus item ini beserta semua datanya?'))return;D.M.qgp=qgParts().filter(x=>x.k!=k);if(D.M.qgimg)delete D.M.qgimg[k];const q=D.M.qg||{};Object.keys(q).forEach(d=>{delete q[d][k];if(!Object.keys(q[d]).length)delete q[d]});if(QG.part==k){QG.part='';QG.pal=0;QG.draft=null;QG.dirty=0}document.querySelectorAll('.qgdlg').forEach(x=>x.remove());qgCommit()}
 const qgDay=()=>QG.day||(QG.day=ymd(new Date()));
@@ -2456,9 +2480,18 @@ function qgPals(day){const t=prNum(qgProd(day).t);return t==null||t<=0?0:Math.mi
 /* Shikake (panjang siklus Skk) bisa diedit per item per tanggal: P.k (default QG_CYC = 10). Start (P.s) dan nomor Skk semua palet mengikuti nilai ini */
 const qgCyc=P=>{const k=parseInt(P&&P.k);return k>=1&&k<=99?k:QG_CYC};
 const qgSkk=(s,n,k)=>{k=k||QG_CYC;return(((s||1)-1+n-1)%k)+1};
+/* Variant: V=Van (Engine hood, Front door, Rear door, Back door), P=Pickup (Engine hood & Front door saja), A=All (gabungan variant yang berlaku untuk item).
+   Item.v = daftar variant yang berlaku (diatur di dialog item); kalau belum diatur ditebak dari nama item. Pilihan variant per item per tanggal di P.v; tiap palet menyimpan variant saat disimpan di P.pv[n] */
+const QG_VN={A:'All',V:'Van',P:'Pickup'};
+function qgVs(it){if(it&&Array.isArray(it.v)&&it.v.length)return it.v;const n=String(it&&it.n||'').toLowerCase();return/rear|back|belakang/.test(n)?['V']:['V','P']}
+const qgItem=k=>qgParts().find(x=>x.k==k)||{k,n:k};
+function qgTgt(day,k,v){const Pr=qgProd(day),t=prNum(Pr.t),va=prNum(Pr.v),pk=t!=null&&va!=null?t-va:null,vs=qgVs(qgItem(k));
+if(v=='V')return va;if(v=='P')return pk;const a=vs.includes('V')?va:null,b=vs.includes('P')?pk:null;return a==null&&b==null?null:(a||0)+(b||0)}
+function qgOkN(P,v){let n=0;Object.keys(P.p||{}).forEach(p=>{const tg=(P.pv||{})[p]||'';if(v!='A'&&tg!=v)return;(P.p[p]||[]).forEach(x=>{if(x[3]=='OK')n++})});return n}
+function qgVar(v){qgWrite(qgDay(),QG.part,P=>{if(v)P.v=v;else delete P.v})}
 const qgDone=(P,n)=>{const r=P.p[n];return!!r&&r.length==QG_N&&r.every(x=>x[3]=='OK'||x[3]=='NG')};
 function qgDate(day){const d=new Date(day+'T00:00:00');return isNaN(d)?day:String(d.getDate()).padStart(2,'0')+'-'+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+'-'+String(d.getFullYear()).slice(2)}
-function qgWrite(day,k,fn){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1&&!P.k)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}}
+function qgWrite(day,k,fn){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1&&!P.k&&!P.v)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}}
 function qgOpen(k){QG.part=k;QG.pal=0;render()}
 function qgClose(){QG.part='';QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;render()}
 function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.bm=0;QG.df=null;QG.cm=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3],qgCm(r[4])]:['','',[],'',qgCm(null)]});QG.dirty=0;render()}
@@ -2470,7 +2503,7 @@ function qgShik(v){const k=parseInt(v);if(!(k>=1&&k<=99)){toast('Shikake harus a
 function qgBulkTog(e){e.stopPropagation();QG.bm=!QG.bm;const m=$('#qgBm');if(m)m.style.display=QG.bm?'block':'none'}
 function qgBulk(a){if(!QG.draft)return;QG.draft.forEach(x=>{if(a=='E'){if(!x[3])x[3]='OK'}else x[3]=a});QG.dirty=1;QG.bm=0;render()}
 document.addEventListener('click',e=>{if(QG.bm&&!(e.target.closest&&e.target.closest('#qgBm'))){QG.bm=0;const m=$('#qgBm');if(m)m.style.display='none'}});
-function qgSavePal(){const day=qgDay(),k=QG.part,n=QG.pal,d=QG.draft.map(x=>[String(x[0]).trim(),String(x[1]).trim(),qgDef(x[2]),x[3],qgCm(x[4])]),blank=d.every(x=>!x[0]&&!x[1]&&!x[2].length&&!x[3]&&!x[4].t&&!x[4].i);QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;qgWrite(day,k,P=>{if(blank)delete P.p[n];else P.p[n]=d});toast('Palet '+n+' tersimpan')}
+function qgSavePal(){const day=qgDay(),k=QG.part,n=QG.pal,d=QG.draft.map(x=>[String(x[0]).trim(),String(x[1]).trim(),qgDef(x[2]),x[3],qgCm(x[4])]),blank=d.every(x=>!x[0]&&!x[1]&&!x[2].length&&!x[3]&&!x[4].t&&!x[4].i);QG.pal=0;QG.draft=null;QG.df=null;QG.cm=null;QG.dirty=0;qgWrite(day,k,P=>{P.pv=P.pv||{};if(blank){delete P.p[n];delete P.pv[n]}else{P.p[n]=d;if(P.v)P.pv[n]=P.v;else delete P.pv[n]}if(!Object.keys(P.pv).length)delete P.pv});toast('Palet '+n+' tersimpan')}
 /* ---------- DEFECT per part: gambar panel (upload manual, per item) + titik merah + callout + popup isi defect. Disimpan di baris palet: x[2] = [{x,y,t}] (x,y dalam persen gambar, null = tanpa titik). Gambar di D.M.qgimg[item] ---------- */
 const qgDef=v=>Array.isArray(v)?v.map(m=>({x:m.x==null?null:m.x,y:m.y==null?null:m.y,t:String(m.t||'')})):(v?[{x:null,y:null,t:String(v)}]:[]);
 const qgDefLbl=a=>!a.length?'-':a.length==1?(a[0].t||'1 defect'):a.length+' defect';
@@ -2530,13 +2563,34 @@ return`<div class="lg"><div class="in"><button class="text-sm mb-4 self-start" s
 <div class="glass"><h2 class="font-bold text-lg text-center">Quality Gate</h2><label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Tanggal</label><input type="date" class="i" value="${esc(day)}" onchange="QG.day=this.value||ymd(new Date());render()">
 ${qgParts().map(({k,n})=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<div class="qgi"><button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${esc(n)}</span><em>${dn}/${tot} palet</em></button><button type="button" class="qge" aria-label="Edit item" onclick="qgItemDlg('${k}')">&#9998;</button></div>`}).join('')}
 <button type="button" class="qgb qgn" onclick="qgItemDlg('')">+ New Item</button>
-${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.part?qgPart():''}${QG.pal?qgPal():''}${QG.df?qgDfView():''}${QG.cm?qgCmView():''}`}
+<button type="button" class="qgb qgus" onclick="awUpdateServer()"><span>Update Server</span><em>kirim &amp; sinkron data</em></button>
+<button type="button" class="qgb qgsr" onclick="QG.sum=1;render()"><span>Summary Report</span><em>rangkuman pengecekan</em></button>
+${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.sum?qgSumView():''}${QG.part?qgPart():''}${QG.pal?qgPal():''}${QG.df?qgDfView():''}${QG.cm?qgCmView():''}`}
+/* Summary Report: rangkuman semua item untuk tanggal terpilih (target per variant, OK/NG, palet selesai, defect & C/M terbanyak) */
+function qgSumView(){const day=qgDay(),tot=qgPals(day);let gOk=0,gNg=0,gPal=0,gAll=0;
+const blocks=qgParts().map(it=>{const P=qgP(day,it.k),vs=qgVs(it),dfc={};let cm=0,ok=0,ng=0,pal=0;
+Object.keys(P.p||{}).forEach(n=>{if(qgDone(P,+n))pal++;(P.p[n]||[]).forEach(x=>{if(x[3]=='OK')ok++;else if(x[3]=='NG')ng++;(x[2]||[]).forEach(m=>{const t=String(m.t||'').trim()||'(tanpa nama)';dfc[t]=(dfc[t]||0)+1});if(x[4]&&(x[4].t||x[4].i))cm++})});
+gOk+=ok;gNg+=ng;gPal+=pal;gAll+=tot;
+const lines=['A',...vs].map(c=>{const tg=qgTgt(day,it.k,c),o=qgOkN(P,c),pc=tg>0?Math.min(100,Math.round(o/tg*100)):0;let ng2=0;Object.keys(P.p||{}).forEach(n=>{if(c!='A'&&((P.pv||{})[n]||'')!=c)return;(P.p[n]||[]).forEach(x=>{if(x[3]=='NG')ng2++})});
+return`<div class="qgsl"><div class="qgsh"><b>${QG_VN[c]}</b><span>${qgFm(o)} / ${tg==null?'-':qgFm(tg)} OK &middot; sisa ${tg==null?'-':qgFm(Math.max(0,tg-o))}${ng2?` &middot; NG ${ng2}`:''}</span></div><div class="qgsb"><i style="width:${pc}%"></i></div></div>`}).join('');
+const top=Object.entries(dfc).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([t,c])=>`<span class="qgch">${esc(t)} &times;${c}</span>`).join('');
+return`<div class="qgsc"><div class="qgst"><b>${esc(it.n)}</b><span>${pal}/${tot} palet</span></div>${lines}<div class="qgsd">${top||'<span style="opacity:.6">Tidak ada defect tercatat</span>'}${cm?`<span class="qgch" style="background:#99e0cf;color:#0f3d34">C/M &times;${cm}</span>`:''}</div></div>`}).join('');
+return`<div class="qgov t3 qgsm" onclick="if(event.target===this){QG.sum=0;render()}"><div class="c qgc qgsmc"><button type="button" class="qgx" aria-label="Tutup" onclick="QG.sum=0;render()">&times;</button>
+<div class="qgsH"><b>Summary Report</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div>
+<div class="qgsk"><div><i>Body dicek</i><b>${qgFm(gOk+gNg)}</b></div><div class="ok"><i>OK</i><b>${qgFm(gOk)}</b></div><div class="ng"><i>NG</i><b>${qgFm(gNg)}</b></div><div><i>Palet selesai</i><b>${gPal}/${gAll}</b></div></div>
+${blocks||'<p class="text-sm text-center" style="padding:14px 0">Belum ada item.</p>'}
+<div class="qgsf">Dibuat ${esc(new Date().toLocaleString(LC()))}</div>
+<button type="button" class="qgpb" onclick="qgPrint()">Cetak / PDF</button></div></div>`}
+function qgPrint(){const h=document.documentElement;h.classList.add('qgprn');const f=()=>{h.classList.remove('qgprn');window.removeEventListener('afterprint',f)};window.addEventListener('afterprint',f);setTimeout(()=>window.print(),50)}
 function qgPart(){const day=qgDay(),k=QG.part,P=qgP(day,k),Pr=qgProd(day),t=prNum(Pr.t),v=prNum(Pr.v),pk=t!=null&&v!=null?t-v:null,tot=qgPals(day),nm=(qgParts().find(x=>x.k==k)||{}).n||k;
 const cyc=qgCyc(P);
 let rows='';for(let i=1;i<=tot;i++){const dn=qgDone(P,i);rows+=`<div class="qgr"><span class="qg-l">${i}</span><span class="qg-l">${qgSkk(P.s,i,cyc)}</span><button type="button" class="qg-o" onclick="qgOpenPal(${i})">Open</button><span class="qg-s ${dn?'ok':'ny'}">${dn?'Finish Check':'Not Yet'}</span></div>`}
 return`<div class="qgov" onclick="if(event.target===this)qgClose()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClose()">&times;</button>
 <div class="qg-ttl"><b>${esc(nm)}</b><span>${esc(qgDate(day))}</span></div>
 <div class="qg-tp"><b>Target<br>Process:</b><div class="qg-tl"><div class="qg-t"><i>All</i><b>${qgFm(t)}</b></div><div class="qg-t"><i>Van</i><b>${qgFm(v)}</b></div><div class="qg-t"><i>Pickup</i><b>${pk!=null&&pk>=0?qgFm(pk):'-'}</b></div></div></div>
+<hr class="qg-hr">
+<div class="qg-vr"><span class="qg-k">Variant:</span>${['A',...qgVs(qgItem(k))].map(c=>`<button type="button" class="qg-vb${P.v==c?' on':''}" onclick="qgVar('${P.v==c?'':c}')">${QG_VN[c]}</button>`).join('')}</div>
+${(()=>{const vc=P.v,tg=vc?qgTgt(day,k,vc):null,ok=vc?qgOkN(P,vc):0;return`<div class="qg-vr"><span class="qg-k">Target:</span><span class="qg-b qg-tv">${vc?(tg==null?'-':qgFm(Math.max(0,tg-ok))):'Pilih variant'}</span></div>${vc&&tg!=null?`<div class="qg-vi">Sisa target ${esc(QG_VN[vc])}: ${qgFm(tg)} &minus; ${qgFm(ok)} OK</div>`:''}`})()}
 <hr class="qg-hr">
 <div class="qg-kv"><span class="qg-k">Shikake:</span><input type="number" class="qg-b qg-sh" inputmode="numeric" min="1" max="99" value="${cyc}" aria-label="Shikake" onchange="qgShik(this.value)"></div>
 <div class="qg-kv"><span class="qg-k">Start:</span><input type="number" class="qg-b" inputmode="numeric" min="1" max="${cyc}" value="${Math.min(P.s||1,cyc)}" aria-label="Start Shikake" onchange="qgStart(this.value)"><span class="qg-sl">/</span><span class="qg-b">${cyc}</span></div>
