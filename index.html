@@ -993,6 +993,8 @@ html[data-view=pc] nav button[data-k=developer]{margin-top:10px;color:#f59e0b;bo
 html[data-view=pc] nav button[data-k=developer]:hover{color:#fde68a;background:rgba(245,158,11,.10)}
 html[data-view=pc] nav button[data-k=developer].on{color:#fde68a;background:linear-gradient(90deg,rgba(245,158,11,.28),rgba(245,158,11,.08));border-color:rgba(245,158,11,.60);box-shadow:0 0 18px rgba(245,158,11,.25),inset 3px 0 0 #f59e0b}
 html[data-view=pc] .pgd{display:none}
+html[data-view=pc] :is(.vw-setting,.vw-developer)>*{grid-column:1/-1!important}
+html[data-view=pc] .wver{background:transparent!important;border:0!important;box-shadow:none!important;padding:14px 0 6px;color:#64748b}
 
 .up-wrap{display:flex;justify-content:center;padding:18px 0 10px}
 .up-btn{position:relative;overflow:hidden;width:232px;height:52px;padding:0;border:2px solid #3AB54A;border-radius:999px;background:#fff;cursor:pointer;--p:100%;box-shadow:0 10px 26px rgba(58,181,74,.42);transition:transform .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
@@ -1154,11 +1156,11 @@ NI.developer='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Master'],['setting','Setting']];
 /* Tab 'developer' sengaja TIDAK ada di TABS (bar bawah tetap 5 icon). Hanya developer, dibuka dengan swipe kiri dari Setting. */
 /* ================= NOMOR REVISI APLIKASI - WAJIB DIBACA AGENT / CLAUDE =================
-   APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting: "WMS V3.<APP_REV>".
+   APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 191. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=191;
+   Revisi ini = 192. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=192;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -1481,7 +1483,7 @@ else{body=`<p class="text-center font-bold mb-3" style="color:#fff">${reg?T('Daf
 return`<div class="lg"><div class="in"><div class="text-right text-xs mb-3" style="color:#93c5fd"><button class="underline" style="font-weight:${LG=='id'?700:400}" onclick="setLang('id')">ID</button> | <button class="underline" style="font-weight:${LG=='en'?700:400}" onclick="setLang('en')">EN</button></div>
 <div class="text-center mb-4">${wmsAnim()}</div>
 <div class="glass">${body}</div>
-<p class="text-center text-xs mt-4" style="color:#64748b">Data tersimpan terpisah per akun - V3.${APP_REV}</p>
+<p class="text-center text-xs mt-4" style="color:#64748b">Data tersimpan terpisah per akun - WMS V3.0-${APP_REV}</p>
 <p class="text-center text-xs mt-1" style="color:#94a3b8">Developed by Fajar Q.</p></div></div>`}
 /* ---------- LUPA PASSWORD: link reset via email (Appwrite Auth) ---------- */
 const AW_HOME='https://fajarqorie88.github.io/wms-adm/';
@@ -2304,7 +2306,7 @@ ${P('name','Nama')}${P('nip','NIP')}${P('dept','Dept')}${fld('Role',`<input clas
 <div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:12px"><b>Akun</b><div class="text-sm">${esc(U.name)} (${U.provider=='google'?'email':U.provider})<br>Data milik: ${esc(U.id)}<br>Hak akses: <b>${roleLabel()}</b></div><button class="b bd mt-2" onclick="logout()">Logout</button></div>
 ${isDev()&&bioOK?`<div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:12px"><b>Biometrik Login</b><p class="text-xs opacity-70 my-2">Masuk tanpa mengetik password di perangkat ini.</p>${bioOn(bioKey())?`<button class="b bd" onclick="bioOff(bioKey());render()">Nonaktifkan</button>`:`<button class="b" onclick="bioAsk(bioKey())">Aktifkan</button>`}</div>`:''}
 ${SERVER?`<div id="pwbox" style="border-top:1px solid var(--bd);margin-top:14px;padding-top:12px"><button type="button" class="flex justify-between items-center w-full" style="text-align:left;cursor:pointer" onclick="PWO?pwClose():pwOpen()"><b>Ganti Password</b><span style="display:inline-block;transition:transform .2s;transform:rotate(${PWO?180:0}deg)">&#9662;</span></button><div id="pwbody" style="display:${PWO?'block':'none'}"><p class="text-xs opacity-70 my-2">Masukkan password baru dan konfirmasinya (min. 8 karakter).</p><input id="pn" class="i" type="password" placeholder="Password baru" autocomplete="new-password"><input id="pn2" class="i" type="password" placeholder="Konfirmasi password baru" autocomplete="new-password"><div class="flex gap-2"><button class="b" onclick="fbPass()">Ubah Password</button>${SRV.resetUrl?`<button class="b b2" onclick="fbReset(U.email)">Kirim link via email</button>`:''}</div></div></div>`:accs()[U.id]?`<div id="pwbox" style="border-top:1px solid var(--bd);margin-top:14px;padding-top:12px"><button type="button" class="flex justify-between items-center w-full" style="text-align:left;cursor:pointer" onclick="PWO?pwClose():pwOpen()"><b>Ganti Password</b><span style="display:inline-block;transition:transform .2s;transform:rotate(${PWO?180:0}deg)">&#9662;</span></button><div id="pwbody" style="display:${PWO?'block':'none'}"><p class="text-xs opacity-70 my-2">Masukkan password baru dan konfirmasinya (min. 8 karakter).</p><input id="pn" class="i" type="password" placeholder="Password baru (min. 8)" autocomplete="new-password"><input id="pn2" class="i" type="password" placeholder="Konfirmasi password baru" autocomplete="new-password"><button class="b" onclick="pwChange()">Ubah Password</button></div></div>`:''}</div></div>
-<div class="c text-sm text-center">WMS V3.${APP_REV} - Welding Monitoring System<p class="text-xs opacity-60 mt-1">Developed by Fajar Q.</p></div>${devDots('setting')}`}
+${verBox()}${devDots('setting')}`}
 function curView(){return L.woms_view||(innerWidth>=1024?'pc':'hp')}
 function setView(v){L.woms_view=v;document.documentElement.dataset.view=v;render()}
 function theme(){const n=document.documentElement.dataset.theme=='dark'?'light':'dark';document.documentElement.dataset.theme=n;L.woms_theme=n;render()}
@@ -2336,6 +2338,7 @@ function openMenu(k){scr=k=='cow'?'app':k;if(k=='cow')tab='input';scrollTo(0,0);
 function backBar(){return`<div class="pt-3"><button class="text-sm text-blue-600 font-semibold" onclick="openMenu('home')">&#8249; Kembali ke Menu</button></div>`}
 
 /* ---------- TAB DEVELOPER (tersembunyi, khusus Developer, dibuka dengan swipe kiri dari Setting) ---------- */
+const verBox=()=>`<div class="c text-sm text-center wver">WELDING MONITORING SYSTEM │ WMS V3.0-${APP_REV}<p class="text-xs opacity-60 mt-1">Developed by Fajar Q.</p></div>`;
 function devDots(a){if(!isDev())return'';let d='';for(let k=0;k<6;k++)d+='<i class="'+(k==5?(a=='developer'?'d':''):(k==4&&a=='setting'?'a':''))+'"></i>';return'<div class="pgd" aria-hidden="true">'+d+'</div>'}
 function devView(){const sz=(L['woms_data_'+U.id]||'').length;
 return`<div class="flex justify-between items-center py-3"><h2 class="font-bold">Developer</h2>${roleBadge()}</div>
@@ -2346,7 +2349,7 @@ ${isDev()?`<div class="c text-sm"><b>Data &amp; Storage</b><p>${D.insp.length} d
 <p>Update server terakhir: ${D.sync.last||'belum pernah'}</p><div class="mt-2"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box;background:#16a34a" onclick="awUpdateServer()">&#11014; Update Data Server</button><div id="spw" class="spw" style="${SP.show?'':'visibility:hidden'}"><div id="spb" style="width:${SP.p}%;background:${SP.err?'#ef4444':'#22c55e'}"></div></div></div>
 <p class="text-xs opacity-60 mt-1">Mengirim data setting (lokasi, checker, material, shift, deskripsi), master equipment, dan data pengecekan ke server Appwrite, lalu mengambil data baru dari server. Perangkat lain menerima pembaruan saat aplikasi dibuka kembali.</p></div>`:''}
 ${isDev()?(setTimeout(scLoad,0),scCard()):''}
-${devDots('developer')}`}
+${verBox()}${devDots('developer')}`}
 
 /* ---------- RENDER ---------- */
 function render(){const y=scrollY;document.body.classList.toggle('wn',!!U&&scr=='app');if(!U){$('#app').innerHTML=loginView();trDom($('#app'));return}
