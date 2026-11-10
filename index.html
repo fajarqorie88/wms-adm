@@ -988,11 +988,44 @@ html[data-view=pc] nav button span{display:inline}
 html[data-view=pc] nav::-webkit-scrollbar{width:6px}
 html[data-view=pc] nav::-webkit-scrollbar-track{background:rgba(56,189,248,.10);border-radius:6px}
 html[data-view=pc] nav::-webkit-scrollbar-thumb{background:#38bdf8;border-radius:6px}
-html:not([data-view=pc]) nav button[data-k=developer]{display:none}
+html:not([data-view=pc]) nav button[data-k=developer]{color:#fde68a}
+html:not([data-view=pc]) nav button[data-k=developer].on{color:#fff}
 html[data-view=pc] nav button[data-k=developer]{margin-top:10px;color:#f59e0b;border-top-color:rgba(245,158,11,.30)}
 html[data-view=pc] nav button[data-k=developer]:hover{color:#fde68a;background:rgba(245,158,11,.10)}
 html[data-view=pc] nav button[data-k=developer].on{color:#fde68a;background:linear-gradient(90deg,rgba(245,158,11,.28),rgba(245,158,11,.08));border-color:rgba(245,158,11,.60);box-shadow:0 0 18px rgba(245,158,11,.25),inset 3px 0 0 #f59e0b}
 html[data-view=pc] .pgd{display:none}
+.qgb{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;padding:14px 16px;margin-top:10px;border-radius:14px;background:#5B9BD5;color:#fff;font-weight:700;font-size:15px;text-align:left}
+.qgb em{font-style:normal;font-size:11px;font-weight:600;opacity:.92;white-space:nowrap}
+.qgov{position:fixed;inset:0;overflow-y:auto;background:rgba(0,0,0,.55);padding:20px 12px;z-index:40}
+.qgov.t2{z-index:50}
+.qgc{position:relative;max-width:440px;width:100%;margin:0 auto}
+.qgx{position:absolute;top:-8px;right:-6px;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #22b8f0;color:#22b8f0;font-weight:700;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2}
+.qg-ttl{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;font-size:14px}.qg-ttl span{font-size:12px;opacity:.7}
+.qg-hr{border:0;border-top:2px solid #94a3b8;margin:12px 0;opacity:.7}
+.qg-tp{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.qg-tp>b{font-size:16px;line-height:1.25}
+.qg-tl{display:flex;gap:8px;flex:1;justify-content:flex-end}
+.qg-t{flex:1;max-width:84px;background:#5B9BD5;color:#1f3864;border-radius:12px;padding:6px 4px 8px;text-align:center}
+.qg-t i{display:block;font-style:normal;font-size:13px;border-bottom:1px solid #1f3864;margin:0 6px 4px}
+.qg-t b{font-size:15px;color:#fff}
+.qg-kv{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:8px 0}
+.qg-k{background:#B4C7E7;color:#1f3864;border-radius:12px;padding:8px 14px;font-weight:600;min-width:104px;text-align:center}
+.qg-b{background:#5B9BD5;color:#1f3864;border-radius:12px;min-width:64px;text-align:center;padding:8px;font-weight:700;border:0;font-size:14px}
+select.qg-b{appearance:none;-webkit-appearance:none;text-align-last:center;color:#1f3864}
+.qg-sl{font-size:26px;font-weight:700;line-height:1}
+.qgr{display:grid;grid-template-columns:44px 44px 1fr 96px;gap:6px;align-items:center;margin-bottom:6px}
+.qgr.p{grid-template-columns:42px 1.5fr .9fr 1.1fr 64px}
+.qgh span{border-radius:10px;padding:6px 2px;text-align:center;font-size:12px;color:#1f3864}
+.qgh .lb{background:#B4C7E7}.qgh .mg{background:#E91AB9;color:#fff}.qgh .or{background:#ED7D31;color:#fff}.qgh .bl{background:#8FAADC}
+.qg-l{background:#B4C7E7;color:#1f3864;border-radius:10px;padding:7px 2px;text-align:center;font-size:13px}
+.qg-o{background:#E91AB9;color:#fff;border-radius:10px;padding:7px;font-size:13px;font-weight:600}
+.qg-s{border-radius:10px;padding:7px 2px;text-align:center;font-size:12px;font-weight:600;color:#111}
+.qg-s.ok{background:#92D050}.qg-s.ny{background:#ED7D31;color:#fff}
+.qg-in{width:100%;min-width:0;border:0;border-radius:10px;padding:7px 6px;font-size:13px;color:#111}
+.qg-in.m{background:#f9a8e6}.qg-in.d{background:#f6b98a}.qg-in.j{background:#8FAADC;font-weight:700;appearance:none;-webkit-appearance:none;text-align:center}
+.qg-in.j.OK{background:#92D050}.qg-in.j.NG{background:#ef4444;color:#fff}
+.qg-ph{display:flex;align-items:center;gap:8px;margin-bottom:8px}.qg-ph>b{font-size:16px;margin-right:2px}
+.qg-sv{margin-left:auto;margin-right:18px;width:44px;height:36px;border-radius:10px;background:#92D050;font-size:20px}
 html[data-view=pc] :is(.vw-setting,.vw-developer)>*{grid-column:1/-1!important}
 html[data-view=pc] .wver{background:transparent!important;border:0!important;box-shadow:none!important;padding:14px 0 6px;color:#64748b}
 
@@ -1159,8 +1192,8 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 192. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=192;
+   Revisi ini = 194. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=194;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -1893,17 +1926,17 @@ function inpGoNew(mid,sid,mt){const m=D.mains.find(x=>String(x.id)==String(mid))
   IG=true;go('input');if(!ok)toast('Isi Info Pengecekan dulu, lalu lanjut ke '+m.code)}
 
 /* ---------- PRODUKSI (tab Data, di bawah kalender): Target, Van, Pick Up (= Target - Van), Shift auto/manual. Disimpan di D.M.prod per tanggal (ikut sync master) ---------- */
-const prDay=()=>Q.cal||ymd(new Date());
+const prDay=()=>scr=='home'?ymd(new Date()):(Q.cal||ymd(new Date()));
 const prNum=v=>{const n=parseFloat(v);return v===''||v==null||isNaN(n)?null:n};
 const prShA=day=>{const l=D.insp.filter(i=>dtIn(i.dt).slice(0,10)==day&&i.shift).sort((x,y)=>(y.created||0)-(x.created||0));return l.length?String(l[0].shift):''};
 const prShL=v=>String(v||'').replace(/^shift\s*/i,'')||'-';
-function prodBox(){const day=prDay(),P=(D.M.prod||{})[day]||{},t=prNum(P.t),v=prNum(P.v),pk=t!=null&&v!=null?t-v:null,bad=pk!=null&&pk<0,man=!!P.sh,sh=P.sh||prShA(day),ed=canApprove(),fm=n=>n==null?'-':n.toLocaleString(LC());
+function prodBox(){const day=prDay(),P=(D.M.prod||{})[day]||{},t=prNum(P.t),v=prNum(P.v),pk=t!=null&&v!=null?t-v:null,bad=pk!=null&&pk<0,man=!!P.sh,sh=P.sh||prShA(day),ed=canProd(),fm=n=>n==null?'-':n.toLocaleString(LC());
  const d=new Date(day+'T00:00:00'),dt=isNaN(d)?day:String(d.getDate()).padStart(2,'0')+'-'+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+'-'+String(d.getFullYear()).slice(2);
  return`<div class="c" id="pdb"><div class="pdb-h"><b>Produksi</b><span class="pdb-r" style="position:relative"><${ed?'button type="button"':'span'} class="pdb-sh${man?' m':''}" ${ed?'onclick="prShMenu(event)"':''}>Shift: ${esc(prShL(sh))} <em>${man?'MANUAL':'AUTO'}</em></${ed?'button':'span'}><span class="pdb-d">${dt}</span>${ed?`<button type="button" class="pdb-ed" aria-label="Edit Produksi" onclick="prEdit()">&#9998;</button>`:''}</span></div><div class="pdb-g"><div class="pdb-t t1"><i>Target</i><b>${fm(t)}</b></div><div class="pdb-t t2"><i>Van</i><b>${fm(v)}</b></div><div class="pdb-t t3${bad?' bad':''}"><i>Pick Up</i><b>${bad?'-':fm(pk)}</b></div></div>${bad?'<div class="pdb-w">Van melebihi Target</div>':''}</div>`}
 function prShMenu(e){e.stopPropagation();const o=document.querySelector('.pdb-mn');if(o){o.remove();return}const day=prDay(),P=(D.M.prod||{})[day]||{},m=document.createElement('div');m.className='pdb-mn';
  m.innerHTML=(D.M.shifts||[]).map((x,k)=>`<button type="button" class="${P.sh==x?'on':''}" data-k="${k}">${esc(x)}</button>`).join('')+`<button type="button" data-k="a" style="color:#16a34a">&#8634; Auto</button>`;
  m.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;const k=b.dataset.k;prSave(day,{sh:k=='a'?'':D.M.shifts[+k]});m.remove()};e.currentTarget.parentNode.appendChild(m);setTimeout(()=>document.addEventListener('click',()=>m.remove(),{once:true}),0)}
-function prEdit(){if(!canApprove())return;const day=prDay(),P=(D.M.prod||{})[day]||{};document.querySelectorAll('.prpop').forEach(x=>x.remove());const d=document.createElement('div');d.className='prpop fixed inset-0 z-40 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.55)';d.onclick=e=>{if(e.target===d)d.remove()};
+function prEdit(){if(!canProd())return;const day=prDay(),P=(D.M.prod||{})[day]||{};document.querySelectorAll('.prpop').forEach(x=>x.remove());const d=document.createElement('div');d.className='prpop fixed inset-0 z-40 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.55)';d.onclick=e=>{if(e.target===d)d.remove()};
  d.innerHTML=`<div class="c" style="max-width:340px;width:100%;margin:0"><b style="font-size:16px">Produksi - ${esc(day)}</b><label class="text-xs opacity-70 mt-2" style="display:block">Target</label><input id="prT" class="i pdb-in" type="number" inputmode="numeric" min="0" value="${esc(P.t==null?'':P.t)}"><label class="text-xs opacity-70" style="display:block">Van</label><input id="prV" class="i pdb-in" type="number" inputmode="numeric" min="0" value="${esc(P.v==null?'':P.v)}"><div class="text-sm">Pick Up (Target - Van): <b id="prP">-</b></div><div class="flex gap-2 mt-3"><button class="b b2" style="flex:1" onclick="this.closest('.prpop').remove()">Batal</button><button class="b" style="flex:1" onclick="prOk()">Simpan</button></div></div>`;document.body.appendChild(d);
  const up=()=>{const t=prNum($('#prT').value),v=prNum($('#prV').value),e=$('#prP');if(t==null||v==null)e.textContent='-';else{e.textContent=(t-v).toLocaleString(LC());e.style.color=t-v<0?'#dc2626':''}};$('#prT').oninput=$('#prV').oninput=up;up();setTimeout(()=>$('#prT').focus(),50)}
 function prOk(){const t=prNum($('#prT').value),v=prNum($('#prV').value);if(t!=null&&t<0||v!=null&&v<0)return toast('Angka tidak boleh negatif');if(t!=null&&v!=null&&v>t)return toast('Van tidak boleh melebihi Target');prSave(prDay(),{t:t==null?'':t,v:v==null?'':v});document.querySelectorAll('.prpop').forEach(x=>x.remove())}
@@ -2326,14 +2359,60 @@ XLSX.utils.book_append_sheet(wb,jts(D.mains.map(m=>{const a=D.insp.filter(i=>i.m
 XLSX.writeFile(wb,`WMS_${U.id}_${new Date().toISOString().slice(0,10)}.xlsx`)}
 
 /* ---------- FRONT PAGE ---------- */
-const MENUS=[['cow','Check Output Welding','Input, data, grafik & master arus welding','\u26A1'],['qg','Quality Gate','Segera hadir','\u2705']];
+const MENUS=[['cow','Check Output Welding','','\u26A1'],['qg','Quality Gate','','\u2705']];
 function homeView(){const nm=esc((D.prof&&D.prof.name)||U.name||'');
 return`<div class="lg"><div class="in"><div class="text-right text-xs mb-3" style="color:#93c5fd"><button class="underline" style="font-weight:${LG=='id'?700:400}" onclick="setLang('id')">ID</button> | <button class="underline" style="font-weight:${LG=='en'?700:400}" onclick="setLang('en')">EN</button></div>
 <div class="text-center mb-6">${wmsStatic()}<p class="text-sm mt-3" style="color:#bfdbfe">Selamat datang${nm?', '+nm:''}</p><p class="text-xs mt-1" style="color:#93c5fd">Pilih menu untuk memulai</p></div>
-${MENUS.map(([k,t,d,ic])=>`<button class="glass w-full text-left flex items-center gap-4 mb-3" onclick="openMenu('${k}')" style="color:#f1f5f9"><span style="width:52px;height:52px;border-radius:14px;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none">${ic}</span><span class="flex-1"><b class="block text-base">${t}</b><span class="text-xs" style="color:#cbd5e1">${d}</span></span><span style="font-size:22px;color:#93c5fd">&#8250;</span></button>`).join('')}
+<div class="mb-3 text-left">${prodBox()}</div>
+${MENUS.map(([k,t,d,ic])=>`<button class="glass w-full text-left flex items-center gap-4 mb-3" onclick="openMenu('${k}')" style="color:#f1f5f9"><span style="width:52px;height:52px;border-radius:14px;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none">${ic}</span><span class="flex-1"><b class="block text-base">${t}</b></span><span style="font-size:22px;color:#93c5fd">&#8250;</span></button>`).join('')}
 <button class="text-xs underline mt-4 mx-auto" style="color:#93c5fd" onclick="logout()">Logout</button></div></div>`}
-function qgView(){return`<div class="lg"><div class="in"><button class="text-sm mb-4 self-start" style="color:#93c5fd" onclick="openMenu('home')">&#8249; Kembali ke Menu</button>
-<div class="glass text-center"><div style="font-size:44px">&#9989;</div><h2 class="font-bold text-lg mt-2">Quality Gate</h2><p class="text-sm mt-1" style="color:#cbd5e1">Fitur ini sedang disiapkan.</p></div></div></div>`}
+/* ---------- QUALITY GATE: pilih part -> daftar palet (Shikake) -> detail palet. Data di D.M.qg[tanggal][RH|LH] (ikut sync master, simpan 45 hari) ---------- */
+const QG_PARTS=[['RH','S/A Front Door RH'],['LH','S/A Front Door LH']],QG_N=10,QG_CYC=10;
+let QG={day:'',part:'',pal:0,draft:null,dirty:0};
+const qgDay=()=>QG.day||(QG.day=ymd(new Date()));
+const qgP=(day,k)=>((((D.M||{}).qg||{})[day]||{})[k])||{s:1,p:{}};
+const qgFm=n=>n==null?'-':n.toLocaleString(LC());
+const qgProd=day=>((D.M.prod||{})[day])||{};
+function qgPals(day){const t=prNum(qgProd(day).t);return t==null||t<=0?0:Math.min(Math.ceil(t/QG_N),300)}
+const qgSkk=(s,n)=>(((s||1)-1+n-1)%QG_CYC)+1;
+const qgDone=(P,n)=>{const r=P.p[n];return!!r&&r.length==QG_N&&r.every(x=>x[3]=='OK'||x[3]=='NG')};
+function qgDate(day){const d=new Date(day+'T00:00:00');return isNaN(d)?day:String(d.getDate()).padStart(2,'0')+'-'+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+'-'+String(d.getFullYear()).slice(2)}
+function qgWrite(day,k,fn){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();try{awMasterNow(true)}catch(e){console.error(e)}}
+function qgOpen(k){QG.part=k;QG.pal=0;render()}
+function qgClose(){QG.part='';QG.pal=0;QG.draft=null;QG.dirty=0;render()}
+function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.draft=Array.from({length:QG_N},(_,i)=>P.p[n]&&P.p[n][i]?P.p[n][i].slice():['','','','']);QG.dirty=0;render()}
+function qgClosePal(){if(QG.dirty&&!confirm('Perubahan belum disimpan. Tutup tanpa simpan?'))return;QG.pal=0;QG.draft=null;QG.dirty=0;render()}
+function qgIn(i,k,v){QG.draft[i][k]=v;QG.dirty=1}
+function qgStart(v){qgWrite(qgDay(),QG.part,P=>{P.s=+v||1})}
+function qgSavePal(){const day=qgDay(),k=QG.part,n=QG.pal,d=QG.draft.map(x=>x.map(y=>String(y).trim())),blank=d.every(x=>!x[0]&&!x[1]&&!x[2]&&!x[3]);QG.pal=0;QG.draft=null;QG.dirty=0;qgWrite(day,k,P=>{if(blank)delete P.p[n];else P.p[n]=d});toast('Palet '+n+' tersimpan')}
+function qgView(){const day=qgDay(),tot=qgPals(day);
+return`<div class="lg"><div class="in"><button class="text-sm mb-4 self-start" style="color:#93c5fd" onclick="openMenu('home')">&#8249; Kembali ke Menu</button>
+<div class="glass"><h2 class="font-bold text-lg text-center">Quality Gate</h2><label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Tanggal</label><input type="date" class="i" value="${esc(day)}" onchange="QG.day=this.value||ymd(new Date());render()">
+${QG_PARTS.map(([k,n])=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${n}</span><em>${dn}/${tot} palet</em></button>`}).join('')}
+${tot?'':'<p class="text-xs mt-3" style="color:#fcd34d">Target tanggal ini belum diisi. Isi dulu di tab Data &gt; Produksi.</p>'}</div></div></div>${QG.part?qgPart():''}${QG.pal?qgPal():''}`}
+function qgPart(){const day=qgDay(),k=QG.part,P=qgP(day,k),Pr=qgProd(day),t=prNum(Pr.t),v=prNum(Pr.v),pk=t!=null&&v!=null?t-v:null,tot=qgPals(day),nm=(QG_PARTS.find(x=>x[0]==k)||[])[1]||k;
+let act=0;for(let i=1;i<=tot;i++)if(!qgDone(P,i)){act=i;break}if(!act)act=tot||1;
+let rows='';for(let i=1;i<=tot;i++){const dn=qgDone(P,i);rows+=`<div class="qgr"><span class="qg-l">${i}</span><span class="qg-l">${qgSkk(P.s,i)}</span><button type="button" class="qg-o" onclick="qgOpenPal(${i})">Open</button><span class="qg-s ${dn?'ok':'ny'}">${dn?'Finish Check':'Not Yet'}</span></div>`}
+return`<div class="qgov" onclick="if(event.target===this)qgClose()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClose()">&times;</button>
+<div class="qg-ttl"><b>${esc(nm)}</b><span>${esc(qgDate(day))}</span></div>
+<div class="qg-tp"><b>Target<br>Process:</b><div class="qg-tl"><div class="qg-t"><i>All</i><b>${qgFm(t)}</b></div><div class="qg-t"><i>Van</i><b>${qgFm(v)}</b></div><div class="qg-t"><i>Pickup</i><b>${pk!=null&&pk>=0?qgFm(pk):'-'}</b></div></div></div>
+<hr class="qg-hr">
+<div class="qg-kv"><span class="qg-k">Shikake:</span><span class="qg-b">${qgSkk(P.s,act)}</span><span class="qg-sl">/</span><span class="qg-b">${QG_CYC}</span></div>
+<div class="qg-kv"><span class="qg-k">Start:</span><select class="qg-b" aria-label="Start Shikake" onchange="qgStart(this.value)">${Array.from({length:QG_CYC},(_,i)=>`<option value="${i+1}"${(P.s||1)==i+1?' selected':''}>${i+1}</option>`).join('')}</select><span class="qg-sl">/</span><span class="qg-b">${QG_CYC}</span></div>
+<hr class="qg-hr">
+<div class="qgr qgh"><span class="lb">Plt no.</span><span class="lb">Skk no.</span><span class="mg">Detail Pallet</span><span class="or">Status</span></div>
+${tot?rows:'<p class="text-sm text-center" style="padding:14px 0;opacity:.7">Target tanggal ini belum diisi. Isi di tab Data &gt; Produksi.</p>'}
+</div></div>`}
+function qgPal(){const day=qgDay(),P=qgP(day,QG.part),n=QG.pal,tot=qgPals(day);
+let r='';for(let i=0;i<QG_N;i++){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l">${i+1}</span><input class="qg-in m" value="${esc(x[0])}" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}"><input class="qg-in m" value="${esc(x[1])}" oninput="qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><input class="qg-in d" value="${esc(x[2])}" oninput="qgIn(${i},2,this.value)" autocomplete="off" aria-label="Defect ${i+1}"><select class="qg-in j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option></select></div>`}
+return`<div class="qgov t2" onclick="if(event.target===this)qgClosePal()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClosePal()">&times;</button>
+<div class="qg-ph"><b>Pallet no.</b><span class="qg-b">${n}</span><span class="qg-sl">/</span><span class="qg-b">${tot}</span><button type="button" class="qg-sv" aria-label="Simpan palet" onclick="qgSavePal()">&#128190;</button></div>
+<div class="text-xs" style="opacity:.7;margin:-2px 0 6px">Skk ${qgSkk(P.s,n)}/${QG_CYC}</div>
+<hr class="qg-hr">
+<div class="qgr p qgh"><span class="lb">Part no.</span><span class="mg">No. Body</span><span class="mg">Sfx</span><span class="or">Defect</span><span class="bl">Jdg</span></div>
+${r}
+</div></div>`}
+
 function openMenu(k){scr=k=='cow'?'app':k;if(k=='cow')tab='input';scrollTo(0,0);render()}
 function backBar(){return`<div class="pt-3"><button class="text-sm text-blue-600 font-semibold" onclick="openMenu('home')">&#8249; Kembali ke Menu</button></div>`}
 
@@ -2356,7 +2435,7 @@ function render(){const y=scrollY;document.body.classList.toggle('wn',!!U&&scr==
 if(scr!='app'){const n0=$('nav');if(n0)n0.remove();$('#app').innerHTML=scr=='qg'?qgView():homeView();trDom($('#app'));return}
 if(!tabOK(tab))tab='input';const v={input:inputView,data:dataView,grafik:grafikView,master:masterView,setting:settingView,developer:devView}[tab]();
 $('#app').innerHTML=backBar()+'<div class="vw vw-'+tab+(vmOf()?' vm-'+vmOf():'')+(SLD?' sld-'+SLD:'')+'">'+v+'</div>';SLD='';let n=$('nav');if(!n){n=document.createElement('nav');document.body.appendChild(n)}
-const sl=n.scrollLeft,vt=visTabs(),bw=vt.length<=5?100/vt.length:20;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('')+(isDev()?`<button data-k="developer" class="${tab=='developer'?'on':''}" onclick="go('developer')">${NI.developer}<span>Developer</span></button>`:'');n.scrollLeft=sl;
+const vt=visTabs(),bw=vt.length<=5?100/vt.length:20;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('')+(isDev()?`<button data-k="developer" class="${tab=='developer'?'on':''}" style="flex-basis:${bw}%" onclick="go('developer')">${NI.developer}<span>Developer</span></button>`:'');n.scrollLeft=tab=='developer'?n.scrollWidth:0;
 trDom($('#app'));trDom(n);
 if(tab=='grafik'){if(G.view=='loc')locGroups(gData()).forEach((g,k)=>gzDraw('cl',k));else matList().forEach((m,k)=>gzDraw('cv',k));if(G.fitAll&&!G.hc)gzFitAll()}if((tab=='setting'||tab=='developer')&&isDev())acLoad();if(tab=='data'||tab=='grafik')calFix();scrollTo(0,y)}
 function go(t){if(!tabOK(t))return toast('Akses ditolak: khusus Developer / Admin');tab=t;PS.ak=null;scrollTo(0,0);render();const b=document.querySelector('nav button.on');if(b&&b.scrollIntoView)try{b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}catch(e){}}
@@ -2717,6 +2796,7 @@ const LVL=[['member','Member'],['gl','Group Leader'],['foreman','Foreman'],['spv
 const lvlOf=t=>{t=String(t||'').toLowerCase();return /supervis|spv/.test(t)?'spv':/foreman/.test(t)?'foreman':/group|leader|\bgl\b/.test(t)?'gl':/member|operator/.test(t)?'member':''};
 const lvlName=k=>(LVL.find(x=>x[0]==k)||['',''])[1];
 const myLvl=()=>lvlOf(D&&D.prof&&D.prof.role);
+const canProd=()=>!!U&&(isDev()||!['foreman','spv'].includes(myLvl()));
 const canApprove=()=>!!U&&(isDev()||['foreman','spv'].includes(myLvl()));
 const apSt=i=>i.ap=='a'?'a':'p';
 const apOkR=i=>apSt(i)=='a';
