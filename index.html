@@ -1301,8 +1301,8 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 199. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=201;
+   Revisi ini = 202. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=202;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2479,9 +2479,9 @@ ${MENUS.map(([k,t,d,ic])=>`<button class="glass w-full text-left flex items-cent
 const QS={p:0,show:false,err:false,t:0,busy:false,q:0,m:'',pn:0};
 const qsLbl=()=>!QS.show?'':QS.p<100?'Sinkron '+Math.round(QS.p)+'%':QS.err?'Gagal sinkron, coba lagi':'\u2713 Tersinkron';
 const qsSty=()=>`style="width:${QS.p}%;background:${QS.err?'#ef4444':'#22c55e'}"`;
-const qsBar=()=>`<div class="qsw" style="visibility:${QS.show?'visible':'hidden'}"><div class="qsb" ${qsSty()}></div></div><div class="qsl">${qsLbl()}</div>`;
+const qsBar=()=>`<div class="qsw" style="display:${QS.show?'block':'none'}"><div class="qsb" ${qsSty()}></div></div><div class="qsl" style="display:${QS.show?'block':'none'}">${qsLbl()}</div>`;
 const qsTop=()=>`<div class="qsw qstop" style="visibility:${QS.show?'visible':'hidden'}"><div class="qsb" ${qsSty()}></div></div>`;
-function qsUpd(){document.querySelectorAll('.qsw').forEach(w=>w.style.visibility=QS.show?'visible':'hidden');document.querySelectorAll('.qsb').forEach(b=>{b.style.width=QS.p+'%';b.style.background=QS.err?'#ef4444':'#22c55e'});document.querySelectorAll('.qsl').forEach(l=>l.textContent=qsLbl())}
+function qsUpd(){document.querySelectorAll('.qsw').forEach(w=>{if(w.classList.contains('qstop'))w.style.visibility=QS.show?'visible':'hidden';else w.style.display=QS.show?'block':'none'});document.querySelectorAll('.qsb').forEach(b=>{b.style.width=QS.p+'%';b.style.background=QS.err?'#ef4444':'#22c55e'});document.querySelectorAll('.qsl').forEach(l=>{l.textContent=qsLbl();l.style.display=QS.show?'block':'none'})}
 function qsSet(p,err,hide){QS.p=p;QS.err=!!err;QS.show=true;clearTimeout(QS.t);qsUpd();if(hide)QS.t=setTimeout(()=>{QS.show=false;QS.p=0;QS.err=false;qsUpd()},err?2600:1500)}
 /* mode: manual = tombol Update Server (progress + centang), pal = setelah simpan palet (progress + centang), auto = setelah perubahan (progress saja), poll = cek berkala (diam kecuali ada data yang bergerak) */
 async function qgSync(mode){
@@ -2663,7 +2663,7 @@ return`<div class="qgov" onclick="if(event.target===this)qgClose()"><div class="
 <div class="qg-tp"><b>Target<br>Process:</b><div class="qg-tl"><div class="qg-t"><i>All</i><b>${qgFm(t)}</b></div><div class="qg-t"><i>Van</i><b>${qgFm(v)}</b></div><div class="qg-t"><i>Pickup</i><b>${pk!=null&&pk>=0?qgFm(pk):'-'}</b></div></div></div>
 <hr class="qg-hr">
 <div class="qg-vr"><span class="qg-k">Variant:</span>${['A',...qgVs(qgItem(k))].map(c=>`<button type="button" class="qg-vb${P.v==c?' on':''}" onclick="qgVar('${P.v==c?'':c}')">${QG_VN[c]}</button>`).join('')}</div>
-${(()=>{const vc=P.v,tg=vc?qgTgt(day,k,vc):null,ok=vc?qgOkN(P,vc):0,os=vc?qgOsN(P,vc):0,ac=vc?qgActN(P,vc):0;return`<div class="qg-vr qg-tr"><span class="qg-k">Target:</span><span class="qg-b qg-tv${vc?'':' qg-pv'}">${vc?(tg==null?'-':qgFm(Math.max(0,tg-ok-os))):'Pilih variant'}</span><span class="qg-k qg-ka">Actual:</span><span class="qg-b qg-tv qg-av">${vc?qgFm(ac):'-'}</span></div>${vc&&tg!=null?`<div class="qg-vi">Sisa target ${esc(QG_VN[vc])}: ${qgFm(tg)} &minus; ${qgFm(ok)} OK${os?` &minus; ${qgFm(os)} Other Shift`:''}</div>`:''}`})()}
+${(()=>{const vc=P.v,ac=vc?qgActN(P,vc):0;return`<div class="qg-vr qg-tr"><span class="qg-k">Target:</span><span class="qg-b qg-tv">${qgFm(t)}</span><span class="qg-k qg-ka">Actual:</span><span class="qg-b qg-tv qg-av">${vc?qgFm(ac):'-'}</span></div>`})()}
 <hr class="qg-hr">
 <div class="qg-kv"><span class="qg-k">Shikake:</span><input type="number" class="qg-b qg-sh" inputmode="numeric" min="1" max="99" value="${cyc}" aria-label="Shikake" onchange="qgShik(this.value)"></div>
 <div class="qg-kv"><span class="qg-k">Start:</span><input type="number" class="qg-b" inputmode="numeric" min="1" max="${cyc}" value="${Math.min(P.s||1,cyc)}" aria-label="Start Shikake" onchange="qgStart(this.value)"><span class="qg-sl">/</span><span class="qg-b">${cyc}</span></div>
