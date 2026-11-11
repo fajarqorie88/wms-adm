@@ -1028,6 +1028,10 @@ html[data-view=pc] .qgr.p .qg-in.c{background:#99e0cf}
 .qgh .kg{background:#8b5cf6;color:#fff}.qg-in.k{background:#c4b5fd}
 .qg-in.j.OS{background:#fbbf24;color:#111}
 .qg-in.sf{padding:0 2px;text-align:center;text-transform:uppercase}
+.qgbw{position:relative;display:block;min-width:0}
+.qgbd{position:absolute;top:-6px;right:-4px;min-width:16px;height:16px;padding:0 3px;border-radius:999px;font-size:10px;font-weight:700;line-height:16px;text-align:center;color:#fff;pointer-events:none;z-index:2;box-shadow:0 0 0 1.5px var(--surface-2,#fff)}
+.qgbd.D{background:#0F6E56}.qgbd.E{background:#534AB7}
+.qgr.p .qg-in.k.df{background:#fca5a5;color:#7f1d1d}
 .qg-sh{flex:none;min-width:0;-moz-appearance:textfield;appearance:textfield}
 input.qg-b{width:64px;flex:none}input.qg-b.qg-sh{width:64px;flex:none}
 input.qg-b::-webkit-outer-spin-button,input.qg-b::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
@@ -1354,7 +1358,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=210;
+const APP_REV=211;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2653,7 +2657,7 @@ ${box}
 /* ---------- KET (Keterangan) per part: tujuan Domestic / Export + detail. Disimpan di baris palet: x[5] = {d:'D'|'E'|'', t:keterangan} (0 kalau kosong) ---------- */
 const qgKt=v=>({d:v&&(v.d=='D'||v.d=='E')?v.d:'',t:String(v&&v.t||'')});
 const qgKs=k=>k.d||k.t?k:0;
-const qgKetS=k=>k.d?(k.d=='D'?'Dom':'Exp'):'-';
+const qgKetS=x=>x[2]&&x[2].length?'Defect':'-';
 const qgKtLbl=k=>k.d=='D'?'Domestic':k.d=='E'?'Export':'-';
 function qgKtOpen(i){const c=qgKt(QG.draft[i][5]);QG.df=null;QG.cm=null;QG.kt={i,d:c.d,t:c.t};render()}
 function qgKtD(d){const c=QG.kt;if(!c)return;c.d=c.d==d?'':d;document.querySelectorAll('.qgktp').forEach(b=>b.classList.toggle('on',b.dataset.d==c.d))}
@@ -2788,7 +2792,7 @@ return`<div class="qgov t25 qgdp" onclick="if(event.target===this)qgDpClose()"><
 <div class="qgdpg"><span class="p s">Variant</span><span class="o">Defect</span></div>
 <div class="qgdpg"><button type="button" class="p s" aria-label="Variant ${i+1}" onclick="qgKtOpen(${i})">${esc(vl)}</button><button type="button" class="o" aria-label="Defect ${i+1}" onclick="qgDf(${i})">View</button></div></div></div>`}
 function qgPal(){const day=qgDay(),P=qgP(day,QG.part),n=QG.pal,tot=qgPals(day);
-let r='';const ph=(l,t)=>l=='-'?[t,' ph']:[l,''];for(let i=0;i<QG_N;i++){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l a-l">${i+1}</span><input class="qg-in m a-b" value="${esc(x[0])}" inputmode="numeric" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}"><input class="qg-in m sf a-s" value="${esc(x[1])}" maxlength="3" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().slice(0,3);qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgop a-d" aria-label="Open ${i+1}" onclick="qgDpOpen(${i})">Open</button><select class="qg-in j a-j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j a-j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option><option value="OS"${x[3]=='OS'?' selected':''}>Other Shift</option></select><button type="button" class="qg-in k qgdb a-k" aria-label="Ket ${i+1}" onclick="qgKtOpen(${i})">${qgKetS(x[5])}</button></div>`}
+let r='';const ph=(l,t)=>l=='-'?[t,' ph']:[l,''];for(let i=0;i<QG_N;i++){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l a-l">${i+1}</span><span class="qgbw a-b"><input class="qg-in m" value="${esc(x[0])}" inputmode="numeric" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}">${x[5]&&x[5].d?`<span class="qgbd ${x[5].d}" aria-label="${x[5].d=='D'?'Domestic':'Export'}">${x[5].d}</span>`:''}</span><input class="qg-in m sf a-s" value="${esc(x[1])}" maxlength="3" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().slice(0,3);qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgop a-d" aria-label="Open ${i+1}" onclick="qgDpOpen(${i})">Open</button><select class="qg-in j a-j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j a-j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option><option value="OS"${x[3]=='OS'?' selected':''}>Other Shift</option></select><button type="button" class="qg-in k qgdb a-k${x[2].length?' df':''}" aria-label="Ket ${i+1}" onclick="qgKtOpen(${i})">${qgKetS(x)}</button></div>`}
 return`<div class="qgov t2" onclick="if(event.target===this)qgClosePal()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClosePal()">&times;</button>
 <div class="qg-ph"><b>Pallet no.</b><span class="qg-b">${n}</span><span class="qg-sl">/</span><span class="qg-b">${tot}</span><button type="button" class="qg-sv" aria-label="Simpan palet" onclick="qgSavePal()">&#128190;</button></div>
 <div class="text-xs" style="opacity:.7;margin:-2px 0 6px">Skk ${qgSkk(P.s,n,qgCyc(P))}/${qgCyc(P)}</div>
