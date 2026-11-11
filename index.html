@@ -1319,8 +1319,8 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 203. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=203;
+   Revisi ini = 204. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=204;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2671,7 +2671,7 @@ return`<div class="qgdash">
 </div>`}
 function qgView(){const day=qgDay(),tot=qgPals(day);
 return`<div class="lg"><div class="in${qgPcOn()?' qgpc':''}"><button class="text-sm mb-4 self-start" style="color:#93c5fd" onclick="openMenu('home')">&#8249; Kembali ke Menu</button>
-<div class="glass"><h2 class="font-bold text-lg text-center">Quality Gate</h2><label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Tanggal</label><div class="qgdt"><span>${esc(qgDate(day))}</span><i aria-hidden="true">&#128197;</i><input type="date" value="${esc(day)}" aria-label="Tanggal" onchange="QG.day=this.value||ymd(new Date());render()"></div>
+<div class="glass"><h2 class="font-bold text-lg text-center">Quality Gate</h2><label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Tanggal</label><div class="qgdt"><span>${esc(qgDate(day))}</span><i aria-hidden="true">&#128197;</i><input type="date" value="${esc(day)}" aria-label="Tanggal" onclick="try{this.showPicker()}catch(e){}" onchange="QG.day=this.value||ymd(new Date());render()"></div>
 ${qgParts().map(({k,n})=>{const P=qgP(day,k);let dn=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))dn++;return`<div class="qgi"><button type="button" class="qgb" onclick="qgOpen('${k}')"><span>${esc(n)}</span><em>${dn}/${tot} palet</em></button><button type="button" class="qge" aria-label="Edit item" onclick="qgItemDlg('${k}')">&#9998;</button></div>`}).join('')}
 <button type="button" class="qgb qgn" onclick="qgItemDlg('')">+ New Item</button>
 <button type="button" class="qgb qgus" onclick="qgSync('manual')"><span>Update Server</span><em>otomatis &middot; ketuk utk paksa</em></button>${qsBar()}
