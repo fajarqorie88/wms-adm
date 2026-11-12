@@ -1038,7 +1038,7 @@ html[data-view=pc] .qgr.p .qg-in.c{background:#99e0cf}
 .qgm-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.18);margin:8px 0 12px;overflow:hidden}.qgm-bar i{display:block;height:100%;background:#92D050}
 .qgm-t{width:100%;border-collapse:collapse;font-size:12px}.qgm-t th{font-weight:400;opacity:.7;text-align:right;padding:4px 0;font-size:11px}.qgm-t td{text-align:right;padding:6px 0;border-top:1px solid rgba(255,255,255,.12)}.qgm-t th:first-child,.qgm-t td:first-child{text-align:left}.qgm-t td:first-child{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qgm-hb{display:grid;grid-template-columns:64px 1fr 22px;gap:8px;align-items:center;font-size:12px;margin-top:7px}.qgm-hb span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qgm-hb div{height:8px;border-radius:999px;background:rgba(255,255,255,.14);overflow:hidden}.qgm-hb i{display:block;height:100%;background:#ED7D31}.qgm-hb b{text-align:right}
-.qgbw{position:relative;display:block;min-width:0}.qgbw>input.qg-in{padding-right:28px;text-align:left}.qgcm{position:absolute;right:2px;top:50%;transform:translateY(-50%);width:26px;height:26px;padding:0;border:0;background:transparent;font-size:15px;line-height:26px;z-index:1}
+.qgbw{position:relative;display:flex;align-items:stretch;min-width:0}.qgbw>input.qg-in{flex:1 1 auto;min-width:0;width:auto;text-align:center}.qgcm{position:static;transform:none;flex:none;width:30px;height:34px;padding:0;border:0;background:#7a7a7a;color:#fff;border-radius:0 10px 10px 0;display:flex;align-items:center;justify-content:center;z-index:1}.qgcm svg{width:17px;height:17px;display:block}
 .qgcpi{display:flex;align-items:center;gap:10px;width:100%;padding:10px 8px;border-radius:10px;background:rgba(148,163,184,.14);margin-bottom:6px;font-size:13px;color:inherit}
 .qgcpb{width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(148,163,184,.8);display:flex;align-items:center;justify-content:center;flex:none;font-size:14px;color:#fff}
 .qgcpi.on .qgcpb{background:#185FA5;border-color:#185FA5}
@@ -1055,6 +1055,9 @@ input.qg-b::-webkit-outer-spin-button,input.qg-b::-webkit-inner-spin-button{-web
 .qgr.p .qg-l{height:34px;display:flex;align-items:center;justify-content:center;padding:0;font-size:10.5px}
 .qgr.p .qg-in{height:34px;padding:0 3px;font-size:10.5px}
 .qgr.p input.qg-in.m{text-align:center}
+/* No. Body: angka di tengah area pink (jarak kiri = kanan), kamera = kotak abu-abu di kanan */
+.qgr.p .qgbw>input.qg-in.m{padding:0 4px;font-size:13px;background:#EBB2EE;border-radius:10px 0 0 10px}
+html[data-view=pc] .qgr.p .qgbw>input.qg-in.m{padding:0 6px;font-size:16px}html[data-view=pc] .qgr.p .qgcm{width:42px;height:42px}html[data-view=pc] .qgr.p .qgcm svg{width:20px;height:20px}
 .qgr.p .qg-in.j{padding:0 1px;font-size:9.5px}.qgr.p .qg-in.k{padding:0 2px;font-size:10px;color:#1f1147;font-weight:600}
 .qg-cp{display:flex;align-items:center;gap:8px;margin:2px 0 6px}.qg-cp .qg-k{min-width:0;padding:7px 10px;font-size:12.5px;white-space:nowrap}.qg-cp select.qg-b{flex:1;min-width:0;padding:7px;font-size:13px}
 .qgr.p.qgh span{font-size:9.5px;line-height:1.15;padding:3px 1px;min-height:34px;display:flex;align-items:center;justify-content:center}
@@ -1262,9 +1265,9 @@ html[data-view=pc] .wver{background:transparent!important;border:0!important;box
 .qgcf{position:absolute;display:none;border:2px dashed #facc15;box-shadow:0 0 0 100vmax rgba(0,0,0,.62);box-sizing:border-box;touch-action:none;cursor:move}
 .qgcf i{position:absolute;width:36px;height:36px;margin:-18px 0 0 -18px;touch-action:none}
 .qgcf i::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#facc15;border:2px solid #000}
-.qgct{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;color:#fff;font-size:12px;text-shadow:0 1px 3px #000;pointer-events:none}
-.qgcb{position:absolute;left:0;right:0;bottom:0;display:flex;gap:10px;justify-content:center;align-items:center;padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,rgba(0,0,0,.75),transparent)}
-.qgcb button{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.2);color:#fff;font-weight:600;font-size:13px;white-space:nowrap}
+.qgct{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;color:#fff;font-size:13px;text-shadow:0 1px 3px #000;pointer-events:none;z-index:3}
+.qgcb{position:absolute;z-index:3;left:0;right:0;bottom:0;display:flex;gap:10px;align-items:center;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,rgba(0,0,0,.75),transparent)}.qgcb::-webkit-scrollbar{display:none}.qgcb>:first-child{margin-left:auto}.qgcb>:last-child{margin-right:auto}
+.qgcb button{flex:none;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.2);color:#fff;font-weight:600;font-size:13px;white-space:nowrap}
 .qgcb button.sh{width:64px;height:64px;padding:0;background:#fff;border:4px solid #94a3b8;flex:none}
 .qgcb button.sh:active{background:#cbd5e1}
 </style><style id="tw-static">/* Tailwind 3.4.17 preflight + utilitas yang dipakai (build manual, tanpa CDN) */
@@ -1402,7 +1405,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=226;
+const APP_REV=227;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2909,21 +2912,40 @@ return`<div class="qgov t25 qgdp" onclick="if(event.target===this)qgDpClose()"><
 /* ---------- FOTO ORDER SHEET -> No. Body (OCR, Tesseract.js dimuat saat dipakai, butuh internet). Nomor di sheet berurut dari baris 10 sampai 1; dipakai 5 angka terakhir. Hasil dicek dulu di kotak review, baris yang sudah terisi tidak ditimpa ---------- */
 function qgOcrLoad(){return window.Tesseract?Promise.resolve():new Promise((ok,no)=>{const e=document.createElement('script');e.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';e.onload=ok;e.onerror=()=>no(new Error('load'));document.head.appendChild(e)})}
 function qgOcrNorm(c){const x=c.getContext('2d');try{const d=x.getImageData(0,0,c.width,c.height),p=d.data;let lo=255,hi=0;for(let i=0;i<p.length;i+=4){const g=(p[i]*.299+p[i+1]*.587+p[i+2]*.114)|0;p[i]=p[i+1]=p[i+2]=g;if(g<lo)lo=g;if(g>hi)hi=g}const r=Math.max(1,hi-lo);for(let i=0;i<p.length;i+=4){const g=Math.round((p[i]-lo)/r*255);p[i]=p[i+1]=p[i+2]=g}x.putImageData(d,0,0)}catch(e){}return c}
+/* Binarisasi adaptif (ambang lokal): bayangan / cahaya tidak rata tidak merusak angka */
+function qgOcrBin(c){try{const x=c.getContext('2d'),W=c.width,H=c.height,d=x.getImageData(0,0,W,H),p=d.data,I=new Float64Array((W+1)*(H+1));
+for(let y=0;y<H;y++){let t=0;for(let i=0;i<W;i++){t+=p[(y*W+i)*4];I[(y+1)*(W+1)+i+1]=I[y*(W+1)+i+1]+t}}
+const R=Math.max(8,Math.round(Math.min(W,H)/10)),out=new Uint8ClampedArray(p.length);
+for(let y=0;y<H;y++){const y0=Math.max(0,y-R),y1=Math.min(H-1,y+R);for(let i=0;i<W;i++){const x0=Math.max(0,i-R),x1=Math.min(W-1,i+R),n=(x1-x0+1)*(y1-y0+1),sm=I[(y1+1)*(W+1)+x1+1]-I[y0*(W+1)+x1+1]-I[(y1+1)*(W+1)+x0]+I[y0*(W+1)+x0],o=(y*W+i)*4,v=p[o]<(sm/n)*.88?0:255;out[o]=out[o+1]=out[o+2]=v;out[o+3]=255}}
+x.putImageData(new ImageData(out,W,H),0,0)}catch(e){}return c}
+function qgOcrCv(src,k,bin){const w=Math.max(1,Math.round(src.width*k)),h=Math.max(1,Math.round(src.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.imageSmoothingQuality='high';x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(src,0,0,w,h);if(bin)qgOcrBin(c);return c}
+/* Ambil nomor dari hasil baca: angka yang kepisah spasi digabung dulu. v = 5 angka terakhir, lo = perlu dicek user */
+function qgOcrParse(r,cap){const it=[],L=(r.data.lines&&r.data.lines.length)?r.data.lines:String(r.data.text||'').split('\n').map(t=>({text:t,confidence:r.data.confidence}));
+L.forEach(l=>{if(it.length>=cap)return;const tk=String(l.text||'').split(/\s+/).map(a=>a.replace(/\D/g,'')).filter(Boolean),cf=(l.confidence||0)<75;let v='',lo=cf;
+const big=tk.find(a=>a.length>=5);if(big)v=big.slice(-5);else{const m=tk.join('');if(m.length>=4){v=m.slice(-5);lo=true}}
+if(v)it.push({v,on:1,lo:lo||v.length<5})});return it}
+function qgOcrScore(it){return it.reduce((a,x)=>a+(x.v.length==5?(x.lo?.6:1):.3),0)}
 function qgOcrPrep(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const sc=Math.min(1,1200/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(qgOcrNorm(c))};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
 /* Mesin baca (worker Tesseract) disiapkan sekali di belakang layar begitu halaman palet dibuka, lalu dipakai ulang untuk semua foto. Proses baca diantre supaya tidak tabrakan */
-let OCRW=null,OCRQ=Promise.resolve(),OCRLG=null;
+let OCRW=null,OCRQ=Promise.resolve(),OCRLG=null,OCRTRY=0;
 function qgOcrWarm(){if(OCRW)return OCRW;OCRW=(async()=>{await qgOcrLoad();const w=await Tesseract.createWorker('eng',1,{logger:m=>{if(OCRLG)OCRLG(m)}});await w.setParameters({tessedit_char_whitelist:'0123456789 ',tessedit_pageseg_mode:'6'});return w})();OCRW.catch(()=>{OCRW=null});return OCRW}
 async function qgOcrPick(inp){const f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(!/^image\//.test(f.type))return toast('File harus berupa gambar');qgOcrRun(()=>qgOcrPrep(f))}
 async function qgOcrRun(mk){
 const O=QG.ocr={at:QG.ocrAt==null?QG_N-1:QG.ocrAt,pal:QG.pal,part:QG.part,st:'run',msg:'Menyiapkan mesin baca...',items:[]};render();
-OCRLG=m=>{if(QG.ocr!==O)return;const e=document.getElementById('qgOcrP');if(e)e.textContent=m.status=='recognizing text'?'Membaca teks... '+Math.round((m.progress||0)*100)+'%':'Menyiapkan mesin baca...'};
+OCRTRY=0;OCRLG=m=>{if(QG.ocr!==O)return;const e=document.getElementById('qgOcrP');if(e)e.textContent=m.status=='recognizing text'?'Membaca teks'+(OCRTRY?' (cara baca lain '+(OCRTRY+1)+')':'')+'... '+Math.round((m.progress||0)*100)+'%':'Menyiapkan mesin baca...'};
 try{const wp=qgOcrWarm(),cv=await mk();if(QG.ocr!==O)return;const w=await wp;if(QG.ocr!==O)return;
-const job=OCRQ.then(()=>w.recognize(cv));OCRQ=job.catch(()=>{});const r=await job;if(QG.ocr!==O)return;
-const it=[];(r.data.lines||[]).forEach(l=>{const m=String(l.text||'').match(/\d{5,}/);if(m&&it.length<QG_N){it.push({v:m[0].slice(-5),on:1,lo:(l.confidence||0)<75})}});
-if(!it.length){O.st='err';O.msg='Tidak ada nomor body terbaca. Coba foto lebih dekat, terang, dan pastikan kolom No. Body pas di dalam bingkai.'}else{O.st='rev';O.items=it}render()}
+const cap=Math.min(QG_N,O.at+1),sc=Math.min(1.6,1600/Math.max(cv.width,cv.height)),sk=sc>1.05?sc:1;
+/* Coba beberapa cara baca; berhenti kalau hasilnya sudah bagus, kalau tidak pakai hasil terbaik */
+const pl=[[()=>cv,'6'],[()=>qgOcrCv(cv,sk,true),'6'],[()=>qgOcrCv(cv,sk,false),'4'],[()=>qgOcrCv(cv,sk,true),'11']];
+const job=OCRQ.then(async()=>{let best=null;for(let a=0;a<pl.length;a++){if(QG.ocr!==O)return null;OCRTRY=a;
+try{await w.setParameters({tessedit_pageseg_mode:pl[a][1]});const r=await w.recognize(pl[a][0]()),it=qgOcrParse(r,cap),s2=qgOcrScore(it);if(!best||s2>best.s)best={it,s:s2};if(it.length>=2&&it.every(x=>!x.lo))break}catch(e){if(a==0)throw e}}
+return best?best.it:[]});OCRQ=job.catch(()=>{});const it=await job;if(QG.ocr!==O||!it)return;
+/* Hasil kosong / sebagian tidak lagi dianggap gagal: kotak review tetap terbuka, sisanya diketik manual */
+O.rd=it.length;O.none=!it.length;const tot=Math.min(cap,Math.max(5,it.length+2));for(let k=it.length;k<tot;k++)it.push({v:'',on:1,bl:1});
+O.st='rev';O.items=it;render()}
 catch(e){if(QG.ocr!==O)return;O.st='err';O.msg=OCRW?'Foto tidak bisa dibaca. Coba foto ulang.':'Mesin baca gagal diunduh. Cek koneksi internet lalu coba lagi.';render()}}
 /* Kamera di dalam aplikasi untuk foto order sheet: area di luar bingkai kuning digelapkan, bingkai bisa digeser dan ditarik dari titik sudut/sisi, hanya isi bingkai yang dipotong dan dibaca OCR. Posisi bingkai terakhir diingat */
-const QGFR_K='wms_ocrfr',QGFR_D={x:.3,y:.12,w:.4,h:.76};
+const QGFR_K='wms_ocrfr2',QGFR_D={x:.3,y:.08,w:.4,h:.62};
 let CAM=null;
 function qgFrGet(){try{const a=JSON.parse(L[QGFR_K]||'null');if(a&&a.w>=.08&&a.h>=.05&&a.x>=0&&a.y>=0&&a.x+a.w<=1.001&&a.y+a.h<=1.001)return a}catch(e){}return Object.assign({},QGFR_D)}
 function qgFrSave(){try{L[QGFR_K]=JSON.stringify(CAM.fr)}catch(e){}}
@@ -2939,13 +2961,20 @@ catch(e){CAM=null;toast('Kamera tidak bisa dibuka (izin ditolak?). Pakai tombol 
 if(!CAM){st.getTracks().forEach(t=>t.stop());return}
 const o=document.createElement('div');o.id='qgCam';o.className='qgcam';
 const hs=[['nw','0','0'],['n','50%','0'],['ne','100%','0'],['e','100%','50%'],['se','100%','100%'],['s','50%','100%'],['sw','0','100%'],['w','0','50%']];
-o.innerHTML='<video id="qgCamV" playsinline muted autoplay></video><div class="qgct">Masukkan kolom No. Body ke dalam bingkai kuning</div><div class="qgcf" id="qgCamF" onpointerdown="qgCamDrag(event)">'+hs.map(h=>'<i data-h="'+h[0]+'" style="left:'+h[1]+';top:'+h[2]+'"></i>').join('')+'</div><div class="qgcb"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamGal()">Galeri</button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" class="sh" aria-label="Jepret" onclick="qgCamShot()"></button><button type="button" id="qgCamT" style="display:none" onclick="qgCamTorch()">Senter</button></div>';
-document.body.appendChild(o);
+o.innerHTML='<video id="qgCamV" playsinline muted autoplay></video><div class="qgct">Masukkan kolom No. Body ke dalam bingkai kuning</div><div class="qgcf" id="qgCamF" onpointerdown="qgCamDrag(event)">'+hs.map(h=>'<i data-h="'+h[0]+'" style="left:'+h[1]+';top:'+h[2]+'"></i>').join('')+'</div><div class="qgcb"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamGal()">Galeri</button><button type="button" class="sh" aria-label="Jepret" onclick="qgCamShot()"></button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" id="qgCamT" style="display:none" onclick="qgCamTorch()">Senter</button></div>';
+document.body.appendChild(o);qgCamBar(o);
 const v=o.querySelector('#qgCamV');v.srcObject=st;
 CAM={o,v,st,fe:o.querySelector('#qgCamF'),fr:qgFrGet(),r:{dw:1,dh:1},tn:0};
 v.addEventListener('loadedmetadata',qgCamLay);v.addEventListener('resize',qgCamLay);addEventListener('resize',qgCamLay);
 try{const tr=st.getVideoTracks()[0],cp=tr.getCapabilities?tr.getCapabilities():{};if(cp.torch)o.querySelector('#qgCamT').style.display=''}catch(e){}
 v.play().catch(()=>{});qgCamLay()}
+function qgCamBar(o){const b=o.querySelector('.qgcb'),sh=b&&b.querySelector('.sh');if(!b||!sh)return;
+const ct=()=>{b.scrollLeft=sh.offsetLeft-(b.clientWidth-sh.offsetWidth)/2};ct();requestAnimationFrame(ct);
+let d=0,x0=0,l0=0,mv=0;
+b.addEventListener('pointerdown',e=>{if(e.pointerType!='mouse')return;d=1;mv=0;x0=e.clientX;l0=b.scrollLeft});
+addEventListener('pointermove',e=>{if(!d)return;const dx=e.clientX-x0;if(Math.abs(dx)>6)mv=1;if(mv)b.scrollLeft=l0-dx});
+addEventListener('pointerup',()=>{d=0});
+b.addEventListener('click',e=>{if(mv){e.preventDefault();e.stopPropagation();mv=0}},true)}
 function qgCamClose(){const c=CAM;CAM=null;if(!c)return;removeEventListener('resize',qgCamLay);try{if(c.st)c.st.getTracks().forEach(t=>t.stop())}catch(e){}if(c.o)c.o.remove()}
 function qgCamGal(){qgCamClose();const g=document.getElementById('qgOcrG');if(g)g.click()}
 function qgCamReset(){if(!CAM||!CAM.o)return;CAM.fr=Object.assign({},QGFR_D);qgFrSave();qgCamLay()}
@@ -2968,16 +2997,16 @@ const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x
 qgCamClose();qgOcrNorm(c);qgOcrRun(()=>Promise.resolve(c))}
 function qgOcrClose(){QG.ocr=null;render()}
 function qgOcrTog(k){const o=QG.ocr;if(!o)return;o.items[k].on=o.items[k].on?0:1;render()}
-function qgOcrVal(k,v){const o=QG.ocr;if(!o)return;v=String(v).replace(/\D/g,'').slice(0,5);o.items[k].v=v}
+function qgOcrVal(k,v){const o=QG.ocr;if(!o)return;v=String(v).replace(/\D/g,'').slice(0,5);o.items[k].v=v;const e=document.getElementById('qgOcrAp');if(e)e.textContent='Isi '+o.items.filter(x=>x.on&&String(x.v).trim()).length+' No. Body'}
 function qgOcrApply(){const o=QG.ocr;if(!o||!QG.draft)return;let n=0,sk=0,em=0;o.items.forEach((x,k)=>{if(!x.on)return;const i=(o.at==null?QG_N-1:o.at)-k,v=String(x.v||'').trim();if(i<0||!v){em++;return}if(String(QG.draft[i][0]||'').trim()){sk++;return}qgIn(i,0,v);n++});
 QG.ocr=null;render();toast(n?(n+' No. Body terisi'+(sk?', '+sk+' baris terisi dilewati':'')):(sk?'Semua baris tujuan sudah terisi':'Tidak ada nomor yang diisi'))}
 function qgOcrView(){const o=QG.ocr;if(!o)return'';let b='';
 if(o.st=='run')b=`<p id="qgOcrP" class="text-sm" style="text-align:center;padding:18px 0">${esc(o.msg)}</p>`;
 else if(o.st=='err')b=`<p class="text-sm" style="padding:10px 0">${esc(o.msg)}</p><div class="flex gap-2 mt-3"><button type="button" class="b b2" style="flex:1" onclick="qgOcrClose()">Tutup</button><button type="button" class="b" style="flex:1" onclick="qgCamOpen()">Foto ulang</button></div>`;
-else b=`<p class="text-xs" style="opacity:.75;margin:0 0 8px">${o.items.length} nomor terbaca (5 angka terakhir), urut dari baris ${(o.at==null?QG_N-1:o.at)+1} ke bawah. Ubah kalau ada yang salah.</p>${o.items.map((x,k)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><input type="checkbox" ${x.on?'checked':''} aria-label="Pakai baris ${QG_N-k}" onchange="qgOcrTog(${k})" style="width:20px;height:20px;flex:none"><span class="text-xs" style="width:52px;flex:none;opacity:.7">Baris ${QG_N-k}</span><input class="i" inputmode="numeric" maxlength="5" value="${esc(x.v)}" oninput="qgOcrVal(${k},this.value);this.value=QG.ocr.items[${k}].v" style="flex:1;margin:0${x.lo?';border-color:#f59e0b':''}" autocomplete="off"></div>${x.lo?'<div class="text-xs" style="color:#fbbf24;margin:-3px 0 6px 80px">Kurang jelas, cek angkanya</div>':''}`).join('')}<p class="text-xs" style="opacity:.7;margin:8px 0">Diisi mulai dari baris 10. Baris yang sudah terisi tidak ditimpa.</p><div class="flex gap-2"><button type="button" class="b b2" style="flex:1" onclick="qgCamOpen()">Ulangi foto</button><button type="button" class="b" style="flex:1.4" onclick="qgOcrApply()">Isi ${o.items.filter(x=>x.on).length} No. Body</button></div>`;
+else b=`<p class="text-xs" style="opacity:.75;margin:0 0 8px">${o.none?'Tidak ada nomor yang terbaca otomatis. Ketik manual di bawah (5 angka terakhir), atau foto ulang.':(o.rd||o.items.length)+' nomor terbaca (5 angka terakhir), urut dari baris '+((o.at==null?QG_N-1:o.at)+1)+' ke bawah. Yang kosong atau kurang jelas, isi manual.'}</p>${o.items.map((x,k)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><input type="checkbox" ${x.on?'checked':''} aria-label="Pakai baris ${(o.at==null?QG_N-1:o.at)+1-k}" onchange="qgOcrTog(${k})" style="width:20px;height:20px;flex:none"><span class="text-xs" style="width:52px;flex:none;opacity:.7">Baris ${(o.at==null?QG_N-1:o.at)+1-k}</span><input class="i" inputmode="numeric" maxlength="5" value="${esc(x.v)}" oninput="qgOcrVal(${k},this.value);this.value=QG.ocr.items[${k}].v" placeholder="${x.bl?'Ketik manual':''}" style="flex:1;margin:0${x.lo?';border-color:#f59e0b':(x.bl?';border-color:#64748b':'')}" autocomplete="off"></div>${x.lo?'<div class="text-xs" style="color:#fbbf24;margin:-3px 0 6px 80px">Kurang jelas, cek angkanya</div>':''}`).join('')}<p class="text-xs" style="opacity:.7;margin:8px 0">Diisi mulai dari baris ${(o.at==null?QG_N-1:o.at)+1}. Baris yang sudah terisi tidak ditimpa.</p><div class="flex gap-2"><button type="button" class="b b2" style="flex:1" onclick="qgCamOpen()">Ulangi foto</button><button type="button" id="qgOcrAp" class="b" style="flex:1.4" onclick="qgOcrApply()">Isi ${o.items.filter(x=>x.on&&String(x.v).trim()).length} No. Body</button></div>`;
 return`<div class="qgov t4" onclick="if(event.target===this&&QG.ocr.st!='run')qgOcrClose()"><div class="c qgc" style="max-width:340px">${o.st!='run'?'<button type="button" class="qgx" aria-label="Tutup" onclick="qgOcrClose()">&times;</button>':''}<div class="qg-ttl"><b>Hasil baca foto</b><span>Palet ${o.pal}</span></div>${b}</div></div>`}
 function qgPal(){const day=qgDay(),P=qgP(day,QG.part),n=QG.pal,tot=qgPals(day);
-let r='';const ph=(l,t)=>l=='-'?[t,' ph']:[l,''];for(let i=QG_N-1;i>=0;i--){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l a-l">${i+1}</span><span class="qgbw a-b"><input class="qg-in m" value="${esc(x[0])}" inputmode="numeric" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}"><button type="button" class="qgcm" aria-label="Foto order sheet mulai baris ${i+1}" onclick="qgCamOpen(${i})">&#128247;</button><span class="qgbd ${x[5]&&x[5].d=='E'?'E':'D'}" aria-label="${x[5]&&x[5].d=='E'?'Export':'Domestic'}">${x[5]&&x[5].d=='E'?'E':'D'}</span></span><input class="qg-in m sf a-s" value="${esc(x[1])}" maxlength="3" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().slice(0,3);qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgop a-d" aria-label="Open ${i+1}" onclick="qgDpOpen(${i})">Open</button><select class="qg-in j a-j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j a-j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option><option value="OS"${x[3]=='OS'?' selected':''}>Other Shift</option></select><button type="button" class="qg-in k qgdb a-k${x[2].length?' df':''}" aria-label="Ket ${i+1}" onclick="qgKtOpen(${i})">${qgKetS(x)}</button></div>`}
+let r='';const ph=(l,t)=>l=='-'?[t,' ph']:[l,''];for(let i=QG_N-1;i>=0;i--){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l a-l">${i+1}</span><span class="qgbw a-b"><input class="qg-in m" value="${esc(x[0])}" inputmode="numeric" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}"><button type="button" class="qgcm" aria-label="Foto order sheet mulai baris ${i+1}" onclick="qgCamOpen(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></button><span class="qgbd ${x[5]&&x[5].d=='E'?'E':'D'}" aria-label="${x[5]&&x[5].d=='E'?'Export':'Domestic'}">${x[5]&&x[5].d=='E'?'E':'D'}</span></span><input class="qg-in m sf a-s" value="${esc(x[1])}" maxlength="3" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().slice(0,3);qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgop a-d" aria-label="Open ${i+1}" onclick="qgDpOpen(${i})">Open</button><select class="qg-in j a-j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j a-j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option><option value="OS"${x[3]=='OS'?' selected':''}>Other Shift</option></select><button type="button" class="qg-in k qgdb a-k${x[2].length?' df':''}" aria-label="Ket ${i+1}" onclick="qgKtOpen(${i})">${qgKetS(x)}</button></div>`}
 return`<div class="qgov t2" onclick="if(event.target===this)qgClosePal()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgClosePal()">&times;</button>
 <div class="qg-ph"><b>Pallet no.</b><span class="qg-b">${n}</span><span class="qg-sl">/</span><span class="qg-b">${tot}</span><button type="button" class="qg-sv" aria-label="Simpan palet" onclick="qgSavePal()">&#128190;</button></div>
 <div class="text-xs" style="opacity:.7;margin:-2px 0 6px">${(()=>{const c=qgCfg(P,day);return c?'Skk '+qgSkk(c.s,n,c.k)+'/'+c.k:'Pickup: tanpa Shikake'})()}</div>
