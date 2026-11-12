@@ -1194,6 +1194,16 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qrs .qrtt b{font-size:36px;font-weight:700;letter-spacing:1.5px}
 .qrs .qrhd .qrdb{border:1.5px solid #e6f0ff;border-radius:14px;white-space:nowrap}.qrs.l .qrhd .qrdb{border-color:#B4C7E7}.qrs .qrhd .qrdb>div{padding:0 12px}
 .qrin{min-width:0}
+.qrmob{margin-top:8px;min-width:0}.qrmob .qrs{width:100%;height:auto;grid-template-rows:none;padding:0 10px 12px;transform:none!important;gap:8px;border-radius:12px;overflow:hidden}
+.qrmob .qrs .qrhd{grid-template-columns:auto 1fr;gap:6px 10px;padding:8px 10px;margin:0 -10px}.qrmob .qrs .qrhd::before{display:none}
+.qrmob .qrlg{background:#fff;border-radius:6px;padding:3px 6px}.qrmob .qrlg img{height:24px;width:auto;display:block}
+.qrmob .qrs .qrtt{font-size:11px;letter-spacing:.5px;text-align:right}.qrmob .qrs .qrtt b{font-size:18px;letter-spacing:.5px}
+.qrmob .qrs .qrhd .qrdb{grid-column:1/-1;display:flex;justify-content:space-between;padding:4px 0}.qrmob .qrs .qrhd .qrdb>div{padding:0 10px}
+.qrmob .qrk{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.qrmob .qrm,.qrmob .qrb3{grid-template-columns:minmax(0,1fr);gap:8px}
+.qrmob .qrc{padding:8px 10px;border-radius:12px}.qrmob .qrbig{font-size:24px}.qrmob .qrt{font-size:12px}.qrmob .qrsub{font-size:11px}
+.qrmob .qrsv{flex:none;height:auto}.qrmob .qrs svg[viewBox^="0 0 510"] text{font-size:15px}
+@media (orientation:landscape) and (max-height:600px){.qrmob .qrk{grid-template-columns:repeat(4,minmax(0,1fr))}.qrmob .qrm,.qrmob .qrb3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 .qrk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.qrm{display:grid;grid-template-columns:1.5fr 1fr;gap:10px}.qrb3{display:grid;grid-template-columns:1fr 1.25fr 1.25fr;gap:10px}
 .qrt{font-size:13px;font-weight:600}.qrsub{font-size:12px;color:var(--pm);line-height:1.5;text-align:right}.qrbig{font-size:34px;font-weight:600;line-height:1}
 .qrrow{display:flex;align-items:center;justify-content:space-between;flex:1}
@@ -1409,7 +1419,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=231;
+const APP_REV=232;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2797,17 +2807,8 @@ return`<div class="qgdash">
 <div class="qgd-c qgd-5" style="display:flex;flex-direction:column;gap:14px"><div><h4>Volume <span>% OK per shift</span></h4>${d.tn?qgStack(d,1):em}</div><div><h4>Defect List <span>per item</span></h4>${qgDfList(day)}</div></div>
 </div>`}
 /* Dashboard Quality Gate versi HP: satu kolom (kartu angka, target + performa item, OK/NG per shift, Defect List per item). Versi PC tetap qgDash */
-function qgDashMBody(day,tot){const r=qgRepData(day),chk=r.ok+r.ng,d=qgDashData(day),items=qgParts(),em='<div class="qgd-em">Belum ada data WMS pada tanggal ini</div>';
-let gOk=0,gPal=0;const rows=items.map(it=>{const P=qgP(day,it.k),o=qgOkN(P,'A'),n=qgCnt(P,'A',j=>j=='NG');let pal=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))pal++;gOk+=o;gPal+=pal;return`<tr><td>${esc(it.n)}</td><td>${pal}/${tot}</td><td>${qgFm(o)}</td><td>${qgFm(n)}</td></tr>`}).join('');
-const t1=prNum(qgProd(day).t),tg=t1==null?null:t1*Math.max(1,items.length),pc=tg>0?Math.min(100,Math.round(gOk/tg*100)):0;
-return`<div class="qgm"><p class="qgm-h">QUALITY GATE DASHBOARD<span>${esc(qgDate(day))}</span></p>
-<div class="qgm-k"><div><em>Total check</em><b>${qgFm(chk)}</b><small>Target ${r.tg?qgFm(r.tg):'-'}</small></div><div><em>OK rate</em><b style="color:${QGC.ok}">${qgPct(r.ok,chk)}%</b><small>${qgFm(r.ok)} body OK</small></div><div><em>Total NG</em><b style="color:${QGC.ng}">${qgFm(r.ng)}</b><small>NG rate ${qgPct(r.ng,chk)}%</small></div><div><em>Palet selesai</em><b>${r.pal}/${r.palAll}</b><small>${items.length} item</small></div></div>
-<div class="qgm-c"><h4>Quality Gate Target <span>${gPal} palet selesai</span></h4><div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:20px">${qgFm(gOk)} <small style="font-size:12px;font-weight:400;opacity:.7">/ ${tg==null?'-':qgFm(tg)} body OK</small></b><b style="color:${QGC.lb}">${pc}%</b></div><div class="qgm-bar"><i style="width:${pc}%"></i></div>
-<h4 style="margin-top:2px">Performa Item</h4><table class="qgm-t"><tr><th>Item</th><th>Palet</th><th>OK</th><th>NG</th></tr>${rows||'<tr><td colspan="4">Belum ada item</td></tr>'}</table></div>
-<div class="qgm-c"><h4>Total Inspeksi <span>tren per shift</span></h4><div class="qgd-big" style="font-size:22px;font-weight:800">${qgFm(d.tn)}</div>${d.tn?qgArea(d.L.map(k=>d.m[k].n),d.L):em}</div>
-<div class="qgm-c"><h4>OK / NG <span>per shift</span></h4>${d.tn?`<div style="display:flex;align-items:center;gap:14px;margin:4px 0"><div style="transform:scale(.8);transform-origin:left center;width:88px;height:88px;flex:none">${qgDonut(d.tok,d.tng)}</div><div class="qgd-lg"><span><i style="background:${QGC.ok}"></i>OK ${qgFm(d.tok)}</span><span><i style="background:${QGC.ng}"></i>NG ${qgFm(d.tng)}</span></div></div>${qgStack(d,0)}`:em}</div>
-<div class="qgm-c"><h4>Volume <span>% OK per shift</span></h4>${d.tn?qgStack(d,1):em}</div>
-<div class="qgm-c"><h4>Defect List <span>per item</span></h4>${qgDfList(day)}</div></div>`}
+/* Isi dashboard HP = Summary Report PC (data palet QG), disusun satu kolom lewat CSS .qrmob */
+function qgDashMBody(day,tot){return`<div class="qrmob"><div class="qrs-w">${qgRepSheet(day,QG.rt=='l'?'l':'d')}</div></div>`}
 function qgDmOn(){try{return localStorage.getItem('qgDm')=='1'}catch(e){return false}}
 function qgDmTog(){try{localStorage.setItem('qgDm',qgDmOn()?'0':'1')}catch(e){QG.dmx=!QG.dmx}render()}
 function qgDashM(day,tot){const on=qgDmOn()||!!QG.dmx;return`<button type="button" class="qgm-tg" aria-expanded="${on?'true':'false'}" onclick="qgDmTog()"><span>QUALITY GATE DASHBOARD</span><em>${on?'Hide Dashboard':'Open Dashboard'} ${on?'&#9650;':'&#9660;'}</em></button>${on?qgDashMBody(day,tot):''}`}
