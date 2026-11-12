@@ -1391,7 +1391,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=221;
+const APP_REV=223;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -1826,14 +1826,16 @@ async function pwChange(){const a=$('#pn').value;if(a.length<8)return toast('Pas
 function logout(){LV='menu';L.removeItem('woms_lock');save(true);if(SERVER&&TOK){api('logout').catch(()=>{});TOK='';L.removeItem('woms_token');CS=false}L.removeItem('woms_user');L.removeItem('woms_nav');U=D=null;render()}
 
 /* ---------- LOGIN SIDIK JARI (WebAuthn + AES-GCM, kunci non-extractable di IndexedDB) ---------- */
-let _bio=null,bioOK=false;const isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+let _bio=null,bioOK=L.woms_bok==='1';const isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 const bioList=()=>{try{return JSON.parse(L.woms_bio||'[]')}catch(e){return[]}},bioOn=e=>bioList().some(x=>x.e==e);
 const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))),unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-const idb=()=>new Promise((r,j)=>{const q=indexedDB.open('woms_bio',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)});
+let _idb=null;const idb=()=>_idb||(_idb=new Promise((r,j)=>{const q=indexedDB.open('woms_bio',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onsuccess=()=>{q.result.onclose=()=>{_idb=null};r(q.result)};q.onerror=()=>{_idb=null;j(q.error)}}));
+const bioBusy=on=>{let d=document.getElementById('bioBusy');if(!on){if(d)d.remove();return}if(d)return;d=document.createElement('div');d.id='bioBusy';d.style.cssText='position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);color:#fff;font-size:14px';d.innerHTML='<div style="background:rgba(15,23,42,.92);border-radius:14px;padding:16px 22px;text-align:center"><div style="width:26px;height:26px;margin:0 auto 10px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:bioSp .8s linear infinite"></div>Memverifikasi akun...</div><style>@keyframes bioSp{to{transform:rotate(360deg)}}</style>';document.body.appendChild(d)};
+try{idb().catch(()=>{})}catch(e){}
 const idbSet=async(k,v)=>{const d=await idb();return new Promise((r,j)=>{const t=d.transaction('k','readwrite');t.objectStore('k').put(v,k);t.oncomplete=()=>r();t.onerror=()=>j(t.error)})};
 const idbGet=async k=>{const d=await idb();return new Promise((r,j)=>{const q=d.transaction('k').objectStore('k').get(k);q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)})};
 const idbDel=async k=>{try{const d=await idb();d.transaction('k','readwrite').objectStore('k').delete(k)}catch(e){}};
-(async()=>{try{bioOK=!!(isMobile&&window.PublicKeyCredential&&window.isSecureContext&&crypto.subtle&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());if(bioOK&&!U)render()}catch(e){}})();
+(async()=>{try{const ok=!!(isMobile&&window.PublicKeyCredential&&window.isSecureContext&&crypto.subtle&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());L.woms_bok=ok?'1':'0';if(ok!==bioOK){bioOK=ok;if(!U)render()}}catch(e){}})();
 function bioOff(e){L.woms_bio=JSON.stringify(bioList().filter(x=>x.e!=e));idbDel('c:'+e)}
 async function bioEnable(e,name,p){
  try{
@@ -1851,8 +1853,8 @@ async function bioVerify(e){const x=bioList().find(v=>v.e==e);if(!x)return false
  catch(err){toast(err&&err.name=='NotAllowedError'?'Verifikasi sidik jari dibatalkan':'Verifikasi sidik jari gagal');return false}}
 async function bioSecret(e){try{const r=await idbGet('c:'+e);return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:r.iv},r.key,r.ct))}catch(err){bioOff(e);render();toast('Data sidik jari tidak ditemukan, aktifkan ulang setelah login');return null}}
 async function bioLogin(e){
- if(!await bioVerify(e))return;const p=await bioSecret(e);if(p===null)return;
- _bio=e;try{await credLogin(e,p)}finally{_bio=null;if(!U)render()}
+ const sp=bioSecret(e);if(!await bioVerify(e)){sp.catch(()=>{});return}const p=await sp;if(p===null)return;
+ _bio=e;bioBusy(1);try{await credLogin(e,p)}finally{bioBusy(0);_bio=null;if(!U)render()}
 }
 async function chkPw(e,p){if(SERVER){try{await api('login',{email:e,password:p});return true}catch(x){if(x&&x.code&&x.code<500)return false;throw x}}const a=accs()[e];return !!a&&a.hash==await sha(e+p)}
 function bioAsk(e,p){const d=document.createElement('div');d.className='fixed inset-0 z-50 flex items-center justify-center p-4';d.style.background='rgba(0,0,0,.6)';
@@ -1881,13 +1883,13 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)idleChk()}
 async function credLogin(e,p){LM='login';if(SERVER)return fbAuth(e,p);const a=accs()[e];if(!a)return toast('Akun belum terdaftar. Klik Daftar untuk membuat password');
  if(a.hash!=await sha(e+p)){if(_bio)bioOff(_bio);return toast('Password salah')}_lp=p;start({id:e,name:a.name,email:e,provider:'email'})}
 async function bioUnlock(){const lk=lockInfo();if(!lk)return;if(!await bioVerify(lk.e))return;
- const s0=scr,t0=tab;let ok=false;
+ const s0=scr,t0=tab;let ok=false;bioBusy(1);
  try{const u0=JSON.parse(L.woms_user||'null');
-  if(SERVER){if(TOK){try{enter((await api('me')).user);ok=true}catch(x){if(x&&x.code==401){TOK='';L.removeItem('woms_token')}else if(u0){enter({id:u0.id,name:u0.name,email:u0.email});ok=true}}}}
+  if(SERVER){if(TOK&&u0){enter({id:u0.id,name:u0.name,email:u0.email});ok=true}else if(TOK){try{enter((await api('me')).user);ok=true}catch(x){if(x&&x.code==401){TOK='';L.removeItem('woms_token')}else if(u0){enter({id:u0.id,name:u0.name,email:u0.email});ok=true}}}}
   else if(u0){U=u0;load(u0.id);L.removeItem('woms_lock');lastAct=Date.now();ok=true}
  }catch(x){}
- if(!ok){const p=await bioSecret(lk.e);if(p!==null){_bio=lk.e;try{await credLogin(lk.e,p)}finally{_bio=null}}}
- if(U){scr=s0;tab=t0;render()}}
+ if(!ok){const p=await bioSecret(lk.e);if(p!==null){_bio=lk.e;try{await credLogin(lk.e,p)}finally{_bio=null;bioBusy(0)}}}
+ bioBusy(0);if(U){scr=s0;tab=t0;render()}}
 async function pwUnlock(){const lk=lockInfo();if(!lk)return;const i=$('#lkp'),p=i?i.value:'';if(!p)return toast('Isi password');
  const s0=scr,t0=tab;await credLogin(lk.e,p);
  if(U){scr=s0;tab=t0;render();if(isMobile&&bioOK&&!bioOn(lk.e)&&!L['woms_bn_'+lk.e])bioAsk(lk.e,p)}}
@@ -2921,7 +2923,7 @@ return`<div class="qgov t2" onclick="if(event.target===this)qgClosePal()"><div c
 <div class="qg-ph"><b>Pallet no.</b><span class="qg-b">${n}</span><span class="qg-sl">/</span><span class="qg-b">${tot}</span><button type="button" class="qg-sv" aria-label="Simpan palet" onclick="qgSavePal()">&#128190;</button></div>
 <div class="text-xs" style="opacity:.7;margin:-2px 0 6px">${(()=>{const c=qgCfg(P,day);return c?'Skk '+qgSkk(c.s,n,c.k)+'/'+c.k:'Pickup: tanpa Shikake'})()}</div>
 ${(()=>{const o=qgParts().filter(x=>x.k!=QG.part);return o.length?`<div class="qg-cp"><span class="qg-k">Copy data from:</span><select class="qg-b" aria-label="Copy data from" onchange="qgCopy(this.value)"><option value="">Pilih item</option>${o.map(x=>`<option value="${esc(x.k)}">${esc(x.n)}</option>`).join('')}</select></div>`:''})()}
-<div class="qg-cp"><span class="qg-k">Foto order sheet:</span><button type="button" class="qgpill" onclick="document.getElementById('qgOcrF').click()">&#128247; Foto</button><input type="file" id="qgOcrF" accept="image/*" hidden onchange="qgOcrPick(this)"></div>
+<div class="qg-cp"><span class="qg-k">Foto order sheet:</span><button type="button" class="qgpill" onclick="document.getElementById('qgOcrF').click()">&#128247; Foto</button><button type="button" class="qgpill" onclick="document.getElementById('qgOcrG').click()">Galeri</button><input type="file" id="qgOcrF" accept="image/*" capture="environment" hidden onchange="qgOcrPick(this)"><input type="file" id="qgOcrG" accept="image/*" hidden onchange="qgOcrPick(this)"></div>
 <hr class="qg-hr">
 <div class="qgr p qgh"><span class="lb a-l">No.</span><span class="mg a-b">No. Body</span><span class="mg a-s">Sfx</span><span class="og a-d">Detail</span><span class="kg a-k">Ket</span><span class="bl qgjh a-j" role="button" tabindex="0" aria-label="Bulk judgement" onclick="qgBulkTog(event)">Judge &#9662;<div id="qgBm" class="qgbm" style="display:${QG.bm?'block':'none'}" onclick="event.stopPropagation()"><button type="button" onclick="qgBulk('OK')">Semua OK</button><button type="button" onclick="qgBulk('NG')">Semua NG</button><button type="button" onclick="qgBulk('E')">Yang kosong jadi OK</button><button type="button" onclick="qgBulk('')">Reset semua</button></div></span></div>
 ${r}
