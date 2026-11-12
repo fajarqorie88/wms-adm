@@ -1019,8 +1019,9 @@ html[data-view=pc] .pgd{display:none}
 .qgdl{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;background:rgba(148,163,184,.14);margin-bottom:6px;font-size:13px;cursor:pointer}
 .qgchs{display:flex;flex-wrap:wrap;gap:6px}
 .qgh .og{background:#ED7D31;color:#fff}.qgh .cg{background:#14b8a6;color:#fff}
-.qgr.p{grid-template-columns:26px minmax(0,1fr) 36px 52px 60px 52px;grid-template-areas:"l b s d j k";gap:3px;padding-bottom:0;margin-bottom:5px;border-bottom:0}
+.qgr.p{grid-template-columns:26px minmax(0,1fr) 60px 50px 54px 48px;grid-template-areas:"l b s d j k";gap:3px;padding-bottom:0;margin-bottom:5px;border-bottom:0}
 .qgr.p.qgh{border-bottom:0;padding-bottom:0}
+.qgr.p.qgh .hc{position:relative;justify-content:center;text-align:center;white-space:nowrap;padding:3px 22px}.qgr.p.qgh .hc .qgh-cam{position:absolute;right:3px;top:50%;transform:translateY(-50%);width:20px;height:20px;padding:0;border:0;background:transparent;color:#fff;display:flex;align-items:center;justify-content:center}.qgr.p.qgh .hc .qgh-cam svg{width:16px;height:16px;display:block}
 .qgr.p .qg-in.c{margin:0;border:0;box-shadow:none}
 html[data-view=pc] .qgr.p .qg-in.c{background:#99e0cf}
 .qgr.p .qgdt3{display:flex;flex-direction:column;gap:3px}.qgr.p .qgdt3 .qg-in{height:26px;display:flex;align-items:center;justify-content:center;text-align:center}.qgr.p .qgdt3 .qg-in.v{background:#c4b5fd}.qgr.p .qgdt3 .qg-in.ph{opacity:.55}html[data-view=pc] .qgr.p .qgdt3{flex-direction:row;gap:8px}html[data-view=pc] .qgr.p .qgdt3 .qg-in{flex:1;height:42px}.qgr.p .qg-l,.qgr.p .qgh span{text-align:center}
@@ -1407,7 +1408,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=229;
+const APP_REV=230;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -3026,7 +3027,7 @@ return`<div class="qgov t2" onclick="if(event.target===this)qgClosePal()"><div c
 ${(()=>{const o=qgParts().filter(x=>x.k!=QG.part);return o.length?`<div class="qg-cp"><span class="qg-k">Copy data from:</span><select class="qg-b" aria-label="Copy data from" onchange="qgCopy(this.value)"><option value="">Pilih item</option>${o.map(x=>`<option value="${esc(x.k)}">${esc(x.n)}</option>`).join('')}</select></div>`:''})()}
 <input type="file" id="qgOcrF" accept="image/*" capture="environment" hidden onchange="qgOcrPick(this)"><input type="file" id="qgOcrG" accept="image/*" hidden onchange="qgOcrPick(this)">
 <hr class="qg-hr">
-<div class="qgr p qgh"><span class="lb a-l">No.</span><span class="mg a-b">No. Body</span><span class="mg a-s">Sfx <button type="button" class="qgcm" aria-label="Foto kolom Sfx" onclick="qgCamOpen(QG_N-1,'sfx')" style="vertical-align:middle;margin-left:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></button></span><span class="og a-d">Detail</span><span class="kg a-k">Ket</span><span class="bl qgjh a-j" role="button" tabindex="0" aria-label="Bulk judgement" onclick="qgBulkTog(event)">Judge &#9662;<div id="qgBm" class="qgbm" style="display:${QG.bm?'block':'none'}" onclick="event.stopPropagation()"><button type="button" onclick="qgBulk('OK')">Semua OK</button><button type="button" onclick="qgBulk('NG')">Semua NG</button><button type="button" onclick="qgBulk('E')">Yang kosong jadi OK</button><button type="button" onclick="qgBulk('')">Reset semua</button></div></span></div>
+<div class="qgr p qgh"><span class="lb a-l">No.</span><span class="mg a-b hc">No. Body<button type="button" class="qgh-cam" aria-label="Foto No. Body dan Varian" onclick="qgCamOpen(QG_N-1,'body')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></button></span><span class="mg a-s hc">Sfx<button type="button" class="qgh-cam" aria-label="Foto kolom Sfx" onclick="qgCamOpen(QG_N-1,'sfx')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></button></span><span class="og a-d">Detail</span><span class="kg a-k">Ket</span><span class="bl qgjh a-j" role="button" tabindex="0" aria-label="Bulk judgement" onclick="qgBulkTog(event)">Judge &#9662;<div id="qgBm" class="qgbm" style="display:${QG.bm?'block':'none'}" onclick="event.stopPropagation()"><button type="button" onclick="qgBulk('OK')">Semua OK</button><button type="button" onclick="qgBulk('NG')">Semua NG</button><button type="button" onclick="qgBulk('E')">Yang kosong jadi OK</button><button type="button" onclick="qgBulk('')">Reset semua</button></div></span></div>
 ${r}
 </div></div>`}
 
