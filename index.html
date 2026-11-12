@@ -1130,12 +1130,12 @@ html[data-view=pc] .qgpc>button{grid-column:1/-1;justify-self:start}
 .qgd-hb{display:grid;grid-template-columns:110px 1fr 34px;gap:8px;align-items:center;font-size:12px;margin:7px 0}.qgd-hb div{height:12px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden}.qgd-hb i{display:block;height:100%;background:#ED7D31;border-radius:6px}
 .qgd-em{font-size:12.5px;opacity:.6;padding:18px 0;text-align:center}
 .qgch i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
-.qgsh{margin-top:12px;padding:12px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2)}
-.qgsh .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;color:#fff;font-weight:700;font-size:14px}.qgsh .hd small{font-weight:600;font-size:11px;color:#bfdbfe;text-align:right}
-.qgsh .vr{display:flex;gap:8px}.qgsh .vr button{flex:1;padding:9px 0;border-radius:12px;background:#B4C7E7;color:#1f3864;font-weight:600;font-size:13px;text-align:center}.qgsh .vr button.on{background:#E91AB9;color:#fff}
-.qgsh .ln{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;color:#e2e8f0;font-size:13px;font-weight:600}.qgsh .ln .g{display:flex;align-items:center;gap:6px}
-.qgsh input{width:64px;flex:none;padding:8px;border-radius:12px;background:#5B9BD5;color:#1f3864;font-weight:700;text-align:center;border:0;font-size:14px;-moz-appearance:textfield;appearance:textfield}.qgsh input::-webkit-outer-spin-button,.qgsh input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.qgsh .nt{margin:8px 0 0;font-size:11px;color:#bfdbfe}
+.qgshk{margin-top:12px;padding:12px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2)}
+.qgshk .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;color:#fff;font-weight:700;font-size:14px}.qgshk .hd small{font-weight:600;font-size:11px;color:#bfdbfe;text-align:right}
+.qgshk .vr{display:flex;gap:8px}.qgshk .vr button{flex:1;padding:9px 0;border-radius:12px;background:#B4C7E7;color:#1f3864;font-weight:600;font-size:13px;text-align:center}.qgshk .vr button.on{background:#E91AB9;color:#fff}
+.qgshk .ln{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;color:#e2e8f0;font-size:13px;font-weight:600}.qgshk .ln .g{display:flex;align-items:center;gap:6px}
+.qgshk input{width:64px;flex:none;padding:8px;border-radius:12px;background:#5B9BD5;color:#1f3864;font-weight:700;text-align:center;border:0;font-size:14px;-moz-appearance:textfield;appearance:textfield}.qgshk input::-webkit-outer-spin-button,.qgshk input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.qgshk .nt{margin:8px 0 0;font-size:11px;color:#bfdbfe}
 .qgdt{position:relative;display:flex;align-items:center;justify-content:space-between;margin-top:4px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-weight:600;font-size:15px}.qgdt i{font-style:normal;opacity:.8}.qgdt input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
 .qginfo{text-align:center;font-size:11.5px;opacity:.7;margin-top:8px}
 .qgmore{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:6px;padding:11px;border-radius:12px;background:#B4C7E7;color:#1f3864;font-weight:700;font-size:14px}.qgmore small{font-weight:600;opacity:.8;font-size:12px}.qgmore .qgar{font-size:12px;display:inline-block;animation:qgbob 1.2s ease-in-out infinite}
@@ -1377,7 +1377,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=215;
+const APP_REV=216;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2761,7 +2761,7 @@ return`<div class="qgm"><p class="qgm-h">QUALITY GATE DASHBOARD<span>${esc(qgDat
 <div class="qgm-c"><h4>OK / NG <span>per shift</span></h4>${d.tn?`<div style="display:flex;align-items:center;gap:14px;margin:4px 0"><div style="transform:scale(.8);transform-origin:left center;width:88px;height:88px;flex:none">${qgDonut(d.tok,d.tng)}</div><div class="qgd-lg"><span><i style="background:${QGC.ok}"></i>OK ${qgFm(d.tok)}</span><span><i style="background:${QGC.ng}"></i>NG ${qgFm(d.tng)}</span></div></div>${qgStack(d,0)}`:em}</div>
 <div class="qgm-c"><h4>Top NG <span>per mesin</span></h4>${ngTop.length?ngTop.map(([k,c])=>`<div class="qgm-hb"><span>${esc(k)}</span><div><i style="width:${Math.round(c/mx*100)}%"></i></div><b>${c}</b></div>`).join(''):'<div class="qgd-em">Tidak ada NG</div>'}</div></div>`}
 function qgShBox(day){const v=qgShV(),g=((D.M||{}).qgsh||{})[day]||{},own=!!g[v],c=qgCfgDay(day,v)||{k:QG_CYC,s:1};
-return`<div class="qgsh"><div class="hd"><span>Shikake</span><small>berlaku ke semua item</small></div>
+return`<div class="qgshk"><div class="hd"><span>Shikake</span><small>berlaku ke semua item</small></div>
 <div class="vr"><button type="button" class="${v=='A'?'on':''}" onclick="qgShSel('A')">All</button><button type="button" class="${v=='V'?'on':''}" onclick="qgShSel('V')">Van</button></div>
 <div class="ln"><span class="g">Shikake <input type="number" inputmode="numeric" min="1" max="99" value="${c.k}" aria-label="Shikake" onchange="qgShW('k',this.value)"></span><span class="g">Start <input type="number" inputmode="numeric" min="1" max="${c.k}" value="${c.s}" aria-label="Start Shikake" onchange="qgShW('s',this.value)"><span>/ ${c.k}</span></span></div>
 ${v=='V'&&!own&&g.A?'<p class="nt">Van ikut setting All sampai diubah sendiri.</p>':''}</div>`}
