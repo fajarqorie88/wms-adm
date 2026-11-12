@@ -1256,6 +1256,17 @@ html[data-view=pc] .wver{background:transparent!important;border:0!important;box
 .ab-bar .ab-s{flex:2 1 0}
 .ab-bar .ab-e{background:transparent!important;color:#2563EB;border:1.5px solid #2563EB;box-shadow:none}
 .ab-bar .ab-g{background:#16a34a!important;color:#fff;box-shadow:none}
+/* ===== KAMERA OCR (foto order sheet, bingkai masking) ===== */
+.qgcam{position:fixed;inset:0;z-index:200;background:#000;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+.qgcam video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.qgcf{position:absolute;display:none;border:2px dashed #facc15;box-shadow:0 0 0 100vmax rgba(0,0,0,.62);box-sizing:border-box;touch-action:none;cursor:move}
+.qgcf i{position:absolute;width:36px;height:36px;margin:-18px 0 0 -18px;touch-action:none}
+.qgcf i::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#facc15;border:2px solid #000}
+.qgct{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;color:#fff;font-size:12px;text-shadow:0 1px 3px #000;pointer-events:none}
+.qgcb{position:absolute;left:0;right:0;bottom:0;display:flex;gap:10px;justify-content:center;align-items:center;padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,rgba(0,0,0,.75),transparent)}
+.qgcb button{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.2);color:#fff;font-weight:600;font-size:13px;white-space:nowrap}
+.qgcb button.sh{width:64px;height:64px;padding:0;background:#fff;border:4px solid #94a3b8;flex:none}
+.qgcb button.sh:active{background:#cbd5e1}
 </style><style id="tw-static">/* Tailwind 3.4.17 preflight + utilitas yang dipakai (build manual, tanpa CDN) */
 *,::before,::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}
 html,:host{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}
@@ -1391,7 +1402,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=223;
+const APP_REV=224;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2649,7 +2660,7 @@ function qgDate(day){const d=new Date(day+'T00:00:00');return isNaN(d)?day:Strin
 function qgWrite(day,k,fn,mode){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1&&!P.k&&!P.v)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();qgAuto(mode||'auto')}
 function qgOpen(k){QG.part=k;QG.pal=0;QG.lim=QG_LIM;render()}
 function qgClose(){QG.part='';QG.pal=0;QG.dp=null;QG.draft=null;QG.df=null;QG.cm=null;QG.kt=null;QG.dirty=0;QG.lim=QG_LIM;render()}
-function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.cp=null;QG.dp=null;QG.bm=0;QG.df=null;QG.cm=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3],qgCm(r[4]),qgKt(r[5])]:['','',[],'',qgCm(null),qgKt(null)]});QG.kt=null;QG.dirty=0;render()}
+function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.cp=null;QG.dp=null;QG.bm=0;QG.df=null;QG.cm=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3],qgCm(r[4]),qgKt(r[5])]:['','',[],'',qgCm(null),qgKt(null)]});QG.kt=null;QG.dirty=0;render();setTimeout(()=>qgOcrWarm().catch(()=>{}),300)}
 /* Copy data dari item lain: pilih kolom yang disalin lewat centang. Kolom: b=No. Body, s=Sfx, j=Judge, d=Defect (+titik, C/M, Evidence), v=Variant */
 const QG_CPF=[['b','No. Body',''],['s','Sfx',''],['j','Judge','OK, NG, Other Shift'],['d','Defect','Titik, C/M, dan Evidence ikut'],['v','Variant','Domestic atau Export']];
 function qgCopy(k){if(!k||!QG.draft)return;const n=QG.pal,src=(qgP(qgDay(),k).p||{})[n];if(!src||!src.length){render();return toast('Item itu belum punya data pada palet '+n)}
@@ -2897,16 +2908,63 @@ return`<div class="qgov t25 qgdp" onclick="if(event.target===this)qgDpClose()"><
 <div class="qgdpg"><button type="button" class="p s" aria-label="Variant ${i+1}" onclick="qgKtOpen(${i})">${esc(vl)}</button><button type="button" class="o" aria-label="Defect ${i+1}" onclick="qgDf(${i})">View</button></div></div></div>`}
 /* ---------- FOTO ORDER SHEET -> No. Body (OCR, Tesseract.js dimuat saat dipakai, butuh internet). Nomor di sheet berurut dari baris 10 sampai 1; dipakai 5 angka terakhir. Hasil dicek dulu di kotak review, baris yang sudah terisi tidak ditimpa ---------- */
 function qgOcrLoad(){return window.Tesseract?Promise.resolve():new Promise((ok,no)=>{const e=document.createElement('script');e.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';e.onload=ok;e.onerror=()=>no(new Error('load'));document.head.appendChild(e)})}
-function qgOcrPrep(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const sc=Math.min(1,1800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);const x=c.getContext('2d');x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);try{const d=x.getImageData(0,0,c.width,c.height),p=d.data;let lo=255,hi=0;for(let i=0;i<p.length;i+=4){const g=(p[i]*.299+p[i+1]*.587+p[i+2]*.114)|0;p[i]=p[i+1]=p[i+2]=g;if(g<lo)lo=g;if(g>hi)hi=g}const r=Math.max(1,hi-lo);for(let i=0;i<p.length;i+=4){const g=Math.round((p[i]-lo)/r*255);p[i]=p[i+1]=p[i+2]=g}x.putImageData(d,0,0)}catch(e){}ok(c)};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
-async function qgOcrPick(inp){const f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(!/^image\//.test(f.type))return toast('File harus berupa gambar');
-const O=QG.ocr={pal:QG.pal,part:QG.part,st:'run',msg:'Menyiapkan mesin baca...',items:[]};render();let w=null;
-try{await qgOcrLoad();if(QG.ocr!==O)return;const cv=await qgOcrPrep(f);if(QG.ocr!==O)return;
-w=await Tesseract.createWorker('eng',1,{logger:m=>{if(QG.ocr!==O)return;const e=document.getElementById('qgOcrP');if(e)e.textContent=m.status=='recognizing text'?'Membaca teks... '+Math.round((m.progress||0)*100)+'%':'Menyiapkan mesin baca...'}});
-await w.setParameters({tessedit_char_whitelist:'0123456789 ',tessedit_pageseg_mode:'6'});
-const r=await w.recognize(cv);await w.terminate();w=null;if(QG.ocr!==O)return;
+function qgOcrNorm(c){const x=c.getContext('2d');try{const d=x.getImageData(0,0,c.width,c.height),p=d.data;let lo=255,hi=0;for(let i=0;i<p.length;i+=4){const g=(p[i]*.299+p[i+1]*.587+p[i+2]*.114)|0;p[i]=p[i+1]=p[i+2]=g;if(g<lo)lo=g;if(g>hi)hi=g}const r=Math.max(1,hi-lo);for(let i=0;i<p.length;i+=4){const g=Math.round((p[i]-lo)/r*255);p[i]=p[i+1]=p[i+2]=g}x.putImageData(d,0,0)}catch(e){}return c}
+function qgOcrPrep(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const sc=Math.min(1,1200/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(qgOcrNorm(c))};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
+/* Mesin baca (worker Tesseract) disiapkan sekali di belakang layar begitu halaman palet dibuka, lalu dipakai ulang untuk semua foto. Proses baca diantre supaya tidak tabrakan */
+let OCRW=null,OCRQ=Promise.resolve(),OCRLG=null;
+function qgOcrWarm(){if(OCRW)return OCRW;OCRW=(async()=>{await qgOcrLoad();const w=await Tesseract.createWorker('eng',1,{logger:m=>{if(OCRLG)OCRLG(m)}});await w.setParameters({tessedit_char_whitelist:'0123456789 ',tessedit_pageseg_mode:'6'});return w})();OCRW.catch(()=>{OCRW=null});return OCRW}
+async function qgOcrPick(inp){const f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(!/^image\//.test(f.type))return toast('File harus berupa gambar');qgOcrRun(()=>qgOcrPrep(f))}
+async function qgOcrRun(mk){
+const O=QG.ocr={pal:QG.pal,part:QG.part,st:'run',msg:'Menyiapkan mesin baca...',items:[]};render();
+OCRLG=m=>{if(QG.ocr!==O)return;const e=document.getElementById('qgOcrP');if(e)e.textContent=m.status=='recognizing text'?'Membaca teks... '+Math.round((m.progress||0)*100)+'%':'Menyiapkan mesin baca...'};
+try{const wp=qgOcrWarm(),cv=await mk();if(QG.ocr!==O)return;const w=await wp;if(QG.ocr!==O)return;
+const job=OCRQ.then(()=>w.recognize(cv));OCRQ=job.catch(()=>{});const r=await job;if(QG.ocr!==O)return;
 const it=[];(r.data.lines||[]).forEach(l=>{const m=String(l.text||'').match(/\d{5,}/);if(m&&it.length<QG_N){it.push({v:m[0].slice(-5),on:1,lo:(l.confidence||0)<75})}});
-if(!it.length){O.st='err';O.msg='Tidak ada nomor body terbaca. Coba foto lebih dekat, terang, dan tidak miring.'}else{O.st='rev';O.items=it}render()}
-catch(e){try{if(w)await w.terminate()}catch(_){}if(QG.ocr!==O)return;O.st='err';O.msg=window.Tesseract?'Foto tidak bisa dibaca. Coba foto ulang.':'Mesin baca gagal diunduh. Cek koneksi internet lalu coba lagi.';render()}}
+if(!it.length){O.st='err';O.msg='Tidak ada nomor body terbaca. Coba foto lebih dekat, terang, dan pastikan kolom No. Body pas di dalam bingkai.'}else{O.st='rev';O.items=it}render()}
+catch(e){if(QG.ocr!==O)return;O.st='err';O.msg=OCRW?'Foto tidak bisa dibaca. Coba foto ulang.':'Mesin baca gagal diunduh. Cek koneksi internet lalu coba lagi.';render()}}
+/* Kamera di dalam aplikasi untuk foto order sheet: area di luar bingkai kuning digelapkan, bingkai bisa digeser dan ditarik dari titik sudut/sisi, hanya isi bingkai yang dipotong dan dibaca OCR. Posisi bingkai terakhir diingat */
+const QGFR_K='wms_ocrfr',QGFR_D={x:.3,y:.12,w:.4,h:.76};
+let CAM=null;
+function qgFrGet(){try{const a=JSON.parse(L[QGFR_K]||'null');if(a&&a.w>=.08&&a.h>=.05&&a.x>=0&&a.y>=0&&a.x+a.w<=1.001&&a.y+a.h<=1.001)return a}catch(e){}return Object.assign({},QGFR_D)}
+function qgFrSave(){try{L[QGFR_K]=JSON.stringify(CAM.fr)}catch(e){}}
+function qgCamLay(){if(!CAM||!CAM.o)return;const o=CAM.o,v=CAM.v,W=o.clientWidth,H=o.clientHeight,vw=v.videoWidth,vh=v.videoHeight,fe=CAM.fe;if(!vw||!vh||!W||!H){fe.style.display='none';return}
+const k=Math.min(W/vw,H/vh),dw=vw*k,dh=vh*k,ox=(W-dw)/2,oy=(H-dh)/2,f=CAM.fr;CAM.r={dw,dh};
+fe.style.display='block';fe.style.left=(ox+f.x*dw)+'px';fe.style.top=(oy+f.y*dh)+'px';fe.style.width=(f.w*dw)+'px';fe.style.height=(f.h*dh)+'px'}
+async function qgCamOpen(){
+if(CAM)return;
+if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('Kamera di aplikasi tidak didukung, pakai kamera bawaan');const f=document.getElementById('qgOcrF');if(f)f.click();return}
+CAM={};qgOcrWarm().catch(()=>{});
+let st;try{st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false})}
+catch(e){CAM=null;toast('Kamera tidak bisa dibuka (izin ditolak?). Pakai tombol Galeri');return}
+if(!CAM){st.getTracks().forEach(t=>t.stop());return}
+const o=document.createElement('div');o.id='qgCam';o.className='qgcam';
+const hs=[['nw','0','0'],['n','50%','0'],['ne','100%','0'],['e','100%','50%'],['se','100%','100%'],['s','50%','100%'],['sw','0','100%'],['w','0','50%']];
+o.innerHTML='<video id="qgCamV" playsinline muted autoplay></video><div class="qgct">Masukkan kolom No. Body ke dalam bingkai kuning</div><div class="qgcf" id="qgCamF" onpointerdown="qgCamDrag(event)">'+hs.map(h=>'<i data-h="'+h[0]+'" style="left:'+h[1]+';top:'+h[2]+'"></i>').join('')+'</div><div class="qgcb"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" class="sh" aria-label="Jepret" onclick="qgCamShot()"></button><button type="button" id="qgCamT" style="display:none" onclick="qgCamTorch()">Senter</button></div>';
+document.body.appendChild(o);
+const v=o.querySelector('#qgCamV');v.srcObject=st;
+CAM={o,v,st,fe:o.querySelector('#qgCamF'),fr:qgFrGet(),r:{dw:1,dh:1},tn:0};
+v.addEventListener('loadedmetadata',qgCamLay);v.addEventListener('resize',qgCamLay);addEventListener('resize',qgCamLay);
+try{const tr=st.getVideoTracks()[0],cp=tr.getCapabilities?tr.getCapabilities():{};if(cp.torch)o.querySelector('#qgCamT').style.display=''}catch(e){}
+v.play().catch(()=>{});qgCamLay()}
+function qgCamClose(){const c=CAM;CAM=null;if(!c)return;removeEventListener('resize',qgCamLay);try{if(c.st)c.st.getTracks().forEach(t=>t.stop())}catch(e){}if(c.o)c.o.remove()}
+function qgCamReset(){if(!CAM||!CAM.o)return;CAM.fr=Object.assign({},QGFR_D);qgFrSave();qgCamLay()}
+function qgCamTorch(){if(!CAM||!CAM.st)return;const tr=CAM.st.getVideoTracks()[0];CAM.tn=!CAM.tn;const b=document.getElementById('qgCamT');if(b){b.style.background=CAM.tn?'#facc15':'';b.style.color=CAM.tn?'#111':''}
+tr.applyConstraints({advanced:[{torch:!!CAM.tn}]}).catch(()=>{if(CAM)CAM.tn=0;if(b){b.style.background='';b.style.color=''}toast('Senter tidak bisa dinyalakan')})}
+function qgCamDrag(e){if(!CAM||!CAM.o)return;const t=e.target.closest?e.target.closest('[data-h]'):null,mode=t?t.dataset.h:'m',f=Object.assign({},CAM.fr),s={x:e.clientX,y:e.clientY},r=CAM.r;e.preventDefault();
+const mv=ev=>{if(!CAM||!CAM.o)return;const dx=(ev.clientX-s.x)/r.dw,dy=(ev.clientY-s.y)/r.dh,MW=.08,MH=.05;let x=f.x,y=f.y,w=f.w,h=f.h;
+if(mode=='m'){x=Math.min(1-w,Math.max(0,f.x+dx));y=Math.min(1-h,Math.max(0,f.y+dy))}
+else{if(mode.includes('w')){const nx=Math.min(f.x+f.w-MW,Math.max(0,f.x+dx));w=f.x+f.w-nx;x=nx}
+if(mode.includes('e'))w=Math.min(1-f.x,Math.max(MW,f.w+dx));
+if(mode.includes('n')){const ny=Math.min(f.y+f.h-MH,Math.max(0,f.y+dy));h=f.y+f.h-ny;y=ny}
+if(mode.includes('s'))h=Math.min(1-f.y,Math.max(MH,f.h+dy))}
+CAM.fr={x,y,w,h};qgCamLay()};
+const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);if(CAM&&CAM.o)qgFrSave()};
+addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)}
+function qgCamShot(){if(!CAM||!CAM.o)return;const v=CAM.v,vw=v.videoWidth,vh=v.videoHeight;if(!vw||!vh)return toast('Kamera belum siap, tunggu sebentar');
+const f=CAM.fr,sx=Math.max(0,Math.round(f.x*vw)),sy=Math.max(0,Math.round(f.y*vh)),sw=Math.max(8,Math.min(vw-sx,Math.round(f.w*vw))),sh=Math.max(8,Math.min(vh-sy,Math.round(f.h*vh))),m=Math.max(sw,sh),k=m>1200?1200/m:(m<700?Math.min(2,700/m):1),
+cw=Math.max(1,Math.round(sw*k)),ch=Math.max(1,Math.round(sh*k)),pad=12,c=document.createElement('canvas');c.width=cw+pad*2;c.height=ch+pad*2;
+const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(v,sx,sy,sw,sh,pad,pad,cw,ch);
+qgCamClose();qgOcrNorm(c);qgOcrRun(()=>Promise.resolve(c))}
 function qgOcrClose(){QG.ocr=null;render()}
 function qgOcrTog(k){const o=QG.ocr;if(!o)return;o.items[k].on=o.items[k].on?0:1;render()}
 function qgOcrVal(k,v){const o=QG.ocr;if(!o)return;v=String(v).replace(/\D/g,'').slice(0,5);o.items[k].v=v}
@@ -2914,8 +2972,8 @@ function qgOcrApply(){const o=QG.ocr;if(!o||!QG.draft)return;let n=0,sk=0,em=0;o
 QG.ocr=null;render();toast(n?(n+' No. Body terisi'+(sk?', '+sk+' baris terisi dilewati':'')):(sk?'Semua baris tujuan sudah terisi':'Tidak ada nomor yang diisi'))}
 function qgOcrView(){const o=QG.ocr;if(!o)return'';let b='';
 if(o.st=='run')b=`<p id="qgOcrP" class="text-sm" style="text-align:center;padding:18px 0">${esc(o.msg)}</p>`;
-else if(o.st=='err')b=`<p class="text-sm" style="padding:10px 0">${esc(o.msg)}</p><div class="flex gap-2 mt-3"><button type="button" class="b b2" style="flex:1" onclick="qgOcrClose()">Tutup</button><button type="button" class="b" style="flex:1" onclick="document.getElementById('qgOcrF').click()">Foto ulang</button></div>`;
-else b=`<p class="text-xs" style="opacity:.75;margin:0 0 8px">${o.items.length} nomor terbaca (5 angka terakhir), urut dari baris 10. Ubah kalau ada yang salah.</p>${o.items.map((x,k)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><input type="checkbox" ${x.on?'checked':''} aria-label="Pakai baris ${QG_N-k}" onchange="qgOcrTog(${k})" style="width:20px;height:20px;flex:none"><span class="text-xs" style="width:52px;flex:none;opacity:.7">Baris ${QG_N-k}</span><input class="i" inputmode="numeric" maxlength="5" value="${esc(x.v)}" oninput="qgOcrVal(${k},this.value);this.value=QG.ocr.items[${k}].v" style="flex:1;margin:0${x.lo?';border-color:#f59e0b':''}" autocomplete="off"></div>${x.lo?'<div class="text-xs" style="color:#fbbf24;margin:-3px 0 6px 80px">Kurang jelas, cek angkanya</div>':''}`).join('')}<p class="text-xs" style="opacity:.7;margin:8px 0">Diisi mulai dari baris 10. Baris yang sudah terisi tidak ditimpa.</p><div class="flex gap-2"><button type="button" class="b b2" style="flex:1" onclick="document.getElementById('qgOcrF').click()">Ulangi foto</button><button type="button" class="b" style="flex:1.4" onclick="qgOcrApply()">Isi ${o.items.filter(x=>x.on).length} No. Body</button></div>`;
+else if(o.st=='err')b=`<p class="text-sm" style="padding:10px 0">${esc(o.msg)}</p><div class="flex gap-2 mt-3"><button type="button" class="b b2" style="flex:1" onclick="qgOcrClose()">Tutup</button><button type="button" class="b" style="flex:1" onclick="qgCamOpen()">Foto ulang</button></div>`;
+else b=`<p class="text-xs" style="opacity:.75;margin:0 0 8px">${o.items.length} nomor terbaca (5 angka terakhir), urut dari baris 10. Ubah kalau ada yang salah.</p>${o.items.map((x,k)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><input type="checkbox" ${x.on?'checked':''} aria-label="Pakai baris ${QG_N-k}" onchange="qgOcrTog(${k})" style="width:20px;height:20px;flex:none"><span class="text-xs" style="width:52px;flex:none;opacity:.7">Baris ${QG_N-k}</span><input class="i" inputmode="numeric" maxlength="5" value="${esc(x.v)}" oninput="qgOcrVal(${k},this.value);this.value=QG.ocr.items[${k}].v" style="flex:1;margin:0${x.lo?';border-color:#f59e0b':''}" autocomplete="off"></div>${x.lo?'<div class="text-xs" style="color:#fbbf24;margin:-3px 0 6px 80px">Kurang jelas, cek angkanya</div>':''}`).join('')}<p class="text-xs" style="opacity:.7;margin:8px 0">Diisi mulai dari baris 10. Baris yang sudah terisi tidak ditimpa.</p><div class="flex gap-2"><button type="button" class="b b2" style="flex:1" onclick="qgCamOpen()">Ulangi foto</button><button type="button" class="b" style="flex:1.4" onclick="qgOcrApply()">Isi ${o.items.filter(x=>x.on).length} No. Body</button></div>`;
 return`<div class="qgov t4" onclick="if(event.target===this&&QG.ocr.st!='run')qgOcrClose()"><div class="c qgc" style="max-width:340px">${o.st!='run'?'<button type="button" class="qgx" aria-label="Tutup" onclick="qgOcrClose()">&times;</button>':''}<div class="qg-ttl"><b>Hasil baca foto</b><span>Palet ${o.pal}</span></div>${b}</div></div>`}
 function qgPal(){const day=qgDay(),P=qgP(day,QG.part),n=QG.pal,tot=qgPals(day);
 let r='';const ph=(l,t)=>l=='-'?[t,' ph']:[l,''];for(let i=QG_N-1;i>=0;i--){const x=QG.draft[i];r+=`<div class="qgr p"><span class="qg-l a-l">${i+1}</span><span class="qgbw a-b"><input class="qg-in m" value="${esc(x[0])}" inputmode="numeric" oninput="qgIn(${i},0,this.value)" autocomplete="off" aria-label="No. Body ${i+1}"><span class="qgbd ${x[5]&&x[5].d=='E'?'E':'D'}" aria-label="${x[5]&&x[5].d=='E'?'Export':'Domestic'}">${x[5]&&x[5].d=='E'?'E':'D'}</span></span><input class="qg-in m sf a-s" value="${esc(x[1])}" maxlength="3" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().slice(0,3);qgIn(${i},1,this.value)" autocomplete="off" aria-label="Sfx ${i+1}"><button type="button" class="qg-in d qgop a-d" aria-label="Open ${i+1}" onclick="qgDpOpen(${i})">Open</button><select class="qg-in j a-j ${x[3]}" aria-label="Jdg ${i+1}" onchange="qgIn(${i},3,this.value);this.className='qg-in j a-j '+this.value"><option value="">-</option><option value="OK"${x[3]=='OK'?' selected':''}>OK</option><option value="NG"${x[3]=='NG'?' selected':''}>NG</option><option value="OS"${x[3]=='OS'?' selected':''}>Other Shift</option></select><button type="button" class="qg-in k qgdb a-k${x[2].length?' df':''}" aria-label="Ket ${i+1}" onclick="qgKtOpen(${i})">${qgKetS(x)}</button></div>`}
@@ -2923,7 +2981,7 @@ return`<div class="qgov t2" onclick="if(event.target===this)qgClosePal()"><div c
 <div class="qg-ph"><b>Pallet no.</b><span class="qg-b">${n}</span><span class="qg-sl">/</span><span class="qg-b">${tot}</span><button type="button" class="qg-sv" aria-label="Simpan palet" onclick="qgSavePal()">&#128190;</button></div>
 <div class="text-xs" style="opacity:.7;margin:-2px 0 6px">${(()=>{const c=qgCfg(P,day);return c?'Skk '+qgSkk(c.s,n,c.k)+'/'+c.k:'Pickup: tanpa Shikake'})()}</div>
 ${(()=>{const o=qgParts().filter(x=>x.k!=QG.part);return o.length?`<div class="qg-cp"><span class="qg-k">Copy data from:</span><select class="qg-b" aria-label="Copy data from" onchange="qgCopy(this.value)"><option value="">Pilih item</option>${o.map(x=>`<option value="${esc(x.k)}">${esc(x.n)}</option>`).join('')}</select></div>`:''})()}
-<div class="qg-cp"><span class="qg-k">Foto order sheet:</span><button type="button" class="qgpill" onclick="document.getElementById('qgOcrF').click()">&#128247; Foto</button><button type="button" class="qgpill" onclick="document.getElementById('qgOcrG').click()">Galeri</button><input type="file" id="qgOcrF" accept="image/*" capture="environment" hidden onchange="qgOcrPick(this)"><input type="file" id="qgOcrG" accept="image/*" hidden onchange="qgOcrPick(this)"></div>
+<div class="qg-cp"><span class="qg-k">Foto order sheet:</span><button type="button" class="qgpill" onclick="qgCamOpen()">&#128247; Foto</button><button type="button" class="qgpill" onclick="document.getElementById('qgOcrG').click()">Galeri</button><input type="file" id="qgOcrF" accept="image/*" capture="environment" hidden onchange="qgOcrPick(this)"><input type="file" id="qgOcrG" accept="image/*" hidden onchange="qgOcrPick(this)"></div>
 <hr class="qg-hr">
 <div class="qgr p qgh"><span class="lb a-l">No.</span><span class="mg a-b">No. Body</span><span class="mg a-s">Sfx</span><span class="og a-d">Detail</span><span class="kg a-k">Ket</span><span class="bl qgjh a-j" role="button" tabindex="0" aria-label="Bulk judgement" onclick="qgBulkTog(event)">Judge &#9662;<div id="qgBm" class="qgbm" style="display:${QG.bm?'block':'none'}" onclick="event.stopPropagation()"><button type="button" onclick="qgBulk('OK')">Semua OK</button><button type="button" onclick="qgBulk('NG')">Semua NG</button><button type="button" onclick="qgBulk('E')">Yang kosong jadi OK</button><button type="button" onclick="qgBulk('')">Reset semua</button></div></span></div>
 ${r}
@@ -2934,6 +2992,7 @@ function openMenu(k){if(k!='qg'&&BKG){BKG=0;try{history.back()}catch(e){}}scr=k=
 var BKG=0;
 function bkPush(){try{history.pushState({wmsqg:1},'');BKG=1}catch(e){}}
 function bkClose(){
+if(CAM){qgCamClose();return 1}
 if(document.querySelector('.qgdlg')){document.querySelectorAll('.qgdlg').forEach(x=>x.remove());return 1}
 if(QG.cp){qgCpCancel();return 1}
 if(QG.df&&QG.df.ed!=-2){qgMkCancel();return 1}
@@ -3205,7 +3264,7 @@ async function cloudBeat(){
   }catch(x){console.error('beat',x)}
 }
 function presOff(){try{if(U&&!cloudOff()){const e=myEm(),n=U.name||e;rid('p',e).then(id=>rdSet(id,{e,n,t:Date.now(),on:0})).catch(()=>{})}}catch(x){}}
-function cloudStop(){UNDOS=[];clearInterval(hbT);CB='';devBad=false;AC=[];acErr=''}
+function cloudStop(){try{qgCamClose()}catch(e){}UNDOS=[];clearInterval(hbT);CB='';devBad=false;AC=[];acErr=''}
 /* Akun dihapus admin: keluarkan paksa dari perangkat ini */
 function forceOut(){
   const e=myEm(),id=U&&U.id;clearInterval(hbT);clearTimeout(saveT);
