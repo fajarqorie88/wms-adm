@@ -1228,13 +1228,15 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qrdd{z-index:3}
 .qrdi{max-height:100%;min-height:0}.qrdp,.qrdf{flex:none}
 .qhl{align-self:stretch;margin-top:6px;padding-top:6px;border-top:1px solid var(--pbd,rgba(148,163,184,.5));display:flex;flex-direction:column;gap:4px;min-height:0;overflow:auto}
-.qhr{display:flex;align-items:center;gap:6px;background:var(--tr,rgba(148,163,184,.14));border-radius:6px;padding:3px 6px;font-size:11px;line-height:1.3}
-.qhb{display:flex;flex-wrap:wrap;gap:2px;max-width:45%;flex:none}.qhb i{width:14px;height:14px;border-radius:50%;background:#ef4444;color:#fff;font-size:9px;font-weight:700;font-style:normal;display:flex;align-items:center;justify-content:center}
-.qhn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qhq{flex:none;color:#ED7D31;font-weight:700}.qhe{font-size:11px;opacity:.7;text-align:center;padding:4px 0}
+.qhh,.qhr{display:grid;grid-template-columns:24px minmax(0,1fr) 64px 28px;gap:6px;align-items:center;padding:3px 6px}
+.qhh{font-size:10px;font-weight:700;opacity:.75;border-bottom:1px solid var(--pbd,rgba(148,163,184,.5));padding-top:0}.qhh span:last-child,.qhq{text-align:right}
+.qhr{background:var(--tr,rgba(148,163,184,.14));border-radius:6px;font-size:11px;line-height:1.3}.qhi{opacity:.7}
+.qhb{display:flex;flex-wrap:wrap;gap:2px;min-width:0}.qhb i{width:14px;height:14px;border-radius:50%;background:#ef4444;color:#fff;font-size:9px;font-weight:700;font-style:normal;display:flex;align-items:center;justify-content:center}
+.qhn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qhq{color:#ED7D31;font-weight:700}.qhe{font-size:11px;opacity:.7;text-align:center;padding:4px 0}
 .qrfsl{display:flex;align-items:center;gap:8px}.qrfsl .qrmx{width:40px;height:40px}
 
 .qrdf{align-self:stretch;display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;line-height:1.2}.qrdf b{font-size:13px;color:#ED7D31}
-.qrdg.big{overflow:visible}.qrdg.big .qrdp img{max-height:68vh}.qrdg.big .qrdn{width:240px;height:180px}.qrdg.big .qrdd{width:22px;height:22px;margin:-11px 0 0 -11px;font-size:12px;line-height:18px;border-width:2px}.qrdg.big .qrdc{font-size:13px;padding:2px 10px;border-width:2px}.qrdg.big .qrdl line{stroke-width:1.8}.qrdg.big .qrdi{max-height:none}.qrdg.big .qhl{overflow:visible}.qrdg.big .qhr{font-size:14px;padding:6px 10px;gap:10px}.qrdg.big .qhb i{width:20px;height:20px;font-size:12px}.qrdg.big .qhn{white-space:normal}.qrdg.big .qhe{font-size:14px}.qrdg.big .qrdf{font-size:15px}.qrdg.big .qrdf b{font-size:22px}
+.qrdg.big{overflow:visible}.qrdg.big .qrdp img{max-height:68vh}.qrdg.big .qrdn{width:240px;height:180px}.qrdg.big .qrdd{width:22px;height:22px;margin:-11px 0 0 -11px;font-size:12px;line-height:18px;border-width:2px}.qrdg.big .qrdc{font-size:13px;padding:2px 10px;border-width:2px}.qrdg.big .qrdl line{stroke-width:1.8}.qrdg.big .qrdi{max-height:none}.qrdg.big .qhl{overflow:visible}.qrdg.big .qhh,.qrdg.big .qhr{grid-template-columns:30px minmax(0,1fr) 110px 40px;gap:10px;padding:6px 10px}.qrdg.big .qhh{font-size:12px;padding-top:0}.qrdg.big .qhr{font-size:14px}.qrdg.big .qhb i{width:20px;height:20px;font-size:12px}.qrdg.big .qhn{white-space:normal}.qrdg.big .qhe{font-size:14px}.qrdg.big .qrdf{font-size:15px}.qrdg.big .qrdf b{font-size:22px}
 .qrfs .qrfc{position:fixed;inset:0;max-width:none;width:auto;height:auto;margin:0;border-radius:0;overflow:auto;padding:16px}
 .qrbd{display:grid;grid-template-columns:31% minmax(0,1fr);gap:10px;min-height:0}.qrr{display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:10px;min-height:0}.qrbd .qrc{min-height:0;overflow:hidden}.qrb3 .qrc{padding:8px 9px}.qrb3 .qrt{font-size:12px}.qrb3 .qrtr{grid-template-columns:minmax(0,1fr) 26px 26px minmax(0,50px);gap:4px;font-size:11px}.qrb3 .qrtr>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qrbd .qrth .qrt{white-space:nowrap}
 .qrmob .qrbd,.qrmob .qrr{display:flex;flex-direction:column;gap:8px}.qrmob .qrdp img{max-height:340px}
@@ -1456,7 +1458,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=242;
+const APP_REV=243;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2934,7 +2936,7 @@ pl.push({g,lb,w,cx,cy})});
 const dots=O.map(t=>G[t].p.map(a=>`<span class="qrdd" style="left:${a.x}%;top:${a.y}%">${a.n}</span>`).join('')).join(''),
 cls=cm?`<svg class="qrdl" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${pl.map(o=>o.g.p.map(a=>`<line x1="${o.cx.toFixed(1)}" y1="${o.cy.toFixed(1)}" x2="${a.x}" y2="${a.y}"/>`).join('')).join('')}</svg>${pl.map(o=>`<span class="qrdc" style="left:${o.cx.toFixed(1)}%;top:${o.cy.toFixed(1)}%">${esc(o.lb)}</span>`).join('')}`:'',
 box=s.im?`<div class="qrdp"><img src="${s.im}" alt="" draggable="false">${cls}${dots}</div>`:`<div class="qrdp qrdn">${esc((qgRepLbl(s.k)[0]||'?').charAt(0).toUpperCase())}</div>`,
-lst=O.length?O.map(t=>{const g=G[t];return`<div class="qhr">${g.p.length?`<span class="qhb">${g.p.map(a=>`<i>${a.n}</i>`).join('')}</span>`:''}<span class="qhn">${esc(g.t)}</span><span class="qhq">\u00d7${g.q}</span></div>`}).join(''):'<div class="qhe">Tidak ada defect</div>';
+lst=O.length?'<div class="qhh"><span>No.</span><span>Defect</span><span>Point</span><span>Qty</span></div>'+O.map((t,k)=>{const g=G[t];return`<div class="qhr"><span class="qhi">${k+1}</span><span class="qhn">${esc(g.t)}</span><span class="qhb">${g.p.length?g.p.map(a=>`<i>${a.n}</i>`).join(''):'-'}</span><span class="qhq">${g.q}</span></div>`}).join(''):'<div class="qhe">Tidak ada defect</div>';
 return`<div class="qrdg${big?' big':''}"><div class="qrdi">${box}<div class="qrdf"><span>${esc(s.k)}</span><span><b>${s.dc||0}</b> defect</span></div><div class="qhl">${lst}</div></div></div>`}
 function qgDpMax(v){QG.dpx=v?1:0;render()}
 function qgDpView(){const day=qgDay(),d=qgRepData(day);return`<div class="qgov t4 qrfs" onclick="if(event.target===this)qgDpMax(0)"><div class="c qgc qrfc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDpMax(0)">&times;</button><div class="qgsH"><b>Highlight Issue</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div><div class="qrfsl">${qgHiSel(d)}${qgEyeBtn()}</div>${qgDpp(d,1)}</div></div>`}
@@ -3154,8 +3156,8 @@ ${isDev()?(setTimeout(scLoad,0),scCard()):''}
 ${verBox()}${devDots('developer')}`}
 
 /* ---------- RENDER ---------- */
-function render(){const y=scrollY;document.body.classList.toggle('wn',!!U&&scr=='app');if(!U){$('#app').innerHTML=loginView();trDom($('#app'));return}
-if(scr=='qg'&&!BKG)bkPush();if(scr!='app'){const n0=$('nav');if(n0)n0.remove();$('#app').innerHTML=scr=='qg'?qgView():homeView();trDom($('#app'));if(scr=='qg'){qgInFit();if(QG.sum)qgRepFit()}return}
+function render(){const y=scrollY,ps=window.__rs;window.__rs=scr;document.body.classList.toggle('wn',!!U&&scr=='app');if(!U){$('#app').innerHTML=loginView();trDom($('#app'));return}
+if(scr=='qg'&&!BKG)bkPush();if(scr!='app'){const keep=scr=='qg'&&ps=='qg',so=keep?[...document.querySelectorAll('.qgov,.qrfc')].map(e=>[e.className,e.scrollTop]):[];const n0=$('nav');if(n0)n0.remove();$('#app').innerHTML=scr=='qg'?qgView():homeView();trDom($('#app'));if(scr=='qg'){qgInFit();if(QG.sum)qgRepFit()}if(keep){scrollTo(0,y);const nn=[...document.querySelectorAll('.qgov,.qrfc')];if(nn.length==so.length)nn.forEach((e,k)=>{if(e.className==so[k][0]&&so[k][1])e.scrollTop=so[k][1]})}return}
 if(!tabOK(tab))tab='input';const v={input:inputView,data:dataView,grafik:grafikView,master:masterView,setting:settingView,developer:devView}[tab]();
 $('#app').innerHTML=backBar()+'<div class="vw vw-'+tab+(vmOf()?' vm-'+vmOf():'')+(SLD?' sld-'+SLD:'')+'">'+v+'</div>';SLD='';let n=$('nav');if(!n){n=document.createElement('nav');document.body.appendChild(n)}
 const vt=visTabs(),bw=vt.length<=5?100/vt.length:20;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('')+(isDev()?`<button data-k="developer" class="${tab=='developer'?'on':''}" style="flex-basis:${bw}%" onclick="go('developer')">${NI.developer}<span>Developer</span></button>`:'');n.scrollLeft=tab=='developer'?n.scrollWidth:0;
