@@ -1279,6 +1279,9 @@ html[data-view=pc] .wver{background:transparent!important;border:0!important;box
 .qgcf{position:absolute;display:none;border:2px dashed #facc15;box-shadow:0 0 0 100vmax rgba(0,0,0,.62);box-sizing:border-box;touch-action:none;cursor:move}
 .qgcf i{position:absolute;width:36px;height:36px;margin:-18px 0 0 -18px;touch-action:none}
 .qgcf i::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#facc15;border:2px solid #000}
+.qgdv{position:absolute;top:0;bottom:0;width:30px;margin-left:-15px;touch-action:none;cursor:ew-resize;z-index:2}
+.qgdv::before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed #5eead4}
+.qgdv::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#5eead4;border:2px solid #000}
 .qgct{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;color:#fff;font-size:13px;text-shadow:0 1px 3px #000;pointer-events:none;z-index:3}
 .qgcb{position:absolute;z-index:3;left:0;right:0;bottom:0;display:flex;gap:10px;align-items:center;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,rgba(0,0,0,.75),transparent)}.qgcb::-webkit-scrollbar{display:none}.qgcb>:first-child{margin-left:auto}.qgcb>:last-child{margin-right:auto}
 .qgcb button{flex:none;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.2);color:#fff;font-weight:600;font-size:13px;white-space:nowrap}
@@ -1419,7 +1422,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=234;
+const APP_REV=235;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2745,12 +2748,12 @@ let pop='';if(d.ed!=-2){const cur=d.pn||'',kb=d.pe?qgBytes(d.pe):0,orig=d.po?(d.
 pop=`<div class="qgov t4" onclick="if(event.target===this)qgMkCancel()"><div class="c qgc" style="max-width:340px"><b style="font-size:15px">${d.ed>=0?'Edit Defect '+(d.ed+1):'Defect Baru'}</b><input id="qgMk" class="i" maxlength="60" value="${esc(cur)}" placeholder="Nama defect (contoh: Spatter)" style="margin:8px 0" autocomplete="off" oninput="QG.df.pn=this.value" onkeydown="if(event.key=='Enter')qgMkOk()">${ch?`<div class="qgchs">${ch}</div>`:''}
 <label class="text-xs opacity-70 mt-2" style="display:block">C/M (Counter Measure)</label><textarea id="qgMkC" class="i" rows="3" maxlength="200" placeholder="Action yang dilakukan untuk defect ini" style="margin:4px 0" oninput="QG.df.pc=this.value">${esc(d.pc||'')}</textarea>${cch?`<div class="qgchs">${cch}</div>`:''}
 <label class="text-xs opacity-70 mt-2" style="display:block">Evidence</label>
-<div class="qgev"><button type="button" class="qgpill${d.pe?' on':''}" onclick="document.getElementById('qgMkFile').click()">&#128247; Evidence</button>${d.pe?`<img src="${d.pe}" alt="Evidence"><span class="text-xs" style="opacity:.75;line-height:1.5">${orig?orig+' &rarr; ':''}${Math.round(kb/1024)} KB<br>Ketuk Evidence untuk ganti</span>`:'<span class="text-xs" style="opacity:.7">Foto dikompres otomatis maks 100 KB.</span>'}</div>
-<input type="file" id="qgMkFile" accept="image/*" hidden onchange="qgMkUp(this)"><div class="flex gap-2 mt-3">${d.pe?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgMkDelImg()">Hapus foto</button>`:''}${d.ed>=0?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgMkDel()">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="qgMkCancel()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgMkOk()">Simpan</button></div></div></div>`}
+<div class="qgev"><button type="button" class="qgpill${d.pe?' on':''}" onclick="document.getElementById('qgMkFileC').click()">&#128247; Kamera</button><button type="button" class="qgpill" onclick="document.getElementById('qgMkFile').click()">Galeri</button>${d.pe?`<img src="${d.pe}" alt="Evidence"><span class="text-xs" style="opacity:.75;line-height:1.5">${orig?orig+' &rarr; ':''}${Math.round(kb/1024)} KB<br>Ambil ulang atau pilih lagi untuk ganti</span>`:'<span class="text-xs" style="opacity:.7">Foto dikompres otomatis maks 100 KB.</span>'}</div>
+<input type="file" id="qgMkFile" accept="image/*" hidden onchange="qgMkUp(this)"><input type="file" id="qgMkFileC" accept="image/*" capture="environment" hidden onchange="qgMkUp(this)"><div class="flex gap-2 mt-3">${d.pe?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgMkDelImg()">Hapus foto</button>`:''}${d.ed>=0?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgMkDel()">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="qgMkCancel()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgMkOk()">Simpan</button></div></div></div>`}
 return`<div class="qgov t3" onclick="if(event.target===this)qgDfCancel()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDfCancel()">&times;</button>
 <div class="qg-ttl"><b>Defect - Part ${d.i+1}</b><span>${esc(row[0]||'')}</span></div>
 ${box}
-<div class="flex gap-2 mt-2"><button type="button" class="b b2" style="flex:1" onclick="document.getElementById('qgFile').click()">${img?'Ganti gambar':'Upload gambar panel'}</button><button type="button" class="b b2" style="flex:1" onclick="qgDfAdd()">+ Tanpa titik</button></div><input type="file" id="qgFile" accept="image/*" hidden onchange="qgUpImg(this)">
+<div class="flex gap-2 mt-2"><button type="button" class="b b2" style="flex:1" onclick="document.getElementById('qgFileC').click()">&#128247; Kamera</button><button type="button" class="b b2" style="flex:1" onclick="document.getElementById('qgFile').click()">${img?'Ganti (galeri)':'Galeri'}</button><button type="button" class="b b2" style="flex:1" onclick="qgDfAdd()">+ Tanpa titik</button></div><input type="file" id="qgFile" accept="image/*" hidden onchange="qgUpImg(this)"><input type="file" id="qgFileC" accept="image/*" capture="environment" hidden onchange="qgUpImg(this)">
 <hr class="qg-hr"><b class="text-sm">List defect (${m.length})</b><div class="mt-2">${list}</div>
 <button type="button" class="b w-full mt-3" onclick="qgDfDone()">Selesai</button></div></div>${pop}`}
 
@@ -2934,7 +2937,13 @@ for(let y=0;y<H;y++){const y0=Math.max(0,y-R),y1=Math.min(H-1,y+R);for(let i=0;i
 x.putImageData(new ImageData(out,W,H),0,0)}catch(e){}return c}
 function qgOcrCv(src,k,bin){const w=Math.max(1,Math.round(src.width*k)),h=Math.max(1,Math.round(src.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.imageSmoothingQuality='high';x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(src,0,0,w,h);if(bin)qgOcrBin(c);return c}
 /* Ambil nomor dari hasil baca: angka yang kepisah spasi digabung dulu. v = 5 angka terakhir, lo = perlu dicek user */
-function qgOcrParse(r,cap,mode){const it=[],L=(r.data.lines&&r.data.lines.length)?r.data.lines:String(r.data.text||'').split('\n').map(t=>({text:t,confidence:r.data.confidence}));
+function qgOcrLines(r){const d=r.data||{};if(d.lines&&d.lines.length)return d.lines;const o=[];try{(d.blocks||[]).forEach(b=>(b.paragraphs||[]).forEach(p=>(p.lines||[]).forEach(l=>o.push(l))))}catch(e){}if(o.length)return o;return String(d.text||'').split('\n').map(t=>({text:t,confidence:d.confidence}))}
+function qgOcrVrOf(raw){raw=String(raw||'').toUpperCase();return/EXP|XPO|PORT/.test(raw)?'E':(/DOM|OME|MES|EST|TIC/.test(raw)?'D':'')}
+/* Gabungkan varian dari potongan kanan ke hasil No. Body berdasarkan posisi baris (tinggi relatif) */
+function qgOcrMerge(it,L,H){const rl=L.map(l=>({v:qgOcrVrOf(l.text),y:l.bbox&&H?((l.bbox.y0+l.bbox.y1)/2)/H:null})).filter(x=>x.v);
+it.forEach((x,k)=>{if(x.vr)return;let b=null,bd=1;if(x.y!=null)rl.forEach(q=>{if(q.y==null||q.u)return;const d=Math.abs(q.y-x.y);if(d<bd){bd=d;b=q}});if(b&&bd<=Math.max(.03,(x.h||.05)*.8)){x.vr=b.v;b.u=1}else if(x.y==null&&rl[k])x.vr=rl[k].v})}
+function qgOcrSub(c,x0,w){const p=12,o=document.createElement('canvas');o.width=Math.max(1,Math.round(w))+p;o.height=c.height;const g=o.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,o.width,o.height);g.drawImage(c,x0,0,w,c.height,x0?p:0,0,w,c.height);return o}
+function qgOcrParse(r,cap,mode,H){const it=[],L=qgOcrLines(r);
 L.forEach(l=>{if(it.length>=cap)return;const raw=String(l.text||'').toUpperCase(),cf=(l.confidence||0)<75;
 if(mode=='sfx'){const t=raw.replace(/[^A-Z0-9]/g,'').slice(0,3);if(t)it.push({v:t,on:1,lo:cf||t.length>3});return}
 /* Varian dibaca dari huruf di baris yang sama; sebagian kata (EXPO / DOMES) tetap dikenali */
@@ -2942,9 +2951,9 @@ const vr=/EXP|XPO|PORT/.test(raw)?'E':(/DOM|OME|MES|EST|TIC/.test(raw)?'D':'');
 const tk=raw.split(/\s+/).filter(Boolean),fx=a=>a.replace(/[OQD]/g,'0').replace(/[IL|]/g,'1').replace(/S/g,'5').replace(/B/g,'8').replace(/\D/g,'');
 let v='',lo=cf;const big=tk.find(a=>{const dg=(a.match(/\d/g)||[]).length,lt=(a.match(/[A-Z]/g)||[]).length;return dg>=3&&lt<=2&&fx(a).length>=5});
 if(big)v=fx(big).slice(-5);else{const m=tk.filter(a=>(a.match(/\d/g)||[]).length>=2&&(a.match(/[A-Z]/g)||[]).length<=2).map(fx).join('');if(m.length>=4){v=m.slice(-5);lo=true}}
-if(v)it.push({v,vr,on:1,lo:lo||v.length<5})});return it}
+if(v)it.push({v,vr,on:1,lo:lo||v.length<5,y:l.bbox&&H?((l.bbox.y0+l.bbox.y1)/2)/H:null,h:l.bbox&&H?(l.bbox.y1-l.bbox.y0)/H:null})});return it}
 function qgOcrScore(it,mode){return it.reduce((a,x)=>a+(mode=='sfx'?(x.lo?.6:1):(x.v.length==5?(x.lo?.6:1)+(x.vr?.2:0):.3)),0)}
-function qgOcrPrep(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const sc=Math.min(1,1200/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(qgOcrNorm(c))};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
+function qgOcrPrep(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const sc=Math.min(1,1000/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(qgOcrNorm(c))};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
 /* Mesin baca (worker Tesseract) disiapkan sekali di belakang layar begitu halaman palet dibuka, lalu dipakai ulang untuk semua foto. Proses baca diantre supaya tidak tabrakan */
 let OCRW=null,OCRQ=Promise.resolve(),OCRLG=null,OCRTRY=0;
 function qgOcrWarm(){if(OCRW)return OCRW;OCRW=(async()=>{await qgOcrLoad();const w=await Tesseract.createWorker('eng',1,{logger:m=>{if(OCRLG)OCRLG(m)}});await w.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:'6'});return w})();OCRW.catch(()=>{OCRW=null});return OCRW}
@@ -2956,37 +2965,42 @@ const RW=qgOcrRows(QG.ocrMode=='sfx'?'sfx':'body');if(!RW.length){toast('Semua b
 const O=QG.ocr={rows:RW,at:RW[0],pal:QG.pal,part:QG.part,st:'run',mode:QG.ocrMode=='sfx'?'sfx':'body',msg:'Menyiapkan mesin baca...',items:[]};render();
 OCRTRY=0;OCRLG=m=>{if(QG.ocr!==O)return;const e=document.getElementById('qgOcrP');if(e)e.textContent=m.status=='recognizing text'?'Membaca teks'+(OCRTRY?' (cara baca lain '+(OCRTRY+1)+')':'')+'... '+Math.round((m.progress||0)*100)+'%':'Menyiapkan mesin baca...'};
 try{const wp=qgOcrWarm(),cv=await mk();if(QG.ocr!==O)return;const w=await wp;if(QG.ocr!==O)return;
-const cap=O.rows.length,sc=Math.min(1.6,1600/Math.max(cv.width,cv.height)),sk=sc>1.05?sc:1;
-/* Coba beberapa cara baca; berhenti kalau hasilnya sudah bagus, kalau tidak pakai hasil terbaik */
-const pl=[[()=>cv,'6'],[()=>qgOcrCv(cv,sk,true),'6'],[()=>qgOcrCv(cv,sk,false),'4'],[()=>qgOcrCv(cv,sk,true),'11']];
+const dvx=cv.dvx>0&&O.mode=='body'?cv.dvx:0,src=dvx?qgOcrSub(cv,0,dvx):cv,rc=dvx?qgOcrSub(cv,dvx,cv.width-dvx):null,OUT={text:true,blocks:true};
+const cap=O.rows.length,sc=Math.min(1.3,900/Math.max(src.width,src.height)),sk=sc>1.05?sc:1;
+/* Coba beberapa cara baca (maks 3); berhenti begitu hasilnya sudah bagus, kalau tidak pakai hasil terbaik */
+const pl=[[()=>src,'6'],[()=>qgOcrCv(src,sk,true),'6'],[()=>qgOcrCv(src,sk,false),'4']];
 const job=OCRQ.then(async()=>{let best=null;for(let a=0;a<pl.length;a++){if(QG.ocr!==O)return null;OCRTRY=a;
-try{await w.setParameters({tessedit_pageseg_mode:pl[a][1]});const r=await w.recognize(pl[a][0]()),it=qgOcrParse(r,cap,O.mode),s2=qgOcrScore(it,O.mode);if(!best||s2>best.s)best={it,s:s2};if(it.length>=2&&it.every(x=>!x.lo))break}catch(e){if(a==0)throw e}}
+try{await w.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:pl[a][1]});const im=pl[a][0](),r=await w.recognize(im,{},OUT),it=qgOcrParse(r,cap,O.mode,im.height),s2=qgOcrScore(it,O.mode);if(!best||s2>best.s)best={it,s:s2};if(it.length>=Math.min(2,cap)&&it.every(x=>!x.lo))break}catch(e){if(a==0)throw e}}
+/* Potongan kanan garis tengah dibaca terpisah khusus huruf varian (Domestic / Export) */
+if(best&&best.it.length&&rc){try{await w.setParameters({tessedit_char_whitelist:'DOMESTICXPR ',tessedit_pageseg_mode:'6'});const im=qgOcrCv(rc,rc.width<500?Math.min(2,500/Math.max(rc.width,rc.height)):1,false),r=await w.recognize(im,{},OUT);qgOcrMerge(best.it,qgOcrLines(r),im.height)}catch(e){}}
 return best?best.it:[]});OCRQ=job.catch(()=>{});const it=await job;if(QG.ocr!==O||!it)return;
 /* Hasil kosong / sebagian tidak lagi dianggap gagal: kotak review tetap terbuka, sisanya diketik manual */
 O.rd=it.length;O.none=!it.length;const tot=Math.min(cap,Math.max(5,it.length+2));for(let k=it.length;k<tot;k++)it.push({v:'',vr:'',on:1,bl:1});
 O.st='rev';O.items=it;render()}
 catch(e){if(QG.ocr!==O)return;O.st='err';O.msg=OCRW?'Foto tidak bisa dibaca. Coba foto ulang.':'Mesin baca gagal diunduh. Cek koneksi internet lalu coba lagi.';render()}}
 /* Kamera di dalam aplikasi untuk foto order sheet: area di luar bingkai kuning digelapkan, bingkai bisa digeser dan ditarik dari titik sudut/sisi, hanya isi bingkai yang dipotong dan dibaca OCR. Posisi bingkai terakhir diingat */
-const QGFR_K='wms_ocrfr3',QGFR_D={x:.08,y:.08,w:.84,h:.62};
+const QGFR_K='wms_ocrfr3',QGFR_KS='wms_ocrfr_sfx',QGDV_K='wms_ocrdv',QGFR_D={x:.08,y:.08,w:.84,h:.62},QGDV_D=.62;
+/* Body dan Sfx punya bingkai sendiri-sendiri; Body juga punya garis tengah (pemisah No. Body | Varian) */
 let CAM=null;
-function qgFrGet(){try{const a=JSON.parse(L[QGFR_K]||'null');if(a&&a.w>=.08&&a.h>=.05&&a.x>=0&&a.y>=0&&a.x+a.w<=1.001&&a.y+a.h<=1.001)return a}catch(e){}return Object.assign({},QGFR_D)}
-function qgFrSave(){try{L[QGFR_K]=JSON.stringify(CAM.fr)}catch(e){}}
+function qgDvGet(){try{const v=parseFloat(L[QGDV_K]);if(v>=.1&&v<=.9)return v}catch(e){}return QGDV_D}
+function qgFrGet(sf){try{const a=JSON.parse(L[sf?QGFR_KS:QGFR_K]||'null');if(a&&a.w>=.08&&a.h>=.05&&a.x>=0&&a.y>=0&&a.x+a.w<=1.001&&a.y+a.h<=1.001)return a}catch(e){}return Object.assign({},QGFR_D)}
+function qgFrSave(){try{L[CAM.sf?QGFR_KS:QGFR_K]=JSON.stringify(CAM.fr);if(!CAM.sf)L[QGDV_K]=String(Math.round(CAM.dv*1000)/1000)}catch(e){}}
 function qgCamLay(){if(!CAM||!CAM.o)return;const o=CAM.o,v=CAM.v,W=o.clientWidth,H=o.clientHeight,vw=v.videoWidth,vh=v.videoHeight,fe=CAM.fe;if(!vw||!vh||!W||!H){fe.style.display='none';return}
 const k=Math.min(W/vw,H/vh),dw=vw*k,dh=vh*k,ox=(W-dw)/2,oy=(H-dh)/2,f=CAM.fr;CAM.r={dw,dh};
-fe.style.display='block';fe.style.left=(ox+f.x*dw)+'px';fe.style.top=(oy+f.y*dh)+'px';fe.style.width=(f.w*dw)+'px';fe.style.height=(f.h*dh)+'px'}
+fe.style.display='block';fe.style.left=(ox+f.x*dw)+'px';fe.style.top=(oy+f.y*dh)+'px';fe.style.width=(f.w*dw)+'px';fe.style.height=(f.h*dh)+'px';if(CAM.dE)CAM.dE.style.left=(CAM.dv*100)+'%'}
 async function qgCamOpen(i,mode){
 if(i!=null)QG.ocrAt=i;if(mode!==undefined)QG.ocrMode=mode;if(CAM)return;
 if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('Kamera di aplikasi tidak didukung, pakai kamera bawaan');const f=document.getElementById('qgOcrF');if(f)f.click();return}
-CAM={};qgOcrWarm().catch(()=>{});
+const SF=QG.ocrMode=='sfx';CAM={};qgOcrWarm().catch(()=>{});
 let st;try{st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false})}
 catch(e){CAM=null;toast('Kamera tidak bisa dibuka (izin ditolak?). Pakai tombol Galeri');return}
 if(!CAM){st.getTracks().forEach(t=>t.stop());return}
 const o=document.createElement('div');o.id='qgCam';o.className='qgcam';
 const hs=[['nw','0','0'],['n','50%','0'],['ne','100%','0'],['e','100%','50%'],['se','100%','100%'],['s','50%','100%'],['sw','0','100%'],['w','0','50%']];
-o.innerHTML='<video id="qgCamV" playsinline muted autoplay></video><div class="qgct">'+(QG.ocrMode=='sfx'?'Masukkan kolom Sfx (atas ke bawah) ke dalam bingkai kuning':'Masukkan kolom No. Body dan Varian ke dalam bingkai kuning')+'</div><div class="qgcf" id="qgCamF" onpointerdown="qgCamDrag(event)">'+hs.map(h=>'<i data-h="'+h[0]+'" style="left:'+h[1]+';top:'+h[2]+'"></i>').join('')+'</div><div class="qgcb"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamGal()">Galeri</button><button type="button" class="sh" aria-label="Jepret" onclick="qgCamShot()"></button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" id="qgCamT" style="display:none" onclick="qgCamTorch()">Senter</button></div>';
+o.innerHTML='<video id="qgCamV" playsinline muted autoplay></video><div class="qgct">'+(SF?'Masukkan kolom Sfx (atas ke bawah) ke dalam bingkai kuning':'Masukkan kolom No. Body dan Varian ke bingkai kuning. Geser garis hijau: kiri No. Body, kanan Varian')+'</div><div class="qgcf" id="qgCamF" onpointerdown="qgCamDrag(event)">'+(SF?'':'<div class="qgdv" data-h="dv"></div>')+hs.map(h=>'<i data-h="'+h[0]+'" style="left:'+h[1]+';top:'+h[2]+'"></i>').join('')+'</div><div class="qgcb"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamGal()">Galeri</button><button type="button" class="sh" aria-label="Jepret" onclick="qgCamShot()"></button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" id="qgCamT" style="display:none" onclick="qgCamTorch()">Senter</button></div>';
 document.body.appendChild(o);qgCamBar(o);
 const v=o.querySelector('#qgCamV');v.srcObject=st;
-CAM={o,v,st,fe:o.querySelector('#qgCamF'),fr:qgFrGet(),r:{dw:1,dh:1},tn:0};
+CAM={o,v,st,fe:o.querySelector('#qgCamF'),dE:o.querySelector('.qgdv'),sf:SF,dv:qgDvGet(),fr:qgFrGet(SF),r:{dw:1,dh:1},tn:0};
 v.addEventListener('loadedmetadata',qgCamLay);v.addEventListener('resize',qgCamLay);addEventListener('resize',qgCamLay);
 try{const tr=st.getVideoTracks()[0],cp=tr.getCapabilities?tr.getCapabilities():{};if(cp.torch)o.querySelector('#qgCamT').style.display=''}catch(e){}
 v.play().catch(()=>{});qgCamLay()}
@@ -2999,11 +3013,12 @@ addEventListener('pointerup',()=>{d=0});
 b.addEventListener('click',e=>{if(mv){e.preventDefault();e.stopPropagation();mv=0}},true)}
 function qgCamClose(){const c=CAM;CAM=null;if(!c)return;removeEventListener('resize',qgCamLay);try{if(c.st)c.st.getTracks().forEach(t=>t.stop())}catch(e){}if(c.o)c.o.remove()}
 function qgCamGal(){qgCamClose();const g=document.getElementById('qgOcrG');if(g)g.click()}
-function qgCamReset(){if(!CAM||!CAM.o)return;CAM.fr=Object.assign({},QGFR_D);qgFrSave();qgCamLay()}
+function qgCamReset(){if(!CAM||!CAM.o)return;CAM.fr=Object.assign({},QGFR_D);CAM.dv=QGDV_D;qgFrSave();qgCamLay()}
 function qgCamTorch(){if(!CAM||!CAM.st)return;const tr=CAM.st.getVideoTracks()[0];CAM.tn=!CAM.tn;const b=document.getElementById('qgCamT');if(b){b.style.background=CAM.tn?'#facc15':'';b.style.color=CAM.tn?'#111':''}
 tr.applyConstraints({advanced:[{torch:!!CAM.tn}]}).catch(()=>{if(CAM)CAM.tn=0;if(b){b.style.background='';b.style.color=''}toast('Senter tidak bisa dinyalakan')})}
 function qgCamDrag(e){if(!CAM||!CAM.o)return;const t=e.target.closest?e.target.closest('[data-h]'):null,mode=t?t.dataset.h:'m',f=Object.assign({},CAM.fr),s={x:e.clientX,y:e.clientY},r=CAM.r;e.preventDefault();
-const mv=ev=>{if(!CAM||!CAM.o)return;const dx=(ev.clientX-s.x)/r.dw,dy=(ev.clientY-s.y)/r.dh,MW=.08,MH=.05;let x=f.x,y=f.y,w=f.w,h=f.h;
+const fb=CAM.fe.getBoundingClientRect();
+const mv=ev=>{if(!CAM||!CAM.o)return;if(mode=='dv'){CAM.dv=Math.min(.9,Math.max(.1,(ev.clientX-fb.left)/Math.max(1,fb.width)));qgCamLay();return}const dx=(ev.clientX-s.x)/r.dw,dy=(ev.clientY-s.y)/r.dh,MW=.08,MH=.05;let x=f.x,y=f.y,w=f.w,h=f.h;
 if(mode=='m'){x=Math.min(1-w,Math.max(0,f.x+dx));y=Math.min(1-h,Math.max(0,f.y+dy))}
 else{if(mode.includes('w')){const nx=Math.min(f.x+f.w-MW,Math.max(0,f.x+dx));w=f.x+f.w-nx;x=nx}
 if(mode.includes('e'))w=Math.min(1-f.x,Math.max(MW,f.w+dx));
@@ -3013,10 +3028,10 @@ CAM.fr={x,y,w,h};qgCamLay()};
 const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);if(CAM&&CAM.o)qgFrSave()};
 addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)}
 function qgCamShot(){if(!CAM||!CAM.o)return;const v=CAM.v,vw=v.videoWidth,vh=v.videoHeight;if(!vw||!vh)return toast('Kamera belum siap, tunggu sebentar');
-const f=CAM.fr,sx=Math.max(0,Math.round(f.x*vw)),sy=Math.max(0,Math.round(f.y*vh)),sw=Math.max(8,Math.min(vw-sx,Math.round(f.w*vw))),sh=Math.max(8,Math.min(vh-sy,Math.round(f.h*vh))),m=Math.max(sw,sh),k=m>1200?1200/m:(m<700?Math.min(2,700/m):1),
+const f=CAM.fr,sx=Math.max(0,Math.round(f.x*vw)),sy=Math.max(0,Math.round(f.y*vh)),sw=Math.max(8,Math.min(vw-sx,Math.round(f.w*vw))),sh=Math.max(8,Math.min(vh-sy,Math.round(f.h*vh))),m=Math.max(sw,sh),k=m>1000?1000/m:(m<600?Math.min(1.6,600/m):1),
 cw=Math.max(1,Math.round(sw*k)),ch=Math.max(1,Math.round(sh*k)),pad=12,c=document.createElement('canvas');c.width=cw+pad*2;c.height=ch+pad*2;
 const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(v,sx,sy,sw,sh,pad,pad,cw,ch);
-qgCamClose();qgOcrNorm(c);qgOcrRun(()=>Promise.resolve(c))}
+const dvx=CAM.sf?0:pad+CAM.dv*cw;qgCamClose();qgOcrNorm(c);c.dvx=dvx;qgOcrRun(()=>Promise.resolve(c))}
 function qgOcrClose(){QG.ocr=null;render()}
 function qgOcrTog(k){const o=QG.ocr;if(!o)return;o.items[k].on=o.items[k].on?0:1;render()}
 function qgOcrVal(k,v){const o=QG.ocr;if(!o)return;v=o.mode=='sfx'?String(v).toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3):String(v).replace(/\D/g,'').slice(0,5);o.items[k].v=v;const e=document.getElementById('qgOcrAp');if(e)e.textContent='Isi '+o.items.filter(x=>x.on&&String(x.v).trim()).length+' No. Body'}
