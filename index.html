@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 244.
+  [x] Tahap 1: Summary Report = grid 48 kolom x 24 baris, 9 kartu (tc, ok, ng, pl, hi, dpu, jd, dc, td) pakai posisi [x,y,w,h]; default sama dengan tampilan lama; HP tetap satu kolom lewat CSS .qrmob (cari QGL_DEF, qgLay, .qrg)
+  [x] Tahap 2: Mode edit Developer (PC saja): tombol Edit layout di QG, geser dan ubah ukuran kartu (snap ke grid, tidak boleh tumpang tindih), Simpan / Reset / Batal; layout disimpan di D.M.qgly dan ikut sinkron ke server (cari qgLyEdit, qgLySave)
+  [ ] Tahap 3: tampil/sembunyikan kartu (icon mata) dan tambah kartu dari daftar
+  [ ] Tahap 4: interaktif antar kartu (klik item di DPU mengubah Highlight Issue dan Top Defect, filter shift dan varian, toggle Body/Palet)
+  Belum diuji di browser sungguhan: cek geser/resize di PC (skala sheet dihitung lewat getBoundingClientRect), lalu lanjut Tahap 3 -->
 <!-- PENTING UNTUK AGENT / CLAUDE: file ini punya nomor revisi di konstanta APP_REV (cari 'const APP_REV' di script). Setiap revisi/deploy WAJIB naikkan APP_REV +1, tidak boleh turun. Baca nilainya dulu sebelum mulai. -->
 <html lang="id"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1184,7 +1190,7 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qgov.qgsm .qgsmc.qrw{max-width:980px}
 .qrctl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.qrb{font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1f3864}.qrb.on{background:#dbe7f7;border-color:#5B9BD5;font-weight:600}
 .qrwrap{overflow:hidden;border-radius:8px;margin-bottom:8px}.qrwrap.z{overflow-x:auto}
-.qrs{width:900px;height:636px;box-sizing:border-box;padding:0 18px 18px;display:grid;grid-template-rows:96px 92px minmax(0,1fr);gap:10px;background:var(--pg);color:var(--pt);transform-origin:top left;border:1px solid var(--pbd);font-family:inherit;line-height:1.3;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.qrs{width:900px;height:636px;box-sizing:border-box;padding:0 18px 18px;display:grid;grid-template-rows:96px minmax(0,1fr);gap:10px;background:var(--pg);color:var(--pt);transform-origin:top left;border:1px solid var(--pbd);font-family:inherit;line-height:1.3;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .qrs.d{--pg:#0a1530;--pc:rgba(255,255,255,.07);--pbd:rgba(255,255,255,.3);--pt:#f1f5f9;--pm:#bfdbfe;--tr:rgba(255,255,255,.14);--ln:rgba(255,255,255,.18)}
 .qrs.l{--pg:#fff;--pc:#f8fafc;--pbd:#B4C7E7;--pt:#1f3864;--pm:#5b6f94;--tr:#e5e9f0;--ln:#cbd5e1}
 .qrs *{box-sizing:border-box}
@@ -1208,10 +1214,10 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qrmob .qrlg{background:#fff;border-radius:6px;padding:3px 6px}.qrmob .qrlg img{height:24px;width:auto;display:block}
 .qrmob .qrs .qrtt{font-size:11px;letter-spacing:.5px;text-align:right}.qrmob .qrs .qrtt b{font-size:18px;letter-spacing:.5px}
 .qrmob .qrs .qrhd .qrdb{grid-column:1/-1;display:flex;justify-content:space-between;padding:4px 0}.qrmob .qrs .qrhd .qrdb>div{padding:0 10px}
-.qrmob .qrk{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.qrmob .qrm,.qrmob .qrb3{grid-template-columns:minmax(0,1fr);gap:8px}
+.qrmob .qrg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;gap:6px}.qrmob .qrg>.qrc{grid-column:auto!important;grid-row:auto!important}.qrmob .qrg>.qrc.bg1,.qrmob .qrg>.qrc.bg2{grid-column:1/-1!important}
 .qrmob .qrc{padding:8px 10px;border-radius:12px}.qrmob .qrbig{font-size:24px}.qrmob .qrt{font-size:12px}.qrmob .qrsub{font-size:11px}
 .qrmob .qrsv{flex:none;height:auto}.qrmob .qrs svg[viewBox^="0 0 510"] text{font-size:15px}
-@media (orientation:landscape) and (max-height:600px){.qrmob .qrk{grid-template-columns:repeat(4,minmax(0,1fr))}.qrmob .qrm,.qrmob .qrb3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (orientation:landscape) and (max-height:600px){.qrmob .qrg{grid-template-columns:repeat(4,minmax(0,1fr))}.qrmob .qrg>.qrc.bg2{grid-column:span 2!important}}
 
 .qrmx{flex:none;width:26px;height:26px;padding:0;border-radius:8px;border:1px solid var(--pbd);background:transparent;color:var(--pt);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .qrdg{flex:1;min-height:0;overflow:hidden;display:flex;justify-content:center;align-items:flex-start}
@@ -1238,9 +1244,12 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qrdf{align-self:stretch;display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;line-height:1.2}.qrdf b{font-size:13px;color:#ED7D31}
 .qrdg.big{overflow:visible}.qrdg.big .qrdp img{max-height:68vh}.qrdg.big .qrdn{width:240px;height:180px}.qrdg.big .qrdd{width:22px;height:22px;margin:-11px 0 0 -11px;font-size:12px;line-height:18px;border-width:2px}.qrdg.big .qrdc{font-size:13px;padding:2px 10px;border-width:2px}.qrdg.big .qrdl line{stroke-width:1.8}.qrdg.big .qrdi{max-height:none}.qrdg.big .qhl{overflow:visible}.qrdg.big .qhh,.qrdg.big .qhr{grid-template-columns:30px minmax(0,1fr) 110px 40px;gap:10px;padding:6px 10px}.qrdg.big .qhh{font-size:12px;padding-top:0}.qrdg.big .qhr{font-size:14px}.qrdg.big .qhb i{width:20px;height:20px;font-size:12px}.qrdg.big .qhn{white-space:normal}.qrdg.big .qhe{font-size:14px}.qrdg.big .qrdf{font-size:15px}.qrdg.big .qrdf b{font-size:22px}
 .qrfs .qrfc{position:fixed;inset:0;max-width:none;width:auto;height:auto;margin:0;border-radius:0;overflow:auto;padding:16px}
-.qrbd{display:grid;grid-template-columns:31% minmax(0,1fr);gap:10px;min-height:0}.qrr{display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:10px;min-height:0}.qrbd .qrc{min-height:0;overflow:hidden}.qrb3 .qrc{padding:8px 9px}.qrb3 .qrt{font-size:12px}.qrb3 .qrtr{grid-template-columns:minmax(0,1fr) 26px 26px minmax(0,50px);gap:4px;font-size:11px}.qrb3 .qrtr>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qrbd .qrth .qrt{white-space:nowrap}
-.qrmob .qrbd,.qrmob .qrr{display:flex;flex-direction:column;gap:8px}.qrmob .qrdp img{max-height:340px}
-.qrk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.qrm{display:grid;grid-template-columns:1.5fr 1fr;gap:10px}.qrb3{display:grid;grid-template-columns:1fr 1.25fr 1.25fr;gap:10px}
+.qrg>.qrc{position:relative;min-width:0;min-height:0;overflow:hidden}.qrg>.qrc.k3{padding:8px 9px}.k3 .qrt{font-size:12px}.k3 .qrtr{grid-template-columns:minmax(0,1fr) 26px 26px minmax(0,50px);gap:4px;font-size:11px}.k3 .qrtr>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qrg .qrth .qrt{white-space:nowrap}
+.qrmob .qrdp img{max-height:340px}
+.qrg{display:grid;grid-template-columns:repeat(48,minmax(0,1fr));grid-template-rows:repeat(24,minmax(0,1fr));gap:10px;min-height:0}
+.qred{outline:1px dashed rgba(56,189,248,.6);outline-offset:4px}.qred>.qrc{cursor:move;outline:2px dashed #38bdf8;outline-offset:-2px;touch-action:none;user-select:none;-webkit-user-select:none}.qred>.qrc>*{pointer-events:none}.qred>.qrc.drag{outline-color:#f59e0b;z-index:5;opacity:.88}
+.qrlb2{position:absolute;left:6px;top:4px;z-index:6;font-size:10px;font-weight:700;background:#38bdf8;color:#04283a;border-radius:4px;padding:0 5px;pointer-events:none}.qrrz{position:absolute;right:0;bottom:0;width:20px;height:20px;z-index:7;cursor:nwse-resize;background:linear-gradient(135deg,transparent 50%,#38bdf8 50%);pointer-events:auto!important}
+.qrlyb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px;font-size:12px;color:#bfdbfe}.qrlyb button{padding:6px 14px;border-radius:999px;background:#B4C7E7;color:#1f3864;font-weight:600;font-size:12px}.qrlyb button.on{background:#E91AB9;color:#fff}
 .qrt{font-size:13px;font-weight:600}.qrsub{font-size:12px;color:var(--pm);line-height:1.5;text-align:right}.qrbig{font-size:34px;font-weight:600;line-height:1}
 .qrrow{display:flex;align-items:center;justify-content:space-between;flex:1}
 .qrth{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}.qrpl{display:flex;gap:6px}
@@ -1458,7 +1467,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=243;
+const APP_REV=244;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2886,7 +2895,8 @@ const cm=x[4]&&(x[4].t||x[4].i);qgDef(x[2]).forEach(m=>{const t=String(m.t||'').
 const dn=qgDone(P,n);if(dn)d.pal++;if(hn)d.pj.ng++;else if(hs)d.pj.os++;else if(dn)d.pj.ok++;else d.pj.be++}
 ['A'].forEach(c=>{const tg=qgTgt(day,it.k,c),o=qgOkN(P,c);d.sl.push({k:it.n,p:tg>0?Math.round(o/tg*100):null,dc:di,df:dl,im:qgImg(it.k)})})});
 d.bs=Math.max(0,d.palAll*QG_N-d.ok-d.ng-d.os);return d}
-function qgRepSheet(day,th){const d=qgRepData(day),chk=d.ok+d.ng,C=131.95,
+function qgRepSheet(day,th,ed){const L=qgLay(ed),co=(id,cl)=>{const a=L[id];return`<div class="qrc ${cl}" data-c="${id}" style="grid-column:${a[0]+1}/span ${a[2]};grid-row:${a[1]+1}/span ${a[3]}">${ed?'<b class="qrlb2">'+QGL_LB[id]+'</b><i class="qrrz"></i>':''}`};
+const d=qgRepData(day),chk=d.ok+d.ng,C=131.95,
 ring=(f,col)=>`<svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="21" fill="none" stroke="var(--tr)" stroke-width="7"/><circle cx="27" cy="27" r="21" fill="none" stroke="${col}" stroke-width="7" stroke-dasharray="${(Math.max(0,Math.min(1,f))*C).toFixed(1)} ${C}" transform="rotate(-90 27 27)"/></svg>`,
 dt=new Date(day+'T00:00:00'),dts=isNaN(dt)?day:dt.toLocaleDateString(LC(),{day:'numeric',month:'short',year:'numeric'}),
 jm=QG.jm=='p'?'p':'b',J=jm=='p'?[['OK',d.pj.ok,'#92D050'],['NG',d.pj.ng,'#ED7D31'],['Other Shift',d.pj.os,'#5B9BD5'],['Belum',d.pj.be,'var(--pm)']]:[['OK',d.ok,'#92D050'],['NG',d.ng,'#ED7D31'],['Other Shift',d.os,'#5B9BD5'],['Belum',d.bs,'var(--pm)']],
@@ -2902,15 +2912,15 @@ dots=df.slice(0,8).map(([t,q],i)=>{const x=(36+q/mq*210).toFixed(1),y=(104-(d.cm
 sc=df.length?`<svg viewBox="0 0 273 140" width="100%" class="qrsv"><line x1="30" y1="8" x2="30" y2="108" stroke="var(--pm)"/><line x1="30" y1="108" x2="268" y2="108" stroke="var(--pm)"/>${dots}<text x="150" y="132" text-anchor="middle">Total Defect</text><text x="10" y="60" transform="rotate(-90 10 60)" text-anchor="middle">C/M</text></svg>`:'<div class="qrem">Tidak ada defect tercatat</div>',
 tp=df.slice(0,4).map(([t,q],i,a)=>`<div class="qrtr"${i==a.length-1?' style="border-bottom:0"':''}><span>${esc(t)}</span><span>${q}</span><span>${d.cmc[t]||0}</span><span class="qrbar" style="width:${(q/mq*100).toFixed(0)}%;background:#ED7D31;height:12px"></span></div>`).join('');
 return`<div class="qrs ${th}${QG.dl==0?' nolb':''}"><div class="qrhd"><div><div class="qrlg"><img src="${QG_LOGO}" alt="ADM"></div></div><div class="qrtt"><div>DAILY SUMMARY REPORT</div><b>QUALITY GATE</b></div><div class="qrc qrdb"><div><em>Tanggal</em><b>${esc(dts)}</b></div><div><em>Shift</em><b style="color:#C55A11">${esc(qgRepShift(day))}</b></div></div></div>
-<div class="qrk"><div class="qrc"><div class="qrt">Total Check</div><div class="qrrow"><div class="qrbig">${qgFm(chk)}</div><div class="qrsub">Target ${d.tg?qgFm(d.tg):'-'}<br>Sisa ${d.tg?qgFm(Math.max(0,d.tg-chk)):'-'}</div></div></div>
-<div class="qrc"><div class="qrt">OK Rate</div><div class="qrrow">${ring(chk?d.ok/chk:0,'#92D050')}<div class="qrbig">${qgPct(d.ok,chk)}%</div></div></div>
-<div class="qrc"><div class="qrt">Total NG</div><div class="qrrow"><div class="qrbig" style="color:#ED7D31">${qgFm(d.ng)}</div><div class="qrsub">Other Shift ${qgFm(d.os)}<br>NG Rate ${qgPct(d.ng,chk)}%</div></div></div>
-<div class="qrc"><div class="qrt">Palet Selesai</div><div class="qrrow">${ring(d.palAll?d.pal/d.palAll:0,'#8FAADC')}<div class="qrbig">${d.pal}/${d.palAll}</div></div></div></div>
-<div class="qrbd"><div class="qrc"><div class="qrth"><div class="qrt">Highlight Issue</div><div style="display:flex;align-items:center;gap:6px;min-width:0">${qgHiSel(d)}${qgEyeBtn()}<button type="button" class="qrmx" aria-label="Layar penuh" onclick="qgDpMax(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div></div>${dpp}</div>
-<div class="qrr"><div class="qrc"><div class="qrth"><div class="qrt">DPU (Defect Per Unit)</div><button type="button" class="qrpill qrlb${QG.dl==0?'':' on'}" aria-label="Tampilkan atau sembunyikan data label" onclick="qgRepLb(this)">Data label</button></div>${dpu}</div>
-<div class="qrb3"><div class="qrc"><div class="qrth"><div class="qrt">Judge</div><div class="qrpl"><span class="qrpill${jm=='b'?' on':''}" role="button" onclick="qgRepSet('jm','b')">Body</span><span class="qrpill${jm=='p'?' on':''}" role="button" onclick="qgRepSet('jm','p')">Palet</span></div></div>${jr}</div>
-<div class="qrc"><div class="qrt">Defect / C/M</div>${sc}</div>
-<div class="qrc"><div class="qrt" style="margin-bottom:2px">Top Defect</div><div class="qrtr" style="color:var(--pm)"><span>Defect</span><span>Qty</span><span>C/M</span><span></span></div>${tp||'<div class="qrem">Tidak ada defect tercatat</div>'}</div></div></div></div></div>`}
+<div class="qrg${ed?' qred':''}">${co('tc','kp')}<div class="qrt">Total Check</div><div class="qrrow"><div class="qrbig">${qgFm(chk)}</div><div class="qrsub">Target ${d.tg?qgFm(d.tg):'-'}<br>Sisa ${d.tg?qgFm(Math.max(0,d.tg-chk)):'-'}</div></div></div>
+${co('ok','kp')}<div class="qrt">OK Rate</div><div class="qrrow">${ring(chk?d.ok/chk:0,'#92D050')}<div class="qrbig">${qgPct(d.ok,chk)}%</div></div></div>
+${co('ng','kp')}<div class="qrt">Total NG</div><div class="qrrow"><div class="qrbig" style="color:#ED7D31">${qgFm(d.ng)}</div><div class="qrsub">Other Shift ${qgFm(d.os)}<br>NG Rate ${qgPct(d.ng,chk)}%</div></div></div>
+${co('pl','kp')}<div class="qrt">Palet Selesai</div><div class="qrrow">${ring(d.palAll?d.pal/d.palAll:0,'#8FAADC')}<div class="qrbig">${d.pal}/${d.palAll}</div></div></div>
+${co('hi','bg1')}<div class="qrth"><div class="qrt">Highlight Issue</div><div style="display:flex;align-items:center;gap:6px;min-width:0">${qgHiSel(d)}${qgEyeBtn()}<button type="button" class="qrmx" aria-label="Layar penuh" onclick="qgDpMax(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div></div>${dpp}</div>
+${co('dpu','bg1')}<div class="qrth"><div class="qrt">DPU (Defect Per Unit)</div><button type="button" class="qrpill qrlb${QG.dl==0?'':' on'}" aria-label="Tampilkan atau sembunyikan data label" onclick="qgRepLb(this)">Data label</button></div>${dpu}</div>
+${co('jd','bg2 k3')}<div class="qrth"><div class="qrt">Judge</div><div class="qrpl"><span class="qrpill${jm=='b'?' on':''}" role="button" onclick="qgRepSet('jm','b')">Body</span><span class="qrpill${jm=='p'?' on':''}" role="button" onclick="qgRepSet('jm','p')">Palet</span></div></div>${jr}</div>
+${co('dc','bg2 k3')}<div class="qrt">Defect / C/M</div>${sc}</div>
+${co('td','bg2 k3')}<div class="qrt" style="margin-bottom:2px">Top Defect</div><div class="qrtr" style="color:var(--pm)"><span>Defect</span><span>Qty</span><span>C/M</span><span></span></div>${tp||'<div class="qrem">Tidak ada defect tercatat</div>'}</div></div></div>`}
 function qgSumView(){const day=qgDay(),sz=QG.rs=='A3'?'A3':'A4',th=QG.rt=='l'?'l':'d',b=(k,v,t,on)=>`<button type="button" class="qrb${on?' on':''}" onclick="qgRepSet('${k}',${v})">${t}</button>`;
 return`<div class="qgov t3 qgsm" onclick="if(event.target===this){QG.sum=0;render()}"><div class="c qgc qgsmc qrw"><button type="button" class="qgx" aria-label="Tutup" onclick="QG.sum=0;render()">&times;</button>
 <div class="qgsH"><b>Summary Report</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div>
@@ -2919,6 +2929,24 @@ return`<div class="qgov t3 qgsm" onclick="if(event.target===this){QG.sum=0;rende
 <div class="qgsf">Dibuat ${esc(new Date().toLocaleString(LC()))}</div>
 <button type="button" class="qgpb" onclick="qgPrint()">Cetak / PDF (${sz} landscape)</button></div></div>`}
 function qgRepSet(k,v){QG[k]=v;render()}
+/* Layout dashboard (Summary Report) = grid 48 kolom x 24 baris. Tiap kartu [x,y,w,h]. Layout tersimpan di D.M.qgly (sinkron ke semua perangkat), hanya Developer yang boleh mengubah (mode PC). HP tetap satu kolom lewat CSS .qrmob */
+const QGL_DEF={tc:[0,0,12,5],ok:[12,0,12,5],ng:[24,0,12,5],pl:[36,0,12,5],hi:[0,5,15,19],dpu:[15,5,33,9],jd:[15,14,9,10],dc:[24,14,12,10],td:[36,14,12,10]};
+const QGL_LB={tc:'Total Check',ok:'OK Rate',ng:'Total NG',pl:'Palet Selesai',hi:'Highlight Issue',dpu:'DPU',jd:'Judge',dc:'Defect / C/M',td:'Top Defect'};
+const qgLayOk=a=>Array.isArray(a)&&a.length==4&&a.every(Number.isInteger)&&a[0]>=0&&a[1]>=0&&a[2]>=4&&a[3]>=3&&a[0]+a[2]<=48&&a[1]+a[3]<=24;
+function qgLay(ed){const s=ed&&QG.edl?QG.edl:(((D.M||{}).qgly||{}).c||{}),o={};Object.keys(QGL_DEF).forEach(k=>{o[k]=qgLayOk(s[k])?s[k]:QGL_DEF[k]});return o}
+const qgLyCp=o=>JSON.parse(JSON.stringify(o));
+function qgLyEdit(){if(!isDev()||!qgPcOn())return;QG.edl=qgLyCp(qgLay(false));QG.ed=1;render()}
+function qgLyCancel(){QG.ed=0;QG.edl=null;render()}
+function qgLyReset(){QG.edl=qgLyCp(QGL_DEF);render()}
+function qgLySave(){if(!isDev())return;D.M=D.M||{};D.M.qgly={v:1,c:qgLyCp(QG.edl||qgLay(false)),by:myEm(),at:Date.now()};D.masterT=Date.now();save(true);QG.ed=0;QG.edl=null;render();toast('Layout dashboard disimpan')}
+function qgLyHit(id,n){const E=QG.edl||{};return Object.keys(E).some(k=>{if(k==id)return false;const a=E[k];return n[0]<a[0]+a[2]&&n[0]+n[2]>a[0]&&n[1]<a[1]+a[3]&&n[1]+n[3]>a[1]})}
+let QGLD=null;
+document.addEventListener('pointerdown',e=>{if(!QG.ed||!e.target.closest)return;const c=e.target.closest('.qred>.qrc');if(!c||!QG.edl)return;const id=c.dataset.c,L=QG.edl[id];if(!L)return;e.preventDefault();const g=c.parentNode,r=g.getBoundingClientRect(),k=(r.width/g.offsetWidth)||1,cw=(g.offsetWidth-47*10)/48,rh=(g.offsetHeight-23*10)/24;
+QGLD={c,id,m:e.target.classList.contains('qrrz')?'r':'m',x0:e.clientX,y0:e.clientY,L:L.slice(),px:(cw+10)*k,py:(rh+10)*k};try{c.setPointerCapture(e.pointerId)}catch(_){}c.classList.add('drag')});
+document.addEventListener('pointermove',e=>{const z=QGLD;if(!z||!QG.edl)return;const dx=Math.round((e.clientX-z.x0)/z.px),dy=Math.round((e.clientY-z.y0)/z.py);let[x,y,w,h]=z.L;
+if(z.m=='m'){x=Math.max(0,Math.min(48-w,x+dx));y=Math.max(0,Math.min(24-h,y+dy))}else{w=Math.max(4,Math.min(48-x,w+dx));h=Math.max(3,Math.min(24-y,h+dy))}
+const n=[x,y,w,h];if(qgLyHit(z.id,n))return;QG.edl[z.id]=n;z.c.style.gridColumn=(x+1)+'/span '+w;z.c.style.gridRow=(y+1)+'/span '+h});
+const qgLyEnd=()=>{if(QGLD){QGLD.c.classList.remove('drag');QGLD=null}};document.addEventListener('pointerup',qgLyEnd);document.addEventListener('pointercancel',qgLyEnd);
 /* Highlight Issue: satu panel (item) per tampilan, dipilih lewat dropdown di atas. Foto item + titik defect bernomor + callout nama defect + total defect. big = layar penuh */
 function qgHiIdx(d){return Math.max(0,Math.min(d.sl.length-1,+QG.hi||0))}
 function qgHiSel(d){if(!d.sl.length)return'';const i=qgHiIdx(d);return`<select class="qrsel" aria-label="Pilih panel" onchange="qgHiSet(this.value)">${d.sl.map((s,k)=>`<option value="${k}"${k==i?' selected':''}>${esc(s.k)} (${s.dc||0})</option>`).join('')}</select>`}
@@ -2941,7 +2969,7 @@ return`<div class="qrdg${big?' big':''}"><div class="qrdi">${box}<div class="qrd
 function qgDpMax(v){QG.dpx=v?1:0;render()}
 function qgDpView(){const day=qgDay(),d=qgRepData(day);return`<div class="qgov t4 qrfs" onclick="if(event.target===this)qgDpMax(0)"><div class="c qgc qrfc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDpMax(0)">&times;</button><div class="qgsH"><b>Highlight Issue</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div><div class="qrfsl">${qgHiSel(d)}${qgEyeBtn()}</div>${qgDpp(d,1)}</div></div>`}
 /* Summary Report tampil langsung di halaman Quality Gate (menggantikan dashboard lama); popup tetap dipakai untuk Download & Print */
-function qgInRep(day){return`<div class="qrin"><div class="qrwrap qrwi">${qgRepSheet(day,QG.rt=='l'?'l':'d')}</div></div>`}
+function qgInRep(day){const pc=isDev()&&qgPcOn(),ed=pc&&!!QG.ed,bar=pc?(ed?`<div class="qrlyb"><span>Mode edit: geser kartu, tarik pojok kanan bawah untuk ubah ukuran</span><button type="button" class="on" onclick="qgLySave()">Simpan</button><button type="button" onclick="qgLyReset()">Reset</button><button type="button" onclick="qgLyCancel()">Batal</button></div>`:`<div class="qrlyb"><button type="button" onclick="qgLyEdit()">Edit layout</button></div>`):'';return`<div class="qrin">${bar}<div class="qrwrap qrwi">${qgRepSheet(day,QG.rt=='l'?'l':'d',ed)}</div></div>`}
 function qgInFit(){document.querySelectorAll('.qrwi').forEach(w=>{const s=w.querySelector('.qrs');if(!s)return;const k=Math.min(1,w.clientWidth/900);s.style.transform='scale('+k+')';w.style.height=Math.round(636*k)+'px'})}
 addEventListener('resize',()=>{if(typeof scr!=='undefined'&&scr=='qg')qgInFit()});
 /* DPU (Defect Per Unit) per item = jumlah defect item / target produksi hari itu; standar maksimal 0.25 */
