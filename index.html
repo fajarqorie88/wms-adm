@@ -1069,6 +1069,15 @@ html[data-view=pc] .qgr.p .qgbw>input.qg-in.m{padding:0 6px;font-size:16px}html[
 .qgov.t2 .qgc{max-width:500px}
 .qgpill{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;background:#99e0cf;color:#0f3d34;border:1px solid #14b8a6;flex:none}
 .qgpill.on{background:#14b8a6;color:#fff}
+.qgg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.qgg2 button{width:100%;height:40px;margin:0;padding:0 8px;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;font-size:13px;box-sizing:border-box}
+html[data-view=pc] .qgg2 button{height:44px;font-size:15px}
+.qgtr{flex:none;margin-left:auto;width:48px;height:48px;border:0;border-radius:8px;background:#dc2626;color:#fff;font-size:10px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.qgtr:active{background:#b91c1c}
+.qgtr span{font-size:18px;line-height:1}
+.qgdw{border-radius:10px;margin-bottom:6px}
+.qgdw .qgdl{margin-bottom:0;border-radius:10px}
+.qgdw .sw-del{border-radius:0 10px 10px 0}
 .qgev{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
 .qgev img{width:84px;height:62px;object-fit:cover;border-radius:8px;border:1px solid rgba(148,163,184,.5)}
 .qgch{font-size:12px;padding:4px 10px;border-radius:999px;background:rgba(148,163,184,.2)}
@@ -1422,7 +1431,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=237;
+const APP_REV=238;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2735,7 +2744,7 @@ function qgDfAdd(){QG.df.ed=-1;QG.df.nx=null;QG.df.ny=null;qgMkInit();render();q
 function qgDfEdit(n){QG.df.ed=n;qgMkInit();render();qgFocus()}
 function qgMkOk(){const d=QG.df,t=String(d.pn||'').trim();if(!t)return toast('Isi nama defect dulu');const c=String(d.pc||'').trim();qgLibAdd(t,c);if(d.ed==-1)d.m.push({x:d.nx,y:d.ny,t,c,e:d.pe||''});else if(d.m[d.ed]){const m=d.m[d.ed];m.t=t;m.c=c;m.e=d.pe||''}d.ed=-2;render()}
 function qgMkDelImg(){QG.df.pe='';QG.df.po=0;render()}
-function qgMkDel(){const d=QG.df;if(d.ed>=0)d.m.splice(d.ed,1);d.ed=-2;render()}
+function qgDfRm(n){const d=QG.df,x=d&&d.m[n];if(!x||!confirm('Hapus defect "'+x.t+'"?'))return;d.m.splice(n,1);if(typeof swClose=='function')swClose();render()}
 function qgMkCancel(){QG.df.ed=-2;render()}
 function qgMkPick(t){QG.df.pn=t;const e=$('#qgMk');if(e){e.value=t;e.focus()}const l=qgLib()[t];if(!QG.df.pc&&l&&l[0]){QG.df.pc=l[0];const c=$('#qgMkC');if(c)c.value=l[0]}}
 function qgUpImg(inp){const f=inp.files&&inp.files[0];inp.value='';if(!f)return;if(!/^image\//.test(f.type))return toast('File harus berupa gambar');const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const enc=(mx,q)=>{const sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)};let u=enc(900,.65);if(u.length>300000)u=enc(700,.5);D.M.qgimg=D.M.qgimg||{};D.M.qgimg[QG.part]=u;qgCommit();toast('Gambar panel tersimpan')};im.onerror=()=>toast('Gambar tidak bisa dibaca');im.src=rd.result};rd.readAsDataURL(f)}
@@ -2743,17 +2752,18 @@ function qgDfView(){const d=QG.df,k=QG.part,img=qgImg(k),m=d.m,row=QG.draft[d.i]
 let dots='';m.forEach((x,n)=>{if(x.x==null)return;dots+=`<span class="qgd" data-m="${n}" style="left:${x.x}%;top:${x.y}%">${n+1}</span><span class="qgco${x.x>55?' l':''}" data-m="${n}" style="left:${x.x}%;top:${x.y}%">${esc(x.t)}</span>`});
 if(d.ed==-1&&d.nx!=null)dots+=`<span class="qgd new" style="left:${d.nx}%;top:${d.ny}%">+</span>`;
 const box=img?`<div class="qgim" onclick="qgImgTap(event)"><img src="${img}" alt="Panel" draggable="false">${dots}</div><p class="text-xs" style="opacity:.7;margin:4px 0 0">Ketuk gambar untuk menandai titik defect, ketuk titik merah untuk mengubah.</p>`:`<div class="qgim0">Belum ada gambar panel untuk item ini.<br>Upload dulu, atau tambah defect tanpa titik.</div>`;
-const list=m.length?m.map((x,n)=>`<div class="qgdl" onclick="qgDfEdit(${n})"><span class="qgd s">${n+1}</span><span style="flex:1;min-width:0"><span style="display:block">${esc(x.t)}</span><span class="text-xs" style="display:block;opacity:${x.c||x.e?.8:.45};margin-top:2px">C/M: ${x.c||x.e?esc(x.c||'Evidence')+(x.c&&x.e?' &#128247;':''):'belum diisi'}</span></span><span class="text-xs" style="opacity:.6">${x.x==null?'tanpa titik':'titik'}</span></div>`).join(''):'<p class="text-sm" style="opacity:.6;text-align:center;padding:8px 0">Belum ada defect.</p>';
+const list=m.length?m.map((x,n)=>`<div class="sw-c qgdw"><button type="button" class="sw-del" aria-label="Hapus defect" onclick="event.stopPropagation();qgDfRm(${n})"><span style="font-size:20px">&#128465;</span>Hapus</button><div class="sw-in qgdl" onclick="qgDfEdit(${n})"><span class="qgd s">${n+1}</span><span style="flex:1;min-width:0"><span style="display:block">${esc(x.t)}</span><span class="text-xs" style="display:block;opacity:${x.c||x.e?.8:.45};margin-top:2px">C/M: ${x.c||x.e?esc(x.c||'Evidence')+(x.c&&x.e?' &#128247;':''):'belum diisi'}</span></span><span class="text-xs" style="opacity:.6">${x.x==null?'tanpa titik':'titik'}</span></div></div>`).join(''):'<p class="text-sm" style="opacity:.6;text-align:center;padding:8px 0">Belum ada defect.</p>';
 let pop='';if(d.ed!=-2){const cur=d.pn||'',kb=d.pe?qgBytes(d.pe):0,orig=d.po?(d.po>1048576?(d.po/1048576).toFixed(1).replace('.',',')+' MB':Math.round(d.po/1024)+' KB'):'',ch=qgLibNames(k).map(t=>`<button type="button" class="qgch" data-t="${esc(t)}" onclick="qgMkPick(this.dataset.t)"${qgLib()[t]?` oncontextmenu="event.preventDefault();qgLibDel(this.dataset.t)"`:''}>${esc(t)}</button>`).join(''),cl=(qgLib()[String(cur).trim()]||[]),cch=cl.map(t=>`<button type="button" class="qgch" data-t="${esc(t)}" onclick="qgMkPickCm(this.dataset.t)">${esc(t.length>40?t.slice(0,40)+'…':t)}</button>`).join('');
 pop=`<div class="qgov t4" onclick="if(event.target===this)qgMkCancel()"><div class="c qgc" style="max-width:340px"><b style="font-size:15px">${d.ed>=0?'Edit Defect '+(d.ed+1):'Defect Baru'}</b><input id="qgMk" class="i" maxlength="60" value="${esc(cur)}" placeholder="Nama defect (contoh: Spatter)" style="margin:8px 0" autocomplete="off" oninput="QG.df.pn=this.value" onkeydown="if(event.key=='Enter')qgMkOk()">${ch?`<div class="qgchs">${ch}</div>`:''}
 <label class="text-xs opacity-70 mt-2" style="display:block">C/M (Counter Measure)</label><textarea id="qgMkC" class="i" rows="3" maxlength="200" placeholder="Action yang dilakukan untuk defect ini" style="margin:4px 0" oninput="QG.df.pc=this.value">${esc(d.pc||'')}</textarea>${cch?`<div class="qgchs">${cch}</div>`:''}
 <label class="text-xs opacity-70 mt-2" style="display:block">Evidence</label>
-<div class="qgev"><button type="button" class="qgpill${d.pe?' on':''}" onclick="document.getElementById('qgMkFileC').click()">&#128247; Kamera</button><button type="button" class="qgpill" onclick="document.getElementById('qgMkFile').click()">Galeri</button>${d.pe?`<img src="${d.pe}" alt="Evidence"><span class="text-xs" style="opacity:.75;line-height:1.5">${orig?orig+' &rarr; ':''}${Math.round(kb/1024)} KB<br>Ambil ulang atau pilih lagi untuk ganti</span>`:'<span class="text-xs" style="opacity:.7">Foto dikompres otomatis maks 100 KB.</span>'}</div>
-<input type="file" id="qgMkFile" accept="image/*" hidden onchange="qgMkUp(this)"><input type="file" id="qgMkFileC" accept="image/*" capture="environment" hidden onchange="qgMkUp(this)"><div class="flex gap-2 mt-3">${d.pe?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgMkDelImg()">Hapus foto</button>`:''}${d.ed>=0?`<button type="button" class="b b2" style="flex:none;color:#dc2626" onclick="qgMkDel()">Hapus</button>`:''}<button type="button" class="b b2" style="flex:1" onclick="qgMkCancel()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgMkOk()">Simpan</button></div></div></div>`}
+<div class="qgg2"><button type="button" class="qgpill${d.pe?' on':''}" onclick="document.getElementById('qgMkFileC').click()">&#128247; Kamera</button><button type="button" class="qgpill" onclick="document.getElementById('qgMkFile').click()">&#128444; Galeri</button></div>
+<div class="qgev">${d.pe?`<img src="${d.pe}" alt="Evidence"><span class="text-xs" style="opacity:.75;line-height:1.5;flex:1;min-width:0">${orig?orig+' &rarr; ':''}${Math.round(kb/1024)} KB<br>Ambil ulang atau pilih lagi untuk ganti</span><button type="button" class="qgtr" aria-label="Hapus foto" onclick="qgMkDelImg()"><span>&#128465;</span>Hapus</button>`:'<span class="text-xs" style="opacity:.7">Foto dikompres otomatis maks 100 KB.</span>'}</div>
+<input type="file" id="qgMkFile" accept="image/*" hidden onchange="qgMkUp(this)"><input type="file" id="qgMkFileC" accept="image/*" capture="environment" hidden onchange="qgMkUp(this)"><div class="flex gap-2 mt-3"><button type="button" class="b b2" style="flex:1" onclick="qgMkCancel()">Batal</button><button type="button" class="b" style="flex:1" onclick="qgMkOk()">Simpan</button></div></div></div>`}
 return`<div class="qgov t3" onclick="if(event.target===this)qgDfCancel()"><div class="c qgc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDfCancel()">&times;</button>
 <div class="qg-ttl"><b>Defect - Part ${d.i+1}</b><span>${esc(row[0]||'')}</span></div>
 ${box}
-<div class="flex gap-2 mt-2"><button type="button" class="b b2" style="flex:1" onclick="document.getElementById('qgFileC').click()">&#128247; Kamera</button><button type="button" class="b b2" style="flex:1" onclick="document.getElementById('qgFile').click()">${img?'Ganti (galeri)':'Galeri'}</button><button type="button" class="b b2" style="flex:1" onclick="qgDfAdd()">+ Tanpa titik</button></div><input type="file" id="qgFile" accept="image/*" hidden onchange="qgUpImg(this)"><input type="file" id="qgFileC" accept="image/*" capture="environment" hidden onchange="qgUpImg(this)">
+<div class="qgg2" style="margin-top:8px"><button type="button" class="b b2" onclick="document.getElementById('qgFileC').click()">&#128247; Kamera</button><button type="button" class="b b2" onclick="document.getElementById('qgFile').click()">&#128444; Galeri</button></div><button type="button" class="b b2 w-full" style="margin:8px 0 0" onclick="qgDfAdd()">+ Tanpa titik</button><input type="file" id="qgFile" accept="image/*" hidden onchange="qgUpImg(this)"><input type="file" id="qgFileC" accept="image/*" capture="environment" hidden onchange="qgUpImg(this)">
 <hr class="qg-hr"><b class="text-sm">List defect (${m.length})</b><div class="mt-2">${list}</div>
 <button type="button" class="b w-full mt-3" onclick="qgDfDone()">Selesai</button></div></div>${pop}`}
 
