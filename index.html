@@ -1223,10 +1223,18 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qrsel option{color:#111;background:#fff}
 .qrfsl{margin:8px 0}.qrfsl .qrsel{max-width:100%;width:100%;height:40px;font-size:15px;padding:0 10px;color:inherit}
 .qrdd{position:absolute;width:15px;height:15px;margin:-7.5px 0 0 -7.5px;border-radius:50%;background:#ef4444;border:1.5px solid #fff;color:#fff;font-size:9px;font-weight:700;line-height:12px;text-align:center}
-.qrdc{position:absolute;transform:translate(8px,-50%);background:#fff;color:#111;border:1px solid #ef4444;border-radius:5px;padding:0 5px;font-size:9px;line-height:1.35;white-space:nowrap;max-width:60%;overflow:hidden;text-overflow:ellipsis}
-.qrdc.l{transform:translate(calc(-100% - 8px),-50%)}
+.qrdc{position:absolute;transform:translate(-50%,-50%);z-index:2;background:#FFA9A9;color:#7A0000;border:1.5px solid #C00000;border-radius:999px;padding:1px 7px;font-size:9px;font-weight:600;line-height:1.35;white-space:nowrap;max-width:70%;overflow:hidden;text-overflow:ellipsis}
+.qrdl{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}.qrdl line{stroke:#C00000;stroke-width:1.3;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.qrdd{z-index:3}
+.qrdi{max-height:100%;min-height:0}.qrdp,.qrdf{flex:none}
+.qhl{align-self:stretch;margin-top:6px;padding-top:6px;border-top:1px solid var(--pbd,rgba(148,163,184,.5));display:flex;flex-direction:column;gap:4px;min-height:0;overflow:auto}
+.qhr{display:flex;align-items:center;gap:6px;background:var(--tr,rgba(148,163,184,.14));border-radius:6px;padding:3px 6px;font-size:11px;line-height:1.3}
+.qhb{display:flex;flex-wrap:wrap;gap:2px;max-width:45%;flex:none}.qhb i{width:14px;height:14px;border-radius:50%;background:#ef4444;color:#fff;font-size:9px;font-weight:700;font-style:normal;display:flex;align-items:center;justify-content:center}
+.qhn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qhq{flex:none;color:#ED7D31;font-weight:700}.qhe{font-size:11px;opacity:.7;text-align:center;padding:4px 0}
+.qrfsl{display:flex;align-items:center;gap:8px}.qrfsl .qrmx{width:40px;height:40px}
+
 .qrdf{align-self:stretch;display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;line-height:1.2}.qrdf b{font-size:13px;color:#ED7D31}
-.qrdg.big{overflow:visible}.qrdg.big .qrdp img{max-height:68vh}.qrdg.big .qrdn{width:240px;height:180px}.qrdg.big .qrdd{width:22px;height:22px;margin:-11px 0 0 -11px;font-size:12px;line-height:18px;border-width:2px}.qrdg.big .qrdc{font-size:13px;padding:2px 8px;transform:translate(15px,-50%);border-width:1.5px;border-radius:8px}.qrdg.big .qrdc.l{transform:translate(calc(-100% - 15px),-50%)}.qrdg.big .qrdf{font-size:15px}.qrdg.big .qrdf b{font-size:22px}
+.qrdg.big{overflow:visible}.qrdg.big .qrdp img{max-height:68vh}.qrdg.big .qrdn{width:240px;height:180px}.qrdg.big .qrdd{width:22px;height:22px;margin:-11px 0 0 -11px;font-size:12px;line-height:18px;border-width:2px}.qrdg.big .qrdc{font-size:13px;padding:2px 10px;border-width:2px}.qrdg.big .qrdl line{stroke-width:1.8}.qrdg.big .qrdi{max-height:none}.qrdg.big .qhl{overflow:visible}.qrdg.big .qhr{font-size:14px;padding:6px 10px;gap:10px}.qrdg.big .qhb i{width:20px;height:20px;font-size:12px}.qrdg.big .qhn{white-space:normal}.qrdg.big .qhe{font-size:14px}.qrdg.big .qrdf{font-size:15px}.qrdg.big .qrdf b{font-size:22px}
 .qrfs .qrfc{position:fixed;inset:0;max-width:none;width:auto;height:auto;margin:0;border-radius:0;overflow:auto;padding:16px}
 .qrbd{display:grid;grid-template-columns:31% minmax(0,1fr);gap:10px;min-height:0}.qrr{display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:10px;min-height:0}.qrbd .qrc{min-height:0;overflow:hidden}.qrb3 .qrc{padding:8px 9px}.qrb3 .qrt{font-size:12px}.qrb3 .qrtr{grid-template-columns:minmax(0,1fr) 26px 26px minmax(0,50px);gap:4px;font-size:11px}.qrb3 .qrtr>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qrbd .qrth .qrt{white-space:nowrap}
 .qrmob .qrbd,.qrmob .qrr{display:flex;flex-direction:column;gap:8px}.qrmob .qrdp img{max-height:340px}
@@ -1448,7 +1456,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=241;
+const APP_REV=242;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2896,7 +2904,7 @@ return`<div class="qrs ${th}${QG.dl==0?' nolb':''}"><div class="qrhd"><div><div 
 <div class="qrc"><div class="qrt">OK Rate</div><div class="qrrow">${ring(chk?d.ok/chk:0,'#92D050')}<div class="qrbig">${qgPct(d.ok,chk)}%</div></div></div>
 <div class="qrc"><div class="qrt">Total NG</div><div class="qrrow"><div class="qrbig" style="color:#ED7D31">${qgFm(d.ng)}</div><div class="qrsub">Other Shift ${qgFm(d.os)}<br>NG Rate ${qgPct(d.ng,chk)}%</div></div></div>
 <div class="qrc"><div class="qrt">Palet Selesai</div><div class="qrrow">${ring(d.palAll?d.pal/d.palAll:0,'#8FAADC')}<div class="qrbig">${d.pal}/${d.palAll}</div></div></div></div>
-<div class="qrbd"><div class="qrc"><div class="qrth"><div class="qrt">Highlight Issue</div><div style="display:flex;align-items:center;gap:6px;min-width:0">${qgHiSel(d)}<button type="button" class="qrmx" aria-label="Layar penuh" onclick="qgDpMax(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div></div>${dpp}</div>
+<div class="qrbd"><div class="qrc"><div class="qrth"><div class="qrt">Highlight Issue</div><div style="display:flex;align-items:center;gap:6px;min-width:0">${qgHiSel(d)}${qgEyeBtn()}<button type="button" class="qrmx" aria-label="Layar penuh" onclick="qgDpMax(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div></div>${dpp}</div>
 <div class="qrr"><div class="qrc"><div class="qrth"><div class="qrt">DPU (Defect Per Unit)</div><button type="button" class="qrpill qrlb${QG.dl==0?'':' on'}" aria-label="Tampilkan atau sembunyikan data label" onclick="qgRepLb(this)">Data label</button></div>${dpu}</div>
 <div class="qrb3"><div class="qrc"><div class="qrth"><div class="qrt">Judge</div><div class="qrpl"><span class="qrpill${jm=='b'?' on':''}" role="button" onclick="qgRepSet('jm','b')">Body</span><span class="qrpill${jm=='p'?' on':''}" role="button" onclick="qgRepSet('jm','p')">Palet</span></div></div>${jr}</div>
 <div class="qrc"><div class="qrt">Defect / C/M</div>${sc}</div>
@@ -2913,12 +2921,23 @@ function qgRepSet(k,v){QG[k]=v;render()}
 function qgHiIdx(d){return Math.max(0,Math.min(d.sl.length-1,+QG.hi||0))}
 function qgHiSel(d){if(!d.sl.length)return'';const i=qgHiIdx(d);return`<select class="qrsel" aria-label="Pilih panel" onchange="qgHiSet(this.value)">${d.sl.map((s,k)=>`<option value="${k}"${k==i?' selected':''}>${esc(s.k)} (${s.dc||0})</option>`).join('')}</select>`}
 function qgHiSet(v){QG.hi=+v||0;render()}
+/* Callout Highlight Issue: satu pill per nama defect, garis dinamis dari pill ke tiap titik (posisi % dihitung ulang tiap render). Tombol mata menyala/mematikan pill + garis (titik tetap tampil). Daftar defect panel ada di bawah gambar */
+function qgHcOn(){try{return localStorage.getItem('qgHc')!='0'}catch(e){return QG.hcx!==false}}
+function qgHcTog(){const v=!qgHcOn();try{localStorage.setItem('qgHc',v?'1':'0')}catch(e){QG.hcx=v}render()}
+function qgEyeBtn(){const on=qgHcOn();return`<button type="button" class="qrmx" aria-label="${on?'Sembunyikan callout':'Tampilkan callout'}" aria-pressed="${on?'true':'false'}" onclick="qgHcTog()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>${on?'':'<path d="M3 3l18 18"/>'}</svg></button>`}
 function qgDpp(d,big){if(!d.sl.length)return'<div class="qrem">Belum ada item</div>';
-const s=d.sl[qgHiIdx(d)];let n=0;const dots=(s.df||[]).filter(x=>x.x!=null&&x.y!=null).map(x=>{n++;return`<span class="qrdd" style="left:${x.x}%;top:${x.y}%">${n}</span><span class="qrdc${x.x>55?' l':''}" style="left:${x.x}%;top:${x.y}%">${esc(x.t)}</span>`}).join(''),
-box=s.im?`<div class="qrdp"><img src="${s.im}" alt="" draggable="false">${dots}</div>`:`<div class="qrdp qrdn">${esc((qgRepLbl(s.k)[0]||'?').charAt(0).toUpperCase())}</div>`;
-return`<div class="qrdg${big?' big':''}"><div class="qrdi">${box}<div class="qrdf"><span>${esc(s.k)}</span><span><b>${s.dc||0}</b> defect</span></div></div></div>`}
+const s=d.sl[qgHiIdx(d)],cm=qgHcOn(),G={},O=[];let n=0;
+(s.df||[]).forEach(x=>{const t=x.t;if(!G[t]){G[t]={t,q:0,p:[]};O.push(t)}const g=G[t];g.q++;if(x.x!=null&&x.y!=null){n++;g.p.push({x:+x.x,y:+x.y,n})}});
+const pl=[];O.forEach(t=>{const g=G[t];if(!g.p.length)return;const lb=g.t+(g.q>1?' \u00d7'+g.q:''),w=Math.min(70,lb.length*2+7),cl=a=>Math.max(2,Math.min(98,a)),xs=g.p.map(a=>a.x),cx=Math.max(w/2+2,Math.min(98-w/2,xs.reduce((a,b)=>a+b,0)/xs.length)),by=Math.min(...g.p.map(a=>a.y))-13;let cy=cl(by);
+for(const o of [0,-11,11,-22,22,-33,33]){const y=Math.max(6,Math.min(94,by+o));if(!pl.some(q=>Math.abs(q.cx-cx)<(q.w+w)/2&&Math.abs(q.cy-y)<10)){cy=y;break}}
+pl.push({g,lb,w,cx,cy})});
+const dots=O.map(t=>G[t].p.map(a=>`<span class="qrdd" style="left:${a.x}%;top:${a.y}%">${a.n}</span>`).join('')).join(''),
+cls=cm?`<svg class="qrdl" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${pl.map(o=>o.g.p.map(a=>`<line x1="${o.cx.toFixed(1)}" y1="${o.cy.toFixed(1)}" x2="${a.x}" y2="${a.y}"/>`).join('')).join('')}</svg>${pl.map(o=>`<span class="qrdc" style="left:${o.cx.toFixed(1)}%;top:${o.cy.toFixed(1)}%">${esc(o.lb)}</span>`).join('')}`:'',
+box=s.im?`<div class="qrdp"><img src="${s.im}" alt="" draggable="false">${cls}${dots}</div>`:`<div class="qrdp qrdn">${esc((qgRepLbl(s.k)[0]||'?').charAt(0).toUpperCase())}</div>`,
+lst=O.length?O.map(t=>{const g=G[t];return`<div class="qhr">${g.p.length?`<span class="qhb">${g.p.map(a=>`<i>${a.n}</i>`).join('')}</span>`:''}<span class="qhn">${esc(g.t)}</span><span class="qhq">\u00d7${g.q}</span></div>`}).join(''):'<div class="qhe">Tidak ada defect</div>';
+return`<div class="qrdg${big?' big':''}"><div class="qrdi">${box}<div class="qrdf"><span>${esc(s.k)}</span><span><b>${s.dc||0}</b> defect</span></div><div class="qhl">${lst}</div></div></div>`}
 function qgDpMax(v){QG.dpx=v?1:0;render()}
-function qgDpView(){const day=qgDay(),d=qgRepData(day);return`<div class="qgov t4 qrfs" onclick="if(event.target===this)qgDpMax(0)"><div class="c qgc qrfc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDpMax(0)">&times;</button><div class="qgsH"><b>Highlight Issue</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div><div class="qrfsl">${qgHiSel(d)}</div>${qgDpp(d,1)}</div></div>`}
+function qgDpView(){const day=qgDay(),d=qgRepData(day);return`<div class="qgov t4 qrfs" onclick="if(event.target===this)qgDpMax(0)"><div class="c qgc qrfc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDpMax(0)">&times;</button><div class="qgsH"><b>Highlight Issue</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div><div class="qrfsl">${qgHiSel(d)}${qgEyeBtn()}</div>${qgDpp(d,1)}</div></div>`}
 /* Summary Report tampil langsung di halaman Quality Gate (menggantikan dashboard lama); popup tetap dipakai untuk Download & Print */
 function qgInRep(day){return`<div class="qrin"><div class="qrwrap qrwi">${qgRepSheet(day,QG.rt=='l'?'l':'d')}</div></div>`}
 function qgInFit(){document.querySelectorAll('.qrwi').forEach(w=>{const s=w.querySelector('.qrs');if(!s)return;const k=Math.min(1,w.clientWidth/900);s.style.transform='scale('+k+')';w.style.height=Math.round(636*k)+'px'})}
