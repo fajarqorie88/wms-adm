@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 252.
+<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 253.
   [x] Tahap 1: Summary Report = grid 48 kolom x 24 baris, 9 kartu (tc, ok, ng, pl, hi, dpu, jd, dc, td) pakai posisi [x,y,w,h]; default sama dengan tampilan lama; HP tetap satu kolom lewat CSS .qrmob (cari QGL_DEF, qgLay, .qrg)
   [x] Tahap 2: Mode edit Developer (PC saja): tombol Edit layout di QG, geser dan ubah ukuran kartu (snap ke grid, tidak boleh tumpang tindih), Simpan / Reset / Batal; layout disimpan di D.M.qgly dan ikut sinkron ke server (cari qgLyEdit, qgLySave)
   [x] Tahap 3: mode edit punya icon mata di tiap kartu (sembunyikan) dan daftar "Kartu tersembunyi" di bar edit (klik untuk tambah kembali, otomatis dicarikan ruang kosong); kartu tersembunyi disimpan sebagai 0 di D.M.qgly.c, tidak tampil di PC, HP, popup dan cetak PDF (cari qgLyHide, qgLyAdd, qgLyFit, .qrhid, .qrey)
@@ -1501,7 +1501,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=252;
+const APP_REV=253;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -3096,7 +3096,13 @@ for(let y=0;y<H;y++){let t=0;for(let i=0;i<W;i++){t+=p[(y*W+i)*4];I[(y+1)*(W+1)+
 const R=Math.max(8,Math.round(Math.min(W,H)/10)),out=new Uint8ClampedArray(p.length);
 for(let y=0;y<H;y++){const y0=Math.max(0,y-R),y1=Math.min(H-1,y+R);for(let i=0;i<W;i++){const x0=Math.max(0,i-R),x1=Math.min(W-1,i+R),n=(x1-x0+1)*(y1-y0+1),sm=I[(y1+1)*(W+1)+x1+1]-I[y0*(W+1)+x1+1]-I[(y1+1)*(W+1)+x0]+I[y0*(W+1)+x0],o=(y*W+i)*4,v=p[o]<(sm/n)*.88?0:255;out[o]=out[o+1]=out[o+2]=v;out[o+3]=255}}
 x.putImageData(new ImageData(out,W,H),0,0)}catch(e){}return c}
-function qgOcrCv(src,k,bin){const w=Math.max(1,Math.round(src.width*k)),h=Math.max(1,Math.round(src.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.imageSmoothingQuality='high';x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(src,0,0,w,h);if(bin)qgOcrBin(c);return c}
+/* Baris yang di-shade / diarsir (gelap bergaris-halus) membuat OCR melewatkan baris itu. Closing grayscale (dilate lalu erode) menghapus garis arsir yang tipis tapi angka tebal tetap utuh */
+function qgOcrDh(c){try{const x=c.getContext('2d'),W=c.width,H=c.height,d=x.getImageData(0,0,W,H),p=d.data,n=W*H,g=new Uint8ClampedArray(n);for(let i=0;i<n;i++)g[i]=p[i*4];const r=Math.max(1,Math.round(Math.max(W,H)/650));
+const ps=(S,mx)=>{const t=new Uint8ClampedArray(n),o=new Uint8ClampedArray(n);
+for(let y=0;y<H;y++){const b=y*W;for(let i=0;i<W;i++){let v=mx?0:255;const a=Math.max(0,i-r),e=Math.min(W-1,i+r);for(let k=a;k<=e;k++){const q=S[b+k];if(mx?q>v:q<v)v=q}t[b+i]=v}}
+for(let y=0;y<H;y++){const a=Math.max(0,y-r),e=Math.min(H-1,y+r);for(let i=0;i<W;i++){let v=mx?0:255;for(let k=a;k<=e;k++){const q=t[k*W+i];if(mx?q>v:q<v)v=q}o[y*W+i]=v}}return o};
+const o=ps(ps(g,1),0);for(let i=0;i<n;i++){p[i*4]=p[i*4+1]=p[i*4+2]=o[i];p[i*4+3]=255}x.putImageData(d,0,0)}catch(e){}return c}
+function qgOcrCv(src,k,bin){const w=Math.max(1,Math.round(src.width*k)),h=Math.max(1,Math.round(src.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.imageSmoothingQuality='high';x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(src,0,0,w,h);if(bin>=2)qgOcrDh(c);if(bin===true||bin==2)qgOcrBin(c);return c}
 /* Ambil nomor dari hasil baca: angka yang kepisah spasi digabung dulu. v = 5 angka terakhir, lo = perlu dicek user */
 function qgOcrLines(r){const d=r.data||{};if(d.lines&&d.lines.length)return d.lines;const o=[];try{(d.blocks||[]).forEach(b=>(b.paragraphs||[]).forEach(p=>(p.lines||[]).forEach(l=>o.push(l))))}catch(e){}if(o.length)return o;return String(d.text||'').split('\n').map(t=>({text:t,confidence:d.confidence}))}
 /* Kolom Sfx berisi angka tapi sering terbaca huruf (O/D/S/B/I/A...): kalau barisnya ada angka, atau mayoritas kolom angka, huruf yang mirip angka diganti angka */
@@ -3111,7 +3117,7 @@ it.forEach((x,k)=>{if(x.vr)return;let b=null,bd=1;if(x.y!=null)rl.forEach(q=>{if
 function qgOcrSub(c,x0,w){const p=12,o=document.createElement('canvas');o.width=Math.max(1,Math.round(w))+p;o.height=c.height;const g=o.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,o.width,o.height);g.drawImage(c,x0,0,w,c.height,x0?p:0,0,w,c.height);return o}
 function qgOcrParse(r,cap,mode,H){const it=[],L=qgOcrLines(r);
 L.forEach(l=>{if(it.length>=cap)return;const raw=String(l.text||'').toUpperCase(),cf=(l.confidence||0)<75;
-if(mode=='sfx'){const t=raw.replace(/[^A-Z0-9]/g,'').slice(0,3);if(t)it.push({v:t,on:1,lo:cf||t.length>3});return}
+if(mode=='sfx'){const t=raw.replace(/[^A-Z0-9]/g,'').slice(0,3);if(t)it.push({v:t,on:1,lo:cf||t.length>3,y:l.bbox&&H?((l.bbox.y0+l.bbox.y1)/2)/H:null,h:l.bbox&&H?(l.bbox.y1-l.bbox.y0)/H:null});return}
 /* Varian dibaca dari huruf di baris yang sama; sebagian kata (EXPO / DOMES) tetap dikenali */
 const vr=/EXP|XPO|PORT/.test(raw)?'E':(/DOM|OME|MES|EST|TIC/.test(raw)?'D':'');
 const tk=raw.split(/\s+/).filter(Boolean),fx=a=>a.replace(/[OQD]/g,'0').replace(/[IL|]/g,'1').replace(/S/g,'5').replace(/B/g,'8').replace(/\D/g,'');
@@ -3119,6 +3125,13 @@ let v='',lo=cf;const big=tk.find(a=>{const dg=(a.match(/\d/g)||[]).length,lt=(a.
 if(big)v=fx(big).slice(-5);else{const m=tk.filter(a=>(a.match(/\d/g)||[]).length>=2&&(a.match(/[A-Z]/g)||[]).length<=2).map(fx).join('');if(m.length>=4){v=m.slice(-5);lo=true}}
 if(v)it.push({v,vr,on:1,lo:lo||v.length<5,y:l.bbox&&H?((l.bbox.y0+l.bbox.y1)/2)/H:null,h:l.bbox&&H?(l.bbox.y1-l.bbox.y0)/H:null})});return it}
 function qgOcrScore(it,mode){return it.reduce((a,x)=>a+(mode=='sfx'?(x.lo?.6:1):(x.v.length==5?(x.lo?.6:1)+(x.vr?.2:0):.3)),0)}
+/* Gabung hasil beberapa cara baca berdasarkan posisi baris (y): baris yang gagal terbaca di satu cara diisi dari cara lain; baris yang tetap terlewat diberi kotak kosong supaya urutan baris tidak bergeser */
+const qgOcrOk=(x,m)=>!x.bl&&(m=='sfx'?(x.v.length>=1&&x.v.length<=3):x.v.length==5);
+function qgOcrPitch(a){const y=a.filter(x=>x.y!=null).map(x=>x.y).sort((p,q)=>p-q);if(y.length>=3){const d=[];for(let i=1;i<y.length;i++)d.push(y[i]-y[i-1]);d.sort((p,q)=>p-q);return d[Math.floor(d.length/2)]||null}const h=a.find(x=>x.h);return h?h.h*1.9:null}
+function qgOcrFill(a){if(a.length<3||a.some(x=>x.y==null))return a;a=a.slice().sort((p,q)=>p.y-q.y);const pt=qgOcrPitch(a);if(!pt||pt<.015)return a;const o=[a[0]];for(let i=1;i<a.length;i++){const n=Math.round((a[i].y-a[i-1].y)/pt)-1;for(let j=1;j<=Math.min(n,3);j++)o.push({v:'',vr:'',on:1,bl:1,lo:true,y:a[i-1].y+(a[i].y-a[i-1].y)*j/(n+1),h:a[i].h});o.push(a[i])}return o}
+function qgOcrUnion(a,b,m){if(!a)return qgOcrFill(b);if(a.concat(b).some(x=>x.y==null))return null;const r=a.filter(x=>!x.bl),pt=qgOcrPitch(r.concat(b))||.06;
+b.forEach(x=>{let k=-1,bd=1;r.forEach((q,i)=>{const d=Math.abs(q.y-x.y);if(d<bd){bd=d;k=i}});if(k>=0&&bd<pt*.6){const q=r[k];if((!qgOcrOk(q,m)&&qgOcrOk(x,m))||(q.lo&&!x.lo&&qgOcrOk(x,m))){if(!x.vr&&q.vr)x.vr=q.vr;r[k]=x}else if(!q.vr&&x.vr)q.vr=x.vr}else r.push(x)});
+return qgOcrFill(r.sort((p,q)=>p.y-q.y))}
 function qgOcrPrep(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const sc=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(qgOcrNorm(c))};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
 /* Mesin baca (worker Tesseract) disiapkan sekali di belakang layar begitu halaman palet dibuka, lalu dipakai ulang untuk semua foto. Proses baca diantre supaya tidak tabrakan */
 let OCRW=null,OCRQ=Promise.resolve(),OCRLG=null,OCRTRY=0;
@@ -3135,16 +3148,16 @@ try{const wp=qgOcrWarm(),cv=await mk();if(QG.ocr!==O)return;const w=await wp;if(
 const dvx=cv.dvx>0&&O.mode=='body'?cv.dvx:0,src=dvx?qgOcrSub(cv,0,dvx):cv,rc=dvx?qgOcrSub(cv,dvx,cv.width-dvx):null,OUT={text:true,blocks:true};
 const cap=O.rows.length,sc=Math.min(1.3,800/Math.max(src.width,src.height)),sk=sc>1.05?sc:1;
 /* Coba beberapa cara baca (maks 3); berhenti begitu hasilnya sudah bagus, kalau tidak pakai hasil terbaik */
-const pl=[[()=>src,'6'],[()=>qgOcrCv(src,sk,true),'6'],[()=>qgOcrCv(src,sk,false),'4']];
-const job=OCRQ.then(async()=>{let best=null;for(let a=0;a<pl.length;a++){if(QG.ocr!==O)return null;OCRTRY=a;
-try{await w.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:pl[a][1]});const im=pl[a][0](),r=await w.recognize(im,{},OUT),it=qgOcrParse(r,cap,O.mode,im.height),s2=qgOcrScore(it,O.mode);if(!best||s2>best.s)best={it,s:s2};if(it.length>=Math.min(2,cap)&&it.every(x=>O.mode=='sfx'?(x.v.length>=1&&x.v.length<=3):x.v.length==5))break}catch(e){if(a==0)throw e}}
+const pl=[[()=>qgOcrCv(src,sk>1?sk:1,3),'6'],[()=>src,'6'],[()=>qgOcrCv(src,sk>1?sk:1,2),'6'],[()=>qgOcrCv(src,sk,true),'4']];
+const job=OCRQ.then(async()=>{let best=null,acc=null;for(let a=0;a<pl.length;a++){if(QG.ocr!==O)return null;OCRTRY=a;
+try{await w.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:pl[a][1]});const im=pl[a][0](),r=await w.recognize(im,{},OUT),it=qgOcrParse(r,cap,O.mode,im.height),s2=qgOcrScore(it,O.mode);if(!best||s2>best.s)best={it,s:s2};const un=qgOcrUnion(acc,it,O.mode);if(un){acc=un;best={it:acc.slice(0,cap+3),s:best.s};if(acc.length>=Math.min(2,cap)&&acc.every(x=>qgOcrOk(x,O.mode)))break}else if(it.length>=Math.min(2,cap)&&it.every(x=>O.mode=='sfx'?(x.v.length>=1&&x.v.length<=3):x.v.length==5))break}catch(e){if(a==0)throw e}}
 /* Potongan kanan garis tengah dibaca terpisah khusus huruf varian: D / E atau kata Domestic / Export. Kalau masih ada yang kosong, coba sekali lagi dengan mode teks jarang */
-if(best&&best.it.length&&rc){const RV=async(im,psm)=>{await w.setParameters({tessedit_char_whitelist:'DEOFCXPRMSTI ',tessedit_pageseg_mode:psm});const r=await w.recognize(im,{},OUT);qgOcrMerge(best.it,qgOcrLines(r),im.height)},rk=Math.max(.6,Math.min(2.5,1000/Math.max(1,Math.max(rc.width,rc.height))));
-try{await RV(qgOcrCv(rc,rk,false),'6');if(best.it.some(x=>!x.vr))await RV(qgOcrCv(rc,rk,true),'11')}catch(e){}}
+if(best&&best.it.some(x=>!x.bl)&&rc){const RV=async(im,psm)=>{await w.setParameters({tessedit_char_whitelist:'DEOFCXPRMSTI ',tessedit_pageseg_mode:psm});const r=await w.recognize(im,{},OUT);qgOcrMerge(best.it,qgOcrLines(r),im.height)},rk=Math.max(.6,Math.min(2.5,1000/Math.max(1,Math.max(rc.width,rc.height))));
+try{await RV(qgOcrCv(rc,rk,2),'11');if(best.it.some(x=>!x.vr&&!x.bl))await RV(qgOcrCv(rc,rk,3),'6');if(best.it.some(x=>!x.vr&&!x.bl))await RV(qgOcrCv(rc,rk,false),'11');if(best.it.some(x=>!x.vr&&!x.bl))await RV(qgOcrCv(rc,rk,true),'6')}catch(e){}}
 if(best&&O.mode=='sfx')qgOcrSfxFix(best.it);
 return best?best.it:[]});OCRQ=job.catch(()=>{});const it=await job;if(QG.ocr!==O||!it)return;
 /* Hasil kosong / sebagian tidak lagi dianggap gagal: kotak review tetap terbuka, sisanya diketik manual */
-O.rd=it.length;O.none=!it.length;const tot=Math.min(cap,Math.max(5,it.length+2));for(let k=it.length;k<tot;k++)it.push({v:'',vr:'',on:1,bl:1});
+O.rd=it.filter(x=>String(x.v||'').trim()).length;O.none=!O.rd;const tot=Math.min(cap,Math.max(5,it.length+2));for(let k=it.length;k<tot;k++)it.push({v:'',vr:'',on:1,bl:1});
 O.st='rev';O.items=it;render()}
 catch(e){if(QG.ocr!==O)return;O.st='err';O.msg=OCRW?'Foto tidak bisa dibaca. Coba foto ulang.':'Mesin baca gagal diunduh. Cek koneksi internet lalu coba lagi.';render()}}
 /* Kamera di dalam aplikasi untuk foto order sheet: area di luar bingkai kuning digelapkan, bingkai bisa digeser dan ditarik dari titik sudut/sisi, hanya isi bingkai yang dipotong dan dibaca OCR. Posisi bingkai terakhir diingat */
