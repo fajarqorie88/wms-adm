@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 263.
+<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 268.
   [x] Tahap 1: Summary Report = grid 48 kolom x 24 baris, 9 kartu (tc, ok, ng, pl, hi, dpu, jd, dc, td) pakai posisi [x,y,w,h]; default sama dengan tampilan lama; HP tetap satu kolom lewat CSS .qrmob (cari QGL_DEF, qgLay, .qrg)
   [x] Tahap 2: Mode edit Developer (PC saja): tombol Edit layout di QG, geser dan ubah ukuran kartu (snap ke grid, tidak boleh tumpang tindih), Simpan / Reset / Batal; layout disimpan di D.M.qgly dan ikut sinkron ke server (cari qgLyEdit, qgLySave)
   [x] Tahap 3: mode edit punya icon mata di tiap kartu (sembunyikan) dan daftar "Kartu tersembunyi" di bar edit (klik untuk tambah kembali, otomatis dicarikan ruang kosong); kartu tersembunyi disimpan sebagai 0 di D.M.qgly.c, tidak tampil di PC, HP, popup dan cetak PDF (cari qgLyHide, qgLyAdd, qgLyFit, .qrhid, .qrey)
@@ -272,6 +272,15 @@ label{font-size:12px;font-weight:600;opacity:.8}
 nav{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:20}
 nav button{flex:1;padding:10px 0;color:#94a3b8;font-size:11px}nav button.on{color:#2563EB;font-weight:700}
 .pgd{display:flex;justify-content:center;gap:6px;padding:14px 0 6px}.pgd i{display:block;width:6px;height:6px;border-radius:50%;background:#94a3b8;opacity:.45}.pgd i.a{background:#2563EB;opacity:1}.pgd i.d{background:#f59e0b;opacity:1}
+.mgr{display:flex;align-items:center;gap:10px;border:1px solid var(--bd);border-radius:12px;padding:8px 10px;margin-top:8px;font-size:14px}
+.mgi{width:32px;height:32px;border-radius:9px;background:#2563EB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.mgn{flex:1;min-width:0;line-height:1.5}.mgp{display:inline-block;font-size:11px;padding:1px 8px;border-radius:8px;font-weight:600}
+.mgt{width:40px;height:22px;border-radius:11px;background:#64748b;position:relative;flex:none;padding:0}.mgt i{position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}.mgt.on{background:#22c55e}.mgt.on i{left:21px}
+.mga{display:flex;flex-direction:column;flex:none}.mga button{font-size:11px;line-height:1.2;padding:1px 6px;opacity:.7}.mga button:disabled{opacity:.2}
+.mgs{font-size:20px;flex:none;padding:0 2px}
+.mcs{display:flex;gap:6px;margin:6px 0 10px}.mcs button{flex:1;font-size:12px;padding:8px 2px;border-radius:9px;border:1px solid var(--bd)}.mcs button.on{background:#2563EB;border-color:#2563EB;color:#fff}
+.mck{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:400;opacity:1;margin:6px 0}
+html[data-view=hp] .vw-developer>.c.mgc{grid-column:1/-1}
 .sld-l{animation:sldL .22s ease-out}.sld-r{animation:sldR .22s ease-out}
 @keyframes sldL{from{transform:translateX(28px);opacity:.4}to{transform:none;opacity:1}}@keyframes sldR{from{transform:translateX(-28px);opacity:.4}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.sld-l,.sld-r{animation:none}}
@@ -1518,13 +1527,13 @@ let NAVR=null,BOOT=Date.now(),IG=false,IH={open:false},U=null,D=null,scr='home',
 const NI={"input": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 20h9\"/><path d=\"M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z\"/></svg>", "data": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M8 6h13M8 12h13M8 18h13\"/><path d=\"M3 6h.01M3 12h.01M3 18h.01\"/></svg>", "grafik": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 3v18h18\"/><path d=\"m7 15 4-5 3 3 5-7\"/><path d=\"M15 6h4v4\"/></svg>", "master": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><ellipse cx=\"12\" cy=\"5\" rx=\"8\" ry=\"3\"/><path d=\"M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5\"/><path d=\"M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6\"/></svg>", "setting": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"/></svg>"};
 NI.developer='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>';
 const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Master'],['setting','Setting']];
-/* Tab 'developer' sengaja TIDAK ada di TABS (bar bawah tetap 5 icon). Hanya developer, dibuka dengan swipe kiri dari Setting. */
+/* Tab 'developer' sengaja TIDAK ada di TABS. Page Developer dibuka dari kartu Developer di Menu utama (openMenu('dev')), tampil tanpa bar bawah. */
 /* ================= NOMOR REVISI APLIKASI - WAJIB DIBACA AGENT / CLAUDE =================
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=267;
+const APP_REV=268;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -1591,7 +1600,7 @@ function compress(file,cb){const u=URL.createObjectURL(file);imgPack(u,d=>{URL.r
 function pick(k,cap,file){if(!file)return;compress(file,d=>{if(k=='prof')D.prof.photo=d;else F.photo=d;save();render()})}
 
 /* ---------- KAPASITAS SERVER ---------- */
-let SC={t:0,busy:false,err:'',files:0,fb:0,docs:0,db:0};
+let SC={t:0,busy:false,err:'',R:{},m:null};
 const scCap=()=>(parseFloat(L.woms_srvcap)||2)*1073741824;
 const fmtB=b=>b>=1073741824?(b/1073741824).toFixed(2)+' GB':b>=1048576?(b/1048576).toFixed(1)+' MB':(b/1024).toFixed(1)+' KB';
 async function scLoad(force){
@@ -1599,26 +1608,32 @@ async function scLoad(force){
   const pre=awCheck();if(pre){SC.err=pre;SC.t=Date.now();return}
   SC.busy=true;SC.err='';render();
   try{
-    let fb=0,fn=0,last=null;
-    for(;;){const q=[Appwrite.Query.limit(100)];if(last)q.push(Appwrite.Query.cursorAfter(last));
-      const r=await awST.listFiles(AW_BK,q);r.files.forEach(f=>{fb+=f.sizeOriginal||0;fn++});
-      if(r.files.length<100)break;last=r.files[r.files.length-1].$id}
-    let db=0,dn=0;last=null;
-    for(;;){const q=[Appwrite.Query.limit(100)];if(last)q.push(Appwrite.Query.cursorAfter(last));
-      const r=await awDB.listDocuments(AW_DB,AW_TB,q);r.documents.forEach(d=>{db+=JSON.stringify(d).length;dn++});
-      if(r.documents.length<100)break;last=r.documents[r.documents.length-1].$id}
-    Object.assign(SC,{files:fn,fb,docs:dn,db});SC.t=Date.now();
-    if((fb+db)/scCap()>=0.8)toast('Peringatan: kapasitas server sudah '+Math.round((fb+db)/scCap()*100)+'%')
+    const pg=async(get,key)=>{const all=[];let last=null;for(;;){const q=[Appwrite.Query.limit(100)];if(last)q.push(Appwrite.Query.cursorAfter(last));const r=await get(q),a=r[key];a.forEach(x=>all.push(x));if(a.length<100)break;last=a[a.length-1].$id}return all};
+    const R={};
+    for(const id of new Set(MREG.flatMap(x=>x.bk||[]))){const f=await pg(q=>awST.listFiles(id,q),'files');R['b'+id]={n:f.length,b:f.reduce((s,x)=>s+(x.sizeOriginal||0),0)}}
+    for(const id of new Set(MREG.flatMap(x=>x.tb||[]))){const d=await pg(q=>awDB.listDocuments(AW_DB,id,q),'documents');R['t'+id]={n:d.length,b:d.reduce((s,x)=>s+JSON.stringify(x).length,0)}}
+    const md=await pg(q=>awDB.listDocuments(AW_DB,AW_MT,q),'documents'),m={master:0,acc:0,oth:0,n:md.length};
+    md.forEach(x=>{const l=JSON.stringify(x).length;if(/^master_/.test(x.$id))m.master+=l;else if(/^[uvp]_/.test(x.$id))m.acc+=l;else m.oth+=l});
+    SC.R=R;SC.m=m;SC.t=Date.now();
+    const u=scRows().reduce((s,r)=>s+r.b,0);
+    if(u/scCap()>=0.8)toast('Peringatan: kapasitas server sudah '+Math.round(u/scCap()*100)+'%')
   }catch(e){SC.err=(e&&e.message)||String(e);SC.t=Date.now()}
   SC.busy=false;if(tab=='setting'||tab=='developer')render()}
+/* Rincian per menu: foto + tabel milik menu (dari MREG) + bagian data master (D.M) milik menu. Pembagian data master per menu = perkiraan dari ukuran data lokal */
+function scRows(){const m=SC.m||{master:0,acc:0,oth:0},M=(D&&D.M)||{},est=p=>Object.keys(M).filter(k=>k.indexOf(p)==0).reduce((s,k)=>s+JSON.stringify(M[k]).length,0);
+  let tq=0;const rows=MREG.map(x=>{let b=0;(x.bk||[]).forEach(i=>{const r=SC.R['b'+i];if(r)b+=r.b});(x.tb||[]).forEach(i=>{const r=SC.R['t'+i];if(r)b+=r.b});
+    if(x.ms&&x.ms!='rest'){const e=Math.max(0,Math.min(est(x.ms),m.master-tq));b+=e;tq+=e}return{k:x.k,b,ms:x.ms}});
+  rows.forEach(r=>{if(r.ms=='rest')r.b+=Math.max(0,m.master-tq)});
+  return rows.map(r=>({l:mNm(r.k),b:r.b})).concat([{l:'Akun dan lainnya',b:m.acc+m.oth}])}
 function scEdit(){const v=prompt('Total kapasitas server (GB)',String(scCap()/1073741824));if(v===null)return;const n=parseFloat(String(v).replace(',','.'));if(!(n>0))return toast('Angka tidak valid');L.woms_srvcap=String(n);render()}
 function scCard(){
-  const used=SC.fb+SC.db,cap=scCap(),pc=Math.min(100,used/cap*100),warn=pc>=80,col=pc>=90?'#dc2626':warn?'#f59e0b':'#16a34a';
-  return `<div class="c text-sm"><div class="flex justify-between items-center"><b>Kapasitas Server</b><button class="b" onclick="scLoad(true)" ${SC.busy?'disabled':''}>${SC.busy?'Memuat...':'&#8635; Refresh'}</button></div>
-${SC.err?`<p class="text-xs my-2" style="color:#dc2626">Gagal membaca kapasitas: ${esc(SC.err)}</p>`:SC.t?`<p class="my-2"><b>${fmtB(used)}</b> terpakai dari <b>${fmtB(cap)}</b> (${pc.toFixed(1)}%)</p>
+  const rows=SC.m?scRows():[],used=rows.reduce((s,r)=>s+r.b,0),cap=scCap(),pc=Math.min(100,used/cap*100),warn=pc>=80,col=pc>=90?'#dc2626':warn?'#f59e0b':'#16a34a',R=SC.R||{},fk=Object.keys(R).filter(k=>k[0]=='b'),fb=fk.reduce((s,k)=>s+R[k].b,0),fn=fk.reduce((s,k)=>s+R[k].n,0);
+  return `<div class="c text-sm mgc"><div class="flex justify-between items-center"><b>Kapasitas Server</b><button class="b" onclick="scLoad(true)" ${SC.busy?'disabled':''}>${SC.busy?'Memuat...':'&#8635; Refresh'}</button></div>
+${SC.err?`<p class="text-xs my-2" style="color:#dc2626">Gagal membaca kapasitas: ${esc(SC.err)}</p>`:SC.t&&SC.m?`<p class="my-2"><b>${fmtB(used)}</b> terpakai dari <b>${fmtB(cap)}</b> (${pc.toFixed(1)}%)</p>
 <div style="height:12px;border-radius:6px;background:rgba(128,128,128,.25);overflow:hidden"><div style="height:100%;width:${pc}%;background:${col}"></div></div>
 ${warn?`<div class="mt-2 p-2" style="border-radius:8px;background:${pc>=90?'#fee2e2':'#fef3c7'};color:${pc>=90?'#991b1b':'#92400e'}"><b>&#9888; Peringatan:</b> kapasitas server sudah ${pc.toFixed(0)}%. Hapus data/foto lama atau tambah kapasitas server.</div>`:''}
-<p class="text-xs opacity-60 mt-2">Foto: ${fmtB(SC.fb)} (${SC.files} file) - Data: ${fmtB(SC.db)} (${SC.docs} dokumen, perkiraan)</p>`:`<p class="text-xs opacity-60 my-2">Memuat...</p>`}
+<div class="mt-2">${rows.map(r=>{const p=used?r.b/used*100:0;return`<div class="text-xs mt-1"><div class="flex justify-between"><span>${esc(r.l)}</span><span>${fmtB(r.b)} (${p.toFixed(0)}%)</span></div><div style="height:6px;border-radius:3px;background:rgba(128,128,128,.25);overflow:hidden"><div style="height:100%;width:${p}%;background:#2563EB"></div></div></div>`}).join('')}</div>
+<p class="text-xs opacity-60 mt-2">Total semua menu: foto ${fmtB(fb)} (${fn} file) + data ${fmtB(used-fb)} (perkiraan). Rincian per menu juga perkiraan.</p>`:`<p class="text-xs opacity-60 my-2">Memuat...</p>`}
 <p class="text-xs opacity-60 mt-1">Total kapasitas ${fmtB(cap)} <button class="underline" onclick="scEdit()">ubah</button></p></div>`}
 /* ---------- PIE CHART OK / NG (tab Grafik) ---------- */
 let PS={sel:null,fetching:false,okA:[],ngA:[],off:(()=>{try{return JSON.parse(L.woms_pieoff||L.wms_pieoff||'{}')||{}}catch(e){return{}}})(),dof:(()=>{try{return JSON.parse(L.woms_piedot||L.wms_piedot||'{}')||{}}catch(e){return{}}})(),eof:(()=>{try{return JSON.parse(L.woms_pieelb||L.wms_pieelb||'{}')||{}}catch(e){return{}}})(),ak:null};
@@ -1956,7 +1971,7 @@ function pwOpen(){PWO=true;const b=$('#pwbody');if(b)b.style.display='block';con
 function pwClose(){if(!PWO)return;PWO=false;const b=$('#pwbody');if(b)b.style.display='none';['#pn','#pn2'].forEach(k=>{const e=$(k);if(e)e.value=''});const a=$('#pwbox span');if(a)a.style.transform=''}
 document.addEventListener('click',e=>{if(PWO&&!(e.target.closest&&e.target.closest('#pwbox')))pwClose()});
 async function pwChange(){const a=$('#pn').value;if(a.length<8)return toast('Password minimal 8 karakter');if(a!=$('#pn2').value)return toast('Konfirmasi tidak sama');const ac=accs();ac[U.id].hash=await sha(U.id+a);L.woms_acc=JSON.stringify(ac);cloudPw(U.id,a);PWO=false;render();awSuccess('Password diubah','Password baru berhasil disimpan')}
-function logout(){LV='menu';L.removeItem('woms_lock');save(true);if(SERVER&&TOK){api('logout').catch(()=>{});TOK='';L.removeItem('woms_token');CS=false}L.removeItem('woms_user');L.removeItem('woms_nav');U=D=null;render()}
+function logout(){LV='menu';L.removeItem('woms_lock');save(true);if(SERVER&&TOK){api('logout').catch(()=>{});TOK='';L.removeItem('woms_token');CS=false}L.removeItem('woms_user');L.removeItem('woms_nav');VAU=false;U=D=null;render()}
 
 /* ---------- LOGIN SIDIK JARI (WebAuthn + AES-GCM, kunci non-extractable di IndexedDB) ---------- */
 let _bio=null,bioOK=L.woms_bok==='1';const isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
@@ -2692,7 +2707,49 @@ XLSX.utils.book_append_sheet(wb,jts(D.mains.map(m=>{const a=D.insp.filter(i=>i.m
 XLSX.writeFile(wb,`WMS_${U.id}_${new Date().toISOString().slice(0,10)}.xlsx`)}
 
 /* ---------- FRONT PAGE ---------- */
-const MENUS=[['cow','Check Output Welding','','\u26A1'],['qg','Quality Gate','','\u2705']];
+/* ---------- REGISTRY MENU UTAMA: Developer mengatur lewat halaman Developer (APP_REV 268) ----------
+   Menu baru = tambah 1 objek di MREG. tb = ID tabel Appwrite milik menu, bk = ID bucket Appwrite milik menu (otomatis ikut dihitung di Kapasitas Server).
+   ms = awalan kunci D.M (data master) milik menu, 'rest' = sisa data master. Pengaturan menu (status, urutan, akses peran, nama, ikon) disimpan di D.M.menus dan D.M.mord (ikut sinkron seperti master). */
+const MREG=[{k:'cow',t:'Check Output Welding',ic:'\u26A1',tb:[AW_TB],bk:[AW_BK],ms:'rest'},{k:'qg',t:'Quality Gate',ic:'\u2705',tb:[],bk:[],ms:'qg'}];
+let VAU=false,MC=null;
+const mReg=k=>MREG.find(x=>x.k==k)||{k,t:k,ic:''};
+function mCfg(k){const c=(((D&&D.M)||{}).menus||{})[k]||{},r=c.ro||{};return{st:['on','soon','mt'].includes(c.st)?c.st:'on',ro:{a:r.a===0?0:1,u:r.u===0?0:1},nm:String(c.nm||''),ic:String(c.ic||'')}}
+const mNm=k=>mCfg(k).nm||mReg(k).t,mIc=k=>mCfg(k).ic||mReg(k).ic;
+function mOrd(){const a=((D&&D.M)||{}).mord,ks=MREG.map(x=>x.k),b=Array.isArray(a)?a:[];return[...b.filter(k=>ks.includes(k)),...ks.filter(k=>!b.includes(k))]}
+const mRole=()=>VAU?'u':isDev()?'d':isAdmRole()?'a':'u';
+const mVis=k=>{const r=mRole();return r=='d'||mCfg(k).ro[r]!==0};
+const mOK=k=>{const r=mRole();return r=='d'||(mVis(k)&&mCfg(k).st=='on')};
+function mPut(fn){if(!isDev())return;D.M=D.M||{};fn(D.M);D.masterT=Date.now();save(true);render()}
+function mTog(k){mPut(M=>{M.menus=M.menus||{};const c=M.menus[k]=M.menus[k]||{};c.st=mCfg(k).st=='on'?'mt':'on'})}
+function mMove(k,d){const o=mOrd(),i=o.indexOf(k),j=i+d;if(i<0||j<0||j>=o.length)return;mPut(M=>{[o[i],o[j]]=[o[j],o[i]];M.mord=o})}
+function vauOn(){if(!isDev())return;VAU=true;openMenu('home')}
+function vauOff(){VAU=false;render()}
+function mcOpen(k){if(!isDev())return;const c=mCfg(k),x=mReg(k);MC={k,st:c.st,a:c.ro.a!==0,u:c.ro.u!==0,nm:c.nm,ic:c.ic};
+ const d=document.createElement('div');d.className='fixed';d.id='mcdlg';d.style.cssText='inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px';d.onclick=e=>{if(e.target==d)d.remove()};
+ const cur=MC.ic||x.ic,IC=['\u26A1','\u2705','\u{1F4CA}','\u{1F527}','\u{1F4E6}','\u{1F3ED}','\u{1F9EA}','\u{1F4CB}','\u{1F50D}','\u2699'];
+ d.innerHTML=`<div class="c" style="width:100%;max-width:360px;max-height:92vh;overflow:auto"><div class="flex justify-between items-center"><b>Pengaturan: ${esc(x.t)}</b><button type="button" onclick="this.closest('.fixed').remove()" style="font-size:18px" aria-label="Tutup">&#10005;</button></div>
+<label style="display:block;margin-top:12px">Status</label><div class="mcs">${[['on','Aktif'],['soon','Segera hadir'],['mt','Maintenance']].map(([v,l])=>`<button type="button" data-v="${v}" class="${MC.st==v?'on':''}" onclick="mcSt('${v}')">${l}</button>`).join('')}</div>
+<label style="display:block">Siapa yang boleh buka</label>
+<label class="mck"><input type="checkbox" checked disabled> Developer <span class="text-xs opacity-60">(selalu)</span></label>
+<label class="mck"><input type="checkbox" ${MC.a?'checked':''} onchange="MC.a=this.checked"> Admin</label>
+<label class="mck"><input type="checkbox" ${MC.u?'checked':''} onchange="MC.u=this.checked"> User</label>
+<label style="display:block;margin-top:12px">Nama menu</label><input class="i" value="${esc(MC.nm||x.t)}" maxlength="30" oninput="MC.nm=this.value">
+<label style="display:block;margin-top:8px">Ikon</label><select class="i" onchange="MC.ic=this.value">${[...new Set([cur,...IC])].map(v=>`<option${v==cur?' selected':''}>${v}</option>`).join('')}</select>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px"><button type="button" class="b b2" onclick="this.closest('.fixed').remove()">Batal</button><button type="button" class="b" onclick="mcSave()">Simpan</button></div></div>`;
+ trDom(d);document.body.appendChild(d)}
+function mcSt(v){if(!MC)return;MC.st=v;document.querySelectorAll('#mcdlg .mcs button').forEach(b=>b.classList.toggle('on',b.dataset.v==v))}
+function mcSave(){if(!isDev()||!MC)return;const x=mReg(MC.k),nm=String(MC.nm||'').trim(),m=MC;
+ mPut(M=>{M.menus=M.menus||{};M.menus[m.k]={st:m.st,ro:{a:m.a?1:0,u:m.u?1:0},nm:nm==x.t?'':nm,ic:m.ic==x.ic?'':m.ic}});
+ const d=document.getElementById('mcdlg');if(d)d.remove();MC=null;toast('Pengaturan menu disimpan')}
+function mHome(){const dv=isDev()&&!VAU;
+ const btn=(k,ic,t,sub,css,fs)=>`<button class="glass w-full text-left flex items-center gap-4 mb-3" onclick="openMenu('${k}')" style="color:#f1f5f9;${css}"><span style="width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:${fs||26}px;flex:none;${k=='dev'?'background:#f59e0b;color:#111;font-weight:700':'background:#2563EB'}">${ic}</span><span class="flex-1"><b class="block text-base">${t}</b>${sub?`<span class="text-xs" style="color:#fde68a">${sub}</span>`:''}</span><span style="font-size:22px;color:#93c5fd">&#8250;</span></button>`;
+ let h=VAU?`<div class="mb-3 text-xs text-center" style="color:#fde68a;border:1px solid rgba(245,158,11,.5);border-radius:12px;padding:8px">Mode Lihat sebagai User <button class="underline" style="color:#fff;margin-left:8px" onclick="vauOff()">Keluar</button></div>`:'';
+ h+=mOrd().filter(mVis).map(k=>{const c=mCfg(k),ok=mOK(k),note=c.st=='soon'?'Segera hadir':c.st=='mt'?'Maintenance':'';return btn(k,esc(mIc(k)),esc(mNm(k)),note,(ok||dv)&&!(note&&!dv)?'':'opacity:.55')}).join('');
+ if(dv)h+=btn('dev','&lt;/&gt;','Developer','Hanya terlihat oleh developer','border-color:rgba(245,158,11,.6);background:rgba(245,158,11,.10)',20);
+ return h}
+function mgCard(){const o=mOrd(),LB={on:'Aktif',soon:'Segera hadir',mt:'Maintenance'},CL={on:['rgba(34,197,94,.18)','#15803d'],soon:['rgba(59,130,246,.18)','#1d4ed8'],mt:['rgba(245,158,11,.22)','#b45309']};
+ const row=(k,i)=>{const c=mCfg(k);return`<div class="mgr"><span class="mgi">${esc(mIc(k))}</span><span class="mgn">${esc(mNm(k))}<br><span class="mgp" style="background:${CL[c.st][0]};color:${CL[c.st][1]}">${LB[c.st]}</span></span><button type="button" class="mgt${c.st=='on'?' on':''}" onclick="mTog('${k}')" aria-label="Aktif atau maintenance"><i></i></button><span class="mga"><button type="button" onclick="mMove('${k}',-1)"${i==0?' disabled':''} aria-label="Naik">&#9650;</button><button type="button" onclick="mMove('${k}',1)"${i==o.length-1?' disabled':''} aria-label="Turun">&#9660;</button></span><button type="button" class="mgs" onclick="mcOpen('${k}')" aria-label="Pengaturan">&#9881;</button></div>`};
+ return`<div class="c mgc" id="cb_menus"><b>Daftar Menu</b><p class="text-xs opacity-60 my-1">Atur menu di halaman utama: aktif atau maintenance, urutan, dan siapa yang boleh membuka. Berlaku di semua perangkat setelah sinkron.</p>${o.map(row).join('')}<div class="mgr" style="opacity:.75"><span class="mgi" style="background:#f59e0b;color:#111;font-size:14px;font-weight:700">&lt;/&gt;</span><span class="mgn">Developer</span><span class="text-xs">Terkunci</span></div><p class="text-xs opacity-60 mt-2">Menu baru otomatis muncul di sini setelah didaftarkan di kode.</p><button type="button" class="b b2 mt-2" style="width:100%" onclick="vauOn()">Lihat sebagai User</button></div>`}
 /* Menu utama: tombol Update Server (hijau, progress bar, centang + cling, ikon speaker = mute) dan pull to refresh */
 const HM={st:0,p:0,t:0,busy:false},HM_CL='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.5-7.97A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9H7zM12 12v5M12 12l-2 2M12 12l2 2"/></svg>',HM_CK='<svg class="hmck" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7 12.5l3.2 3.2L17 9"/></svg>';
 const hmMuted=()=>{try{return localStorage.getItem('woms_mute')==='1'}catch(e){return false}};
@@ -2714,7 +2771,7 @@ function homeView(){const nm=esc((D.prof&&D.prof.name)||U.name||'');
 return`<div class="lg"><div class="in"><div class="text-right text-xs mb-3" style="color:#93c5fd"><button class="underline" style="font-weight:${LG=='id'?700:400}" onclick="setLang('id')">ID</button> | <button class="underline" style="font-weight:${LG=='en'?700:400}" onclick="setLang('en')">EN</button></div>
 <div class="text-center mb-6">${wmsStatic()}<p class="text-sm mt-3" style="color:#bfdbfe">Selamat datang${nm?', '+nm:''}</p><p class="text-xs mt-1" style="color:#93c5fd">Pilih menu untuk memulai</p></div>
 <div class="mb-3 text-left homeprod">${prodBox()}</div>${hmBtn()}
-${MENUS.map(([k,t,d,ic])=>`<button class="glass w-full text-left flex items-center gap-4 mb-3" onclick="openMenu('${k}')" style="color:#f1f5f9"><span style="width:52px;height:52px;border-radius:14px;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none">${ic}</span><span class="flex-1"><b class="block text-base">${t}</b></span><span style="font-size:22px;color:#93c5fd">&#8250;</span></button>`).join('')}
+${mHome()}
 <button class="text-xs underline mt-4 mx-auto" style="color:#93c5fd" onclick="logout()">Logout</button></div></div>`}
 /* ---------- SINKRON QUALITY GATE: cepat (hanya master), otomatis tiap ada perubahan + cek berkala, progress bar & animasi centang ---------- */
 const QS={p:0,show:false,err:false,t:0,busy:false,q:0,m:'',pn:0};
@@ -3345,7 +3402,7 @@ ${r}
 <button type="button" class="qgrs" onclick="qgResetPal()">&#8634; Reset data palet ${n}</button>
 </div></div>`}
 
-function openMenu(k){if(k!='qg'&&BKG){BKG=0;try{history.back()}catch(e){}}scr=k=='cow'?'app':k;if(k=='cow')tab='input';scrollTo(0,0);render();if(k=='qg')setTimeout(()=>qgSync('poll'),300)}
+function openMenu(k){if(k!='home'){const dv=k=='dev';if(dv?!(isDev()&&!VAU):!mOK(k))return toast(dv?'Akses ditolak: khusus Developer':!mVis(k)?'Akses ditolak':mCfg(k).st=='mt'?'Menu sedang maintenance':'Menu ini segera hadir')}if(k!='qg'&&BKG){BKG=0;try{history.back()}catch(e){}}scr=(k=='cow'||k=='dev')?'app':k;if(k=='cow')tab='input';if(k=='dev')tab='developer';scrollTo(0,0);render();if(k=='qg')setTimeout(()=>qgSync('poll'),300)}
 /* ---------- Tombol back HP di Quality Gate: tutup kotak paling atas dulu, lalu kembali ke Menu. Satu entri history "penjaga" ditambah saat masuk QG ---------- */
 var BKG=0;
 function bkPush(){try{history.pushState({wmsqg:1},'');BKG=1}catch(e){}}
@@ -3368,41 +3425,33 @@ if(bkClose()){if(!BKG)bkPush();return}
 openMenu('home')});
 function backBar(){return`<div class="pt-3"><button class="text-sm text-blue-600 font-semibold" onclick="openMenu('home')">&#8249; Kembali ke Menu</button></div>`}
 
-/* ---------- TAB DEVELOPER (tersembunyi, khusus Developer, dibuka dengan swipe kiri dari Setting) ---------- */
+/* ---------- PAGE DEVELOPER (khusus Developer, dibuka dari kartu Developer di Menu utama; pusat kontrol menu + alat developer) ---------- */
 const verBox=()=>`<div class="c text-sm text-center wver">WELDING MONITORING SYSTEM │ WMS V3.0-${APP_REV}<p class="text-xs opacity-60 mt-1">Developed by Fajar Q.</p></div>`;
-function devDots(a){if(!isDev())return'';let d='';for(let k=0;k<6;k++)d+='<i class="'+(k==5?(a=='developer'?'d':''):(k==4&&a=='setting'?'a':''))+'"></i>';return'<div class="pgd" aria-hidden="true">'+d+'</div>'}
+function devDots(){return''}
 function devView(){const sz=(L['woms_data_'+U.id]||'').length;
 return`<div class="flex justify-between items-center py-3"><h2 class="font-bold">Developer</h2>${roleBadge()}</div>
+${isDev()?(setTimeout(scLoad,0),scCard()):''}
+${isDev()?mgCard():''}
+<div class="text-xs opacity-60 mt-4 mb-1" style="font-weight:700;letter-spacing:.06em">ALAT DEVELOPER</div>
 ${isDev()?apPanel():''}${isDev()?acCard():''}
 ${isDev()?wcCard():''}
 ${isDev()?`<div class="c text-sm"><b>Data &amp; Storage</b><p>${D.insp.length} data pengecekan - ${(sz/1024).toFixed(1)} KB</p><p class="text-xs opacity-60">Data tersimpan otomatis di perangkat ini dan tidak hilang saat refresh.</p>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" class="my-2"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="xl()">Export Excel</button><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="bk()">Backup JSON</button><label class="b b2" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box;cursor:pointer">Restore JSON<input type="file" accept=".json" hidden onchange="rs(this.files[0])"></label><button class="b bd" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box" onclick="wipe()">Hapus Semua</button></div>
 <p>Update server terakhir: ${D.sync.last||'belum pernah'}</p><div class="mt-2"><button class="b" style="display:flex;align-items:center;justify-content:center;width:100%;height:40px;padding:0 6px;font-size:13px;white-space:nowrap;margin:0;box-sizing:border-box;background:#16a34a" onclick="awUpdateServer()">&#11014; Update Data Server</button><div id="spw" class="spw" style="${SP.show?'':'visibility:hidden'}"><div id="spb" style="width:${SP.p}%;background:${SP.err?'#ef4444':'#22c55e'}"></div></div></div>
 <p class="text-xs opacity-60 mt-1">Mengirim data setting (lokasi, checker, material, shift, deskripsi), master equipment, dan data pengecekan ke server Appwrite, lalu mengambil data baru dari server. Perangkat lain menerima pembaruan saat aplikasi dibuka kembali.</p></div>`:''}
-${isDev()?(setTimeout(scLoad,0),scCard()):''}
-${verBox()}${devDots('developer')}`}
+${verBox()}`}
 
 /* ---------- RENDER ---------- */
-function render(){const y=scrollY,ps=window.__rs;window.__rs=scr;document.body.classList.toggle('wn',!!U&&scr=='app');if(!U){$('#app').innerHTML=loginView();trDom($('#app'));return}
+function render(){if(U&&D){if(scr=='qg'&&!mOK('qg'))scr='home';if(scr=='app'&&(tab=='developer'?!(isDev()&&!VAU):!mOK('cow')))scr='home'}const y=scrollY,ps=window.__rs;window.__rs=scr;document.body.classList.toggle('wn',!!U&&scr=='app'&&tab!='developer');if(!U){$('#app').innerHTML=loginView();trDom($('#app'));return}
 if(scr=='qg'&&!BKG)bkPush();if(scr!='app'){const keep=scr=='qg'&&ps=='qg',so=keep?[...document.querySelectorAll('.lg,.qgov,.qrfc,.qgdt2')].map(e=>[e.className,e.scrollTop]):[];const n0=$('nav');if(n0)n0.remove();clearTimeout(window.__qgMh);window.__qgLive=0;/* REV 256: container scroll dashboard QG adalah .lg (fixed, overflow:auto), bukan window, jadi .lg ikut disimpan dan dipulihkan */$('#app').innerHTML=scr=='qg'?qgView():homeView();trDom($('#app'));if(scr=='qg'){qgInFit();if(QG.sum)qgRepFit()}if(keep){const rs=()=>{scrollTo(0,y);const nn=[...document.querySelectorAll('.lg,.qgov,.qrfc,.qgdt2')];nn.forEach((e,k)=>{const m=nn.length==so.length?so[k]:so.find(z=>z[0]==e.className);if(m&&m[1])e.scrollTop=m[1]})};window.__qgLive=1;rs();requestAnimationFrame(rs);document.querySelectorAll('#app img').forEach(im=>{if(!im.complete)im.addEventListener('load',()=>{if(window.__qgLive)rs()},{once:true})});window.__qgMh=setTimeout(()=>{window.__qgLive=0},900)}return}
 if(!tabOK(tab))tab='input';const v={input:inputView,data:dataView,grafik:grafikView,master:masterView,setting:settingView,developer:devView}[tab]();
-$('#app').innerHTML=backBar()+'<div class="vw vw-'+tab+(vmOf()?' vm-'+vmOf():'')+(SLD?' sld-'+SLD:'')+'">'+v+'</div>';SLD='';let n=$('nav');if(!n){n=document.createElement('nav');document.body.appendChild(n)}
-const vt=visTabs(),bw=vt.length<=5?100/vt.length:20;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('')+(isDev()?`<button data-k="developer" class="${tab=='developer'?'on':''}" style="flex-basis:${bw}%" onclick="go('developer')">${NI.developer}<span>Developer</span></button>`:'');n.scrollLeft=tab=='developer'?n.scrollWidth:0;
-trDom($('#app'));trDom(n);
+$('#app').innerHTML=backBar()+'<div class="vw vw-'+tab+(vmOf()?' vm-'+vmOf():'')+(SLD?' sld-'+SLD:'')+'">'+v+'</div>';SLD='';let n=$('nav');if(tab=='developer'){if(n)n.remove();n=null}else if(!n){n=document.createElement('nav');document.body.appendChild(n)}
+if(n){const vt=visTabs(),bw=vt.length<=5?100/vt.length:20;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('');n.scrollLeft=0}
+trDom($('#app'));if(n)trDom(n);
 if(tab=='grafik'){if(G.view=='loc')locGroups(gData()).forEach((g,k)=>gzDraw('cl',k));else matList().forEach((m,k)=>gzDraw('cv',k));if(G.fitAll&&!G.hc)gzFitAll()}if((tab=='setting'||tab=='developer')&&isDev())acLoad();if(tab=='data'||tab=='grafik')calFix();scrollTo(0,y)}
 function go(t){if(!tabOK(t))return toast('Akses ditolak: khusus Developer / Admin');tab=t;PS.ak=null;scrollTo(0,0);render();const b=document.querySelector('nav button.on');if(b&&b.scrollIntoView)try{b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}catch(e){}}
-/* ---------- SWIPE: Setting <-> Developer (khusus Developer) ---------- */
+/* Swipe Setting <-> Developer dihapus (APP_REV 268): Developer sekarang dibuka dari kartu di Menu utama. */
 let SLD='';
-(function(){let sx=0,sy=0,t0=0,ok=false;
-const blk=t=>{for(let e=t;e&&e!==document.body;e=e.parentElement){const n=e.tagName;if(n=='INPUT'||n=='TEXTAREA'||n=='SELECT'||n=='CANVAS'||n=='TABLE')return true;if(e.scrollWidth>e.clientWidth+4){const o=getComputedStyle(e).overflowX;if(o=='auto'||o=='scroll')return true}}return false};
-const dn=(x,y,t)=>{ok=!!U&&scr=='app'&&((tab=='setting'&&isDev())||tab=='developer')&&!document.querySelector('.fixed')&&!blk(t);sx=x;sy=y;t0=Date.now()};
-const up=(x,y,min)=>{if(!ok)return;ok=false;const dx=x-sx,dy=y-sy;if(Date.now()-t0>700||Math.abs(dx)<min||Math.abs(dy)>Math.abs(dx)*.6)return;
- if(dx<0&&tab=='setting'&&isDev()){SLD='l';go('developer')}else if(dx>0&&tab=='developer'){SLD='r';go('setting')}};
-addEventListener('touchstart',e=>{const t=e.touches[0];dn(t.clientX,t.clientY,e.target)},{passive:true});
-addEventListener('touchend',e=>{const t=e.changedTouches[0];up(t.clientX,t.clientY,70)},{passive:true});
-addEventListener('mousedown',e=>{if(e.button===0)dn(e.clientX,e.clientY,e.target)});
-addEventListener('mouseup',e=>up(e.clientX,e.clientY,140));
-})();
 
 /* ---------- SINKRON MASTER KE APPWRITE ---------- */
 const AW_MT="6ad9e3270004fcc8e26d", AW_CH=15000;
