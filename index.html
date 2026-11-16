@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 258.
+<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 261.
   [x] Tahap 1: Summary Report = grid 48 kolom x 24 baris, 9 kartu (tc, ok, ng, pl, hi, dpu, jd, dc, td) pakai posisi [x,y,w,h]; default sama dengan tampilan lama; HP tetap satu kolom lewat CSS .qrmob (cari QGL_DEF, qgLay, .qrg)
   [x] Tahap 2: Mode edit Developer (PC saja): tombol Edit layout di QG, geser dan ubah ukuran kartu (snap ke grid, tidak boleh tumpang tindih), Simpan / Reset / Batal; layout disimpan di D.M.qgly dan ikut sinkron ke server (cari qgLyEdit, qgLySave)
   [x] Tahap 3: mode edit punya icon mata di tiap kartu (sembunyikan) dan daftar "Kartu tersembunyi" di bar edit (klik untuk tambah kembali, otomatis dicarikan ruang kosong); kartu tersembunyi disimpan sebagai 0 di D.M.qgly.c, tidak tampil di PC, HP, popup dan cetak PDF (cari qgLyHide, qgLyAdd, qgLyFit, .qrhid, .qrey)
@@ -1505,7 +1505,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=258;
+const APP_REV=261;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -3017,7 +3017,18 @@ return`<div class="qgov t3 qgsm" onclick="if(event.target===this){QG.sum=0;rende
 <div class="qrctl">${b('rs',"'A4'",'A4 &middot; 297 &times; 210 mm',sz=='A4')}${b('rs',"'A3'",'A3 &middot; 420 &times; 297 mm',sz=='A3')}${b('rt',"'d'",'Tema gelap QG',th=='d')}${b('rt',"'l'",'Hemat tinta',th=='l')}${b('rz',QG.rz?0:1,'Zoom',!!QG.rz)}</div>
 ${qgFiltBar()}<div class="qrwrap${QG.rz?' z':''}">${qgRepSheet(day,th)}</div>
 <div class="qgsf">Dibuat ${esc(new Date().toLocaleString(LC()))}</div>
-<button type="button" class="qgpb" onclick="qgPrint()">Cetak / PDF (${sz} landscape)</button></div></div>`}
+<button type="button" class="qgpb" onclick="qgPrint()">Cetak / PDF (${sz} landscape)</button>
+<button type="button" class="qgpb" style="margin-top:8px;background:#2F6FB5" onclick="qgShare()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button></div></div>`}
+/* Bagikan Summary Report: render lembar (.qrs, 900x636) jadi gambar lewat SVG foreignObject dengan style terhitung disalin ke klon, lalu dibungkus PDF landscape dan dibuka lewat menu bagikan bawaan (WhatsApp, Email, dll.). Kalau render gagal, yang dibagikan teks ringkasan */
+async function qgShare(){const el=document.querySelector('.qgsm .qrs');if(!el)return toast('Laporan belum siap');const day=qgDay(),nm='Summary_QG_'+String(day).replace(/\D/g,'')+'.pdf',msg='Summary Report Quality Gate '+qgDate(day);
+const cp=(a,b)=>{const cs=getComputedStyle(a);let t='';for(let i=0;i<cs.length;i++)t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';b.setAttribute('style',t);for(let i=0;i<a.children.length;i++)cp(a.children[i],b.children[i])};
+try{if(!window.jspdf)throw 0;const W=900,H=636,cl=el.cloneNode(true);cp(el,cl);cl.style.transform='none';cl.style.width=W+'px';cl.style.height=H+'px';cl.setAttribute('xmlns','http://www.w3.org/1999/xhtml');
+const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'"><foreignObject width="100%" height="100%">'+new XMLSerializer().serializeToString(cl)+'</foreignObject></svg>',im=new Image();
+await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)});
+const c=document.createElement('canvas');c.width=W*2;c.height=H*2;const x=c.getContext('2d');x.scale(2,2);x.fillStyle=getComputedStyle(el).backgroundColor||'#fff';x.fillRect(0,0,W,H);x.drawImage(im,0,0,W,H);
+const url=c.toDataURL('image/jpeg',.92),doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:QG.rs=='A3'?'a3':'a4'}),pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight(),k=Math.min(pw/W,ph/H);
+doc.addImage(url,'JPEG',(pw-W*k)/2,(ph-H*k)/2,W*k,H*k);await outPdf(doc,nm,0)}
+catch(e){if(navigator.share){try{await navigator.share({title:'Summary Report',text:msg});return}catch(er){if(er&&er.name=='AbortError')return}}try{await navigator.clipboard.writeText(msg);toast('Teks ringkasan disalin')}catch(er){prompt('Salin:',msg)}}}
 function qgRepSet(k,v){QG[k]=v;render()}
 /* Interaksi antar kartu: klik titik item di DPU = pilih panel Highlight Issue (QG.hi) + filter Top Defect (QG.hl=1). Filter Varian QG.fv (A/V/P) dihitung di qgRepData */
 function qgDpuPick(i){if(QG.hl&&QG.hi==i)QG.hl=0;else{QG.hi=i;QG.hl=1}render()}
@@ -3133,6 +3144,14 @@ function qgOcrCv(src,k,bin){const w=Math.max(1,Math.round(src.width*k)),h=Math.m
 /* Ambil nomor dari hasil baca: angka yang kepisah spasi digabung dulu. v = 5 angka terakhir, lo = perlu dicek user */
 function qgOcrLines(r){const d=r.data||{};if(d.lines&&d.lines.length)return d.lines;const o=[];try{(d.blocks||[]).forEach(b=>(b.paragraphs||[]).forEach(p=>(p.lines||[]).forEach(l=>o.push(l))))}catch(e){}if(o.length)return o;return String(d.text||'').split('\n').map(t=>({text:t,confidence:d.confidence}))}
 /* Kolom Sfx berisi angka tapi sering terbaca huruf (O/D/S/B/I/A...): kalau barisnya ada angka, atau mayoritas kolom angka, huruf yang mirip angka diganti angka */
+/* Persiapan khusus foto Sfx: kolom yang di-highlight / diisi warna dibuat putih. Pakai kanal terang (max R,G,B: tinta hitam tetap gelap, warna stabilo jadi terang), lalu bagi dengan latar lokal per petak supaya fill apa pun (kuning, hijau, pink, biru muda, abu) ikut rata dan tinta menonjol */
+function qgOcrSfxPrep(c){const x=c.getContext('2d');try{const W=c.width,H=c.height,d=x.getImageData(0,0,W,H),p=d.data,V=new Uint8Array(W*H);for(let i=0,j=0;i<p.length;i+=4,j++)V[j]=Math.max(p[i],p[i+1],p[i+2]);
+const s=Math.max(10,Math.round(Math.min(W,H)/5)),gx=Math.ceil(W/s),gy=Math.ceil(H/s),B=new Float32Array(gx*gy);
+for(let cy=0;cy<gy;cy++)for(let cx=0;cx<gx;cx++){const h=new Uint32Array(256);let n=0;for(let y=cy*s;y<Math.min(H,cy*s+s);y++)for(let xx=cx*s;xx<Math.min(W,cx*s+s);xx++){h[V[y*W+xx]]++;n++}let a=0,t=n*.85,v=255;for(let k=0;k<256;k++){a+=h[k];if(a>=t){v=k;break}}B[cy*gx+cx]=Math.max(40,v)}
+for(let y=0;y<H;y++){const fy=Math.min(gy-1,Math.max(0,y/s-.5)),y0=Math.floor(fy),y1=Math.min(gy-1,y0+1),ty=fy-y0;for(let xx=0;xx<W;xx++){const fx=Math.min(gx-1,Math.max(0,xx/s-.5)),x0=Math.floor(fx),x1=Math.min(gx-1,x0+1),tx=fx-x0,bg=(B[y0*gx+x0]*(1-tx)+B[y0*gx+x1]*tx)*(1-ty)+(B[y1*gx+x0]*(1-tx)+B[y1*gx+x1]*tx)*ty,r=V[y*W+xx]/bg,g=Math.round(Math.max(0,Math.min(1,(r-.3)/.55))*255),i=(y*W+xx)*4;p[i]=p[i+1]=p[i+2]=g}}
+/* Penghalus titik halftone (closing 3x3): titik gelap kecil pada fill abu-abu hilang, goresan tebal huruf tetap */
+const G=new Uint8Array(W*H),T=new Uint8Array(W*H);for(let j=0;j<W*H;j++)G[j]=p[j*4];const mm=(S,D,mx)=>{for(let y=0;y<H;y++)for(let xx=0;xx<W;xx++){let v=mx?0:255;for(let dy=-1;dy<=1;dy++){const yy=y+dy;if(yy<0||yy>=H)continue;for(let dx=-1;dx<=1;dx++){const x2=xx+dx;if(x2<0||x2>=W)continue;const q=S[yy*W+x2];if(mx?q>v:q<v)v=q}}D[y*W+xx]=v}};mm(G,T,1);mm(T,G,0);for(let j=0;j<W*H;j++)p[j*4]=p[j*4+1]=p[j*4+2]=G[j];
+x.putImageData(d,0,0)}catch(e){return qgOcrNorm(c)}return c}
 function qgOcrSfxFix(it){const M={O:'0',Q:'0',D:'0',I:'1',L:'1','|':'1',Z:'2',S:'5',G:'6',B:'8'},ok=t=>/^[0-9OQDILZSGB|]+$/.test(t),fx=t=>t.replace(/[A-Z|]/g,c=>M[c]||c),dg=it.filter(x=>/\d/.test(x.v)&&ok(x.v)).length,num=dg*2>=it.length&&dg>0;
 it.forEach(x=>{const v=String(x.v||'');if(!v||!ok(v))return;if(/\d/.test(v)||num){const n=fx(v);if(n!==v){x.v=n;x.lo=true}}})}
 function qgOcrVrOf(raw){raw=String(raw||'').toUpperCase();if(/EXP|XPO|PORT/.test(raw))return'E';if(/DOM|OME|MES|EST|TIC/.test(raw))return'D';
@@ -3144,7 +3163,7 @@ it.forEach((x,k)=>{if(x.vr)return;let b=null,bd=1;if(x.y!=null)rl.forEach(q=>{if
 function qgOcrSub(c,x0,w){const p=12,o=document.createElement('canvas');o.width=Math.max(1,Math.round(w))+p;o.height=c.height;const g=o.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,o.width,o.height);g.drawImage(c,x0,0,w,c.height,x0?p:0,0,w,c.height);return o}
 function qgOcrParse(r,cap,mode,H){const it=[],L=qgOcrLines(r);
 L.forEach(l=>{if(it.length>=cap)return;const raw=String(l.text||'').toUpperCase(),cf=(l.confidence||0)<75;
-if(mode=='sfx'){const t=raw.replace(/[^A-Z0-9]/g,'').slice(0,3);if(t)it.push({v:t,on:1,lo:cf||t.length>3,y:l.bbox&&H?((l.bbox.y0+l.bbox.y1)/2)/H:null,h:l.bbox&&H?(l.bbox.y1-l.bbox.y0)/H:null});return}
+if(mode=='sfx'){const t=raw.replace(/[^A-Z0-9]/g,'').slice(0,3);/* buang derau: huruf sama berulang (III, LLL) atau huruf saja berkeyakinan rendah */if(t&&!(/^([A-Z])\1+$/.test(t)&&t.length>=2)&&!(/^[A-Z]+$/.test(t)&&(l.confidence||0)<40))it.push({v:t,on:1,lo:cf||t.length>3,y:l.bbox&&H?((l.bbox.y0+l.bbox.y1)/2)/H:null,h:l.bbox&&H?(l.bbox.y1-l.bbox.y0)/H:null});return}
 /* Varian dibaca dari huruf di baris yang sama; sebagian kata (EXPO / DOMES) tetap dikenali */
 const vr=/EXP|XPO|PORT/.test(raw)?'E':(/DOM|OME|MES|EST|TIC/.test(raw)?'D':'');
 const tk=raw.split(/\s+/).filter(Boolean),fx=a=>a.replace(/[OQD]/g,'0').replace(/[IL|]/g,'1').replace(/S/g,'5').replace(/B/g,'8').replace(/\D/g,'');
@@ -3159,7 +3178,7 @@ function qgOcrFill(a){if(a.length<3||a.some(x=>x.y==null))return a;a=a.slice().s
 function qgOcrUnion(a,b,m){if(!a)return qgOcrFill(b);if(a.concat(b).some(x=>x.y==null))return null;const r=a.filter(x=>!x.bl),pt=qgOcrPitch(r.concat(b))||.06;
 b.forEach(x=>{let k=-1,bd=1;r.forEach((q,i)=>{const d=Math.abs(q.y-x.y);if(d<bd){bd=d;k=i}});if(k>=0&&bd<pt*.6){const q=r[k];if((!qgOcrOk(q,m)&&qgOcrOk(x,m))||(q.lo&&!x.lo&&qgOcrOk(x,m))){if(!x.vr&&q.vr)x.vr=q.vr;r[k]=x}else if(!q.vr&&x.vr)q.vr=x.vr}else r.push(x)});
 return qgOcrFill(r.sort((p,q)=>p.y-q.y))}
-function qgOcrPrep(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const sc=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(qgOcrNorm(c))};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
+function qgOcrPrep(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const sc=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(QG.ocrMode=='sfx'?qgOcrSfxPrep(c):qgOcrNorm(c))};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
 /* Mesin baca (worker Tesseract) disiapkan sekali di belakang layar begitu halaman palet dibuka, lalu dipakai ulang untuk semua foto. Proses baca diantre supaya tidak tabrakan */
 let OCRW=null,OCRQ=Promise.resolve(),OCRLG=null,OCRTRY=0;
 function qgOcrWarm(){if(OCRW)return OCRW;OCRW=(async()=>{await qgOcrLoad();const lg={logger:m=>{if(OCRLG)OCRLG(m)}};let w;try{w=await Tesseract.createWorker('eng',1,Object.assign({langPath:'https://tessdata.projectnaptha.com/4.0.0_fast'},lg))}catch(e){w=await Tesseract.createWorker('eng',1,lg)}await w.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:'6'});return w})();OCRW.catch(()=>{OCRW=null});return OCRW}
@@ -3251,7 +3270,7 @@ function qgCamRead(){if(!CAM||!CAM.o||!CAM.sel)return;const src=CAM.cs,vw=src.wi
 const f=CAM.fr,sx=Math.max(0,Math.round(f.x*vw)),sy=Math.max(0,Math.round(f.y*vh)),sw=Math.max(8,Math.min(vw-sx,Math.round(f.w*vw))),sh=Math.max(8,Math.min(vh-sy,Math.round(f.h*vh))),m=Math.max(sw,sh),k=m>1000?1000/m:(m<560?Math.min(1.6,560/m):1),
 cw=Math.max(1,Math.round(sw*k)),ch=Math.max(1,Math.round(sh*k)),pad=12,c=document.createElement('canvas');c.width=cw+pad*2;c.height=ch+pad*2;
 const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.imageSmoothingQuality='high';x.drawImage(src,sx,sy,sw,sh,pad,pad,cw,ch);
-const dvx=CAM.sf?0:pad+CAM.dv*cw;qgCamClose();qgOcrNorm(c);c.dvx=dvx;qgOcrRun(()=>Promise.resolve(c))}
+const dvx=CAM.sf?0:pad+CAM.dv*cw,CAM_SF=!!CAM.sf;qgCamClose();if(CAM_SF)qgOcrSfxPrep(c);else qgOcrNorm(c);c.dvx=dvx;qgOcrRun(()=>Promise.resolve(c))}
 function qgOcrClose(){QG.ocr=null;render()}
 function qgOcrTog(k){const o=QG.ocr;if(!o)return;o.items[k].on=o.items[k].on?0:1;render()}
 function qgOcrVal(k,v){const o=QG.ocr;if(!o)return;v=o.mode=='sfx'?String(v).toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3):String(v).replace(/\D/g,'').slice(0,5);o.items[k].v=v;const e=document.getElementById('qgOcrAp');if(e)e.textContent='Isi '+o.items.filter(x=>x.on&&String(x.v).trim()).length+' No. Body'}
