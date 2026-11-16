@@ -1380,6 +1380,13 @@ html[data-view=pc] .wver{background:transparent!important;border:0!important;box
 .qgcam.sel .qgcs{display:block}.qgcam.sel video{visibility:hidden}
 .qgcl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;pointer-events:none;z-index:1}
 .qgcam.rdy .qgcl{display:none}
+/* REV 267: timer 3s, zoom, hitung mundur */
+.qgcd{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:120px;font-weight:800;color:#fff;text-shadow:0 4px 24px #000;pointer-events:none;z-index:4}
+.qgzm{display:none;position:absolute;z-index:4;left:16px;right:16px;bottom:calc(104px + env(safe-area-inset-bottom,0px));align-items:center;gap:10px;max-width:420px;margin:0 auto;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.45);color:#fff}
+.qgcam.zmok:not(.sel) .qgzm{display:flex}
+.qgzm button{flex:none;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:18px;font-weight:700;line-height:1;border:0}
+.qgzm input{flex:1;min-width:0;accent-color:#22b8f0}
+.qgzm b{flex:none;min-width:38px;text-align:right;font-size:12px}
 .qgcam.sel .qgc1{display:none}.qgcam:not(.sel) .qgc2{display:none}
 .qgcb.qgc2{justify-content:center}.qgcb.qgc2 button.rd{background:#16a34a;padding:12px 26px;font-size:15px}
 </style><style id="tw-static">/* Tailwind 3.4.17 preflight + utilitas yang dipakai (build manual, tanpa CDN) */
@@ -1517,7 +1524,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=266;
+const APP_REV=267;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -3227,24 +3234,25 @@ O.rd=it.filter(x=>String(x.v||'').trim()).length;O.none=!O.rd;const tot=Math.min
 O.st='rev';O.items=it;render()}
 catch(e){if(QG.ocr!==O)return;O.st='err';O.msg=OCRW?'Foto tidak bisa dibaca. Coba foto ulang.':'Mesin baca gagal diunduh. Cek koneksi internet lalu coba lagi.';render()}}
 /* Kamera di dalam aplikasi untuk foto order sheet: area di luar bingkai kuning digelapkan, bingkai bisa digeser dan ditarik dari titik sudut/sisi, hanya isi bingkai yang dipotong dan dibaca OCR. Posisi bingkai terakhir diingat */
-const QGFR_K='wms_ocrfr3',QGFR_KS='wms_ocrfr_sfx',QGDV_K='wms_ocrdv',QGFR_D={x:.08,y:.08,w:.84,h:.62},QGDV_D=.62;
+const QGFR_K='wms_ocrfr3',QGFR_KS='wms_ocrfr_sfx',QGDV_K='wms_ocrdv',QGFR_D={x:.08,y:.08,w:.84,h:.62},QGDV_D=.62,QGDV_KS='wms_ocrdv_sfx',QGDV_DS=.92,QGTM_K='wms_ocrtm';
 /* Body dan Sfx punya bingkai sendiri-sendiri; Body juga punya garis tengah (pemisah No. Body | Varian) */
 let CAM=null;
-function qgDvGet(){try{const v=parseFloat(L[QGDV_K]);if(v>=.1&&v<=.9)return v}catch(e){}return QGDV_D}
+function qgDvGet(sf){try{const v=parseFloat(L[sf?QGDV_KS:QGDV_K]);if(v>=.1&&v<=(sf?.95:.9))return v}catch(e){}return sf?QGDV_DS:QGDV_D}
+function qgTmGet(){try{return L[QGTM_K]=='1'}catch(e){return false}}
 function qgFrGet(sf){try{const a=JSON.parse(L[sf?QGFR_KS:QGFR_K]||'null');if(a&&a.w>=.08&&a.h>=.05&&a.x>=0&&a.y>=0&&a.x+a.w<=1.001&&a.y+a.h<=1.001)return a}catch(e){}return Object.assign({},QGFR_D)}
-function qgFrSave(){try{L[CAM.sf?QGFR_KS:QGFR_K]=JSON.stringify(CAM.fr);if(!CAM.sf)L[QGDV_K]=String(Math.round(CAM.dv*1000)/1000)}catch(e){}}
-function qgCamDim(){const c=CAM;if(!c)return[0,0];if(c.sel&&c.cs)return[c.cs.width,c.cs.height];return[c.v?c.v.videoWidth:0,c.v?c.v.videoHeight:0]}
+function qgFrSave(){try{L[CAM.sf?QGFR_KS:QGFR_K]=JSON.stringify(CAM.fr);L[CAM.sf?QGDV_KS:QGDV_K]=String(Math.round(CAM.dv*1000)/1000)}catch(e){}}
+function qgCamDim(){const c=CAM;if(!c)return[0,0];if(c.sel&&c.cs)return[c.cs.width,c.cs.height];const z=c.zh?1:(c.zm||1);return[c.v?c.v.videoWidth/z:0,c.v?c.v.videoHeight/z:0]}
 function qgCamLay(){if(!CAM||!CAM.o)return;const o=CAM.o,W=o.clientWidth,H=o.clientHeight,d=qgCamDim(),vw=d[0],vh=d[1],fe=CAM.fe;if(!vw||!vh||!W||!H){fe.style.display='none';return}
 const k=Math.min(W/vw,H/vh),dw=vw*k,dh=vh*k,ox=(W-dw)/2,oy=(H-dh)/2,f=CAM.fr;CAM.r={dw,dh};
 fe.style.display='block';fe.style.left=(ox+f.x*dw)+'px';fe.style.top=(oy+f.y*dh)+'px';fe.style.width=(f.w*dw)+'px';fe.style.height=(f.h*dh)+'px';if(CAM.dE)CAM.dE.style.left=(CAM.dv*100)+'%'}
 /* Layar kamera dibuat dulu (langsung tampil "Menyiapkan kamera..."), baru izin/stream kamera diminta. Dua tahap: 1) bidik + jepret, 2) seleksi ulang di foto yang sudah dijepret, baru Baca */
 function qgCamMk(SF){const o=document.createElement('div');o.id='qgCam';o.className='qgcam';
 const hs=[['nw','0','0'],['n','50%','0'],['ne','100%','0'],['e','100%','50%'],['se','100%','100%'],['s','50%','100%'],['sw','0','100%'],['w','0','50%']];
-o.innerHTML='<video id="qgCamV" playsinline muted autoplay></video><canvas id="qgCamS" class="qgcs"></canvas><div class="qgct" id="qgCamTx"></div><div class="qgcl">Menyiapkan kamera...</div><div class="qgcf" id="qgCamF" onpointerdown="qgCamDrag(event)">'+(SF?'':'<div class="qgdv" data-h="dv"></div>')+hs.map(h=>'<i data-h="'+h[0]+'" style="left:'+h[1]+';top:'+h[2]+'"></i>').join('')+'</div><div class="qgcb qgc1"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamGal()">Galeri</button><button type="button" class="sh" aria-label="Jepret" onclick="qgCamShot()"></button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" id="qgCamT" style="display:none" onclick="qgCamTorch()">Senter</button></div><div class="qgcb qgc2"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamRetake()">Ulangi foto</button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" class="rd" onclick="qgCamRead()">Baca</button></div>';
+o.innerHTML='<video id="qgCamV" playsinline muted autoplay></video><canvas id="qgCamS" class="qgcs"></canvas><div class="qgct" id="qgCamTx"></div><div class="qgcd" id="qgCamCd"></div><div class="qgzm" id="qgCamZ"><button type="button" aria-label="Zoom out" onclick="qgCamZStep(-1)">&minus;</button><input type="range" id="qgCamZR" min="1" max="4" step="0.1" value="1" oninput="qgCamZoom(+this.value)"><button type="button" aria-label="Zoom in" onclick="qgCamZStep(1)">+</button><b id="qgCamZL">1.0x</b></div><div class="qgcl">Menyiapkan kamera...</div><div class="qgcf" id="qgCamF" onpointerdown="qgCamDrag(event)"><div class="qgdv" data-h="dv"></div>'+hs.map(h=>'<i data-h="'+h[0]+'" style="left:'+h[1]+';top:'+h[2]+'"></i>').join('')+'</div><div class="qgcb qgc1"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamGal()">Galeri</button><button type="button" class="sh" aria-label="Jepret" onclick="qgCamShot()"></button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" id="qgCamTm" onclick="qgCamTm()">Timer 3s</button><button type="button" id="qgCamT" style="display:none" onclick="qgCamTorch()">Senter</button></div><div class="qgcb qgc2"><button type="button" onclick="qgCamClose()">Batal</button><button type="button" onclick="qgCamRetake()">Ulangi foto</button><button type="button" onclick="qgCamReset()">Reset bingkai</button><button type="button" class="rd" onclick="qgCamRead()">Baca</button></div>';
 document.body.appendChild(o);qgCamBar(o);
-CAM={o,v:o.querySelector('#qgCamV'),cs:o.querySelector('#qgCamS'),tx:o.querySelector('#qgCamTx'),st:null,fe:o.querySelector('#qgCamF'),dE:o.querySelector('.qgdv'),sf:SF,dv:qgDvGet(),fr:qgFrGet(SF),r:{dw:1,dh:1},tn:0,sel:0};
+CAM={o,v:o.querySelector('#qgCamV'),cs:o.querySelector('#qgCamS'),tx:o.querySelector('#qgCamTx'),st:null,fe:o.querySelector('#qgCamF'),dE:o.querySelector('.qgdv'),sf:SF,dv:qgDvGet(SF),fr:qgFrGet(SF),r:{dw:1,dh:1},tn:0,sel:0,zm:1,zh:0,zmin:1,zmax:4,tm:qgTmGet(),cdt:0,ci:0};qgCamTmUi();
 addEventListener('resize',qgCamLay);qgCamTxt();return o}
-function qgCamTxt(){if(!CAM||!CAM.tx)return;CAM.tx.textContent=CAM.sel?'Foto diambil. Atur ulang bingkai kuning'+(CAM.sf?'':' dan garis hijau')+' pas di area nomor (zoom/geser bingkai), lalu tekan Baca':(CAM.sf?'Masukkan kolom Sfx (atas ke bawah) ke dalam bingkai kuning':'Masukkan kolom No. Body dan Varian ke bingkai kuning. Geser garis hijau: kiri No. Body, kanan Varian')}
+function qgCamTxt(){if(!CAM||!CAM.tx)return;CAM.tx.textContent=CAM.sel?'Foto diambil. Atur ulang bingkai kuning dan garis hijau'+' pas di area nomor (zoom/geser bingkai), lalu tekan Baca':(CAM.sf?'Masukkan kolom Sfx (atas ke bawah) ke bingkai kuning. Geser garis hijau: kiri = Sfx yang dibaca, kanan diabaikan':'Masukkan kolom No. Body dan Varian ke bingkai kuning. Geser garis hijau: kiri No. Body, kanan Varian')}
 function qgCamSel(on){const c=CAM;if(!c||!c.o)return;c.sel=on?1:0;c.o.classList.toggle('sel',!!on);qgCamTxt();qgCamLay();if(!on){const b=c.o.querySelector('.qgc1'),sh=b&&b.querySelector('.sh');if(b&&sh)b.scrollLeft=sh.offsetLeft-(b.clientWidth-sh.offsetWidth)/2}}
 /* Foto dari galeri / kamera bawaan: langsung masuk tahap seleksi (tanpa kamera langsung) */
 function qgCamStill(c){if(CAM)qgCamClose();const SF=QG.ocrMode=='sfx';qgCamMk(SF);qgOcrWarm().catch(()=>{});CAM.cs.width=c.width;CAM.cs.height=c.height;CAM.cs.getContext('2d').drawImage(c,0,0);CAM.o.classList.add('rdy');qgCamSel(1)}
@@ -3257,8 +3265,8 @@ catch(e){if(CAM&&CAM.o===o)qgCamClose();toast('Kamera tidak bisa dibuka (izin di
 if(!CAM||CAM.o!==o){st.getTracks().forEach(t=>t.stop());return}
 CAM.st=st;const v=CAM.v;v.srcObject=st;
 const rdy=()=>{if(CAM&&CAM.o===o){o.classList.add('rdy');qgCamLay()}};v.addEventListener('loadedmetadata',rdy);v.addEventListener('playing',rdy);v.addEventListener('resize',qgCamLay);
-try{const tr=st.getVideoTracks()[0],cp=tr.getCapabilities?tr.getCapabilities():{};if(cp.torch)o.querySelector('#qgCamT').style.display='';if(cp.focusMode&&cp.focusMode.indexOf('continuous')>=0)tr.applyConstraints({advanced:[{focusMode:'continuous'}]}).catch(()=>{})}catch(e){}
-v.play().catch(()=>{});qgCamLay()}
+try{const tr=st.getVideoTracks()[0],cp=tr.getCapabilities?tr.getCapabilities():{};if(cp.torch)o.querySelector('#qgCamT').style.display='';if(cp.zoom&&cp.zoom.max>cp.zoom.min){CAM.zh=1;CAM.zmin=cp.zoom.min;CAM.zmax=Math.min(cp.zoom.max,10);CAM.zm=CAM.zmin}qgCamZInit();if(cp.focusMode&&cp.focusMode.indexOf('continuous')>=0)tr.applyConstraints({advanced:[{focusMode:'continuous'}]}).catch(()=>{})}catch(e){}
+if(CAM&&CAM.o===o&&!CAM.zh)qgCamZInit();v.play().catch(()=>{});qgCamLay()}
 function qgCamBar(o){const b=o.querySelector('.qgcb'),sh=b&&b.querySelector('.sh');if(!b||!sh)return;
 const ct=()=>{b.scrollLeft=sh.offsetLeft-(b.clientWidth-sh.offsetWidth)/2};ct();requestAnimationFrame(ct);
 let d=0,x0=0,l0=0,mv=0;
@@ -3266,14 +3274,14 @@ b.addEventListener('pointerdown',e=>{if(e.pointerType!='mouse')return;d=1;mv=0;x
 addEventListener('pointermove',e=>{if(!d)return;const dx=e.clientX-x0;if(Math.abs(dx)>6)mv=1;if(mv)b.scrollLeft=l0-dx});
 addEventListener('pointerup',()=>{d=0});
 b.addEventListener('click',e=>{if(mv){e.preventDefault();e.stopPropagation();mv=0}},true)}
-function qgCamClose(){const c=CAM;CAM=null;if(!c)return;removeEventListener('resize',qgCamLay);try{if(c.st)c.st.getTracks().forEach(t=>t.stop())}catch(e){}if(c.o)c.o.remove()}
+function qgCamClose(){const c=CAM;CAM=null;if(!c)return;clearInterval(c.ci);removeEventListener('resize',qgCamLay);try{if(c.st)c.st.getTracks().forEach(t=>t.stop())}catch(e){}if(c.o)c.o.remove()}
 function qgCamGal(){qgCamClose();const g=document.getElementById('qgOcrG');if(g)g.click()}
-function qgCamReset(){if(!CAM||!CAM.o)return;CAM.fr=Object.assign({},QGFR_D);CAM.dv=QGDV_D;qgFrSave();qgCamLay()}
+function qgCamReset(){if(!CAM||!CAM.o)return;CAM.fr=Object.assign({},QGFR_D);CAM.dv=CAM.sf?QGDV_DS:QGDV_D;qgFrSave();qgCamLay()}
 function qgCamTorch(){if(!CAM||!CAM.st)return;const tr=CAM.st.getVideoTracks()[0];CAM.tn=!CAM.tn;const b=document.getElementById('qgCamT');if(b){b.style.background=CAM.tn?'#facc15':'';b.style.color=CAM.tn?'#111':''}
 tr.applyConstraints({advanced:[{torch:!!CAM.tn}]}).catch(()=>{if(CAM)CAM.tn=0;if(b){b.style.background='';b.style.color=''}toast('Senter tidak bisa dinyalakan')})}
 function qgCamDrag(e){if(!CAM||!CAM.o)return;const t=e.target.closest?e.target.closest('[data-h]'):null,mode=t?t.dataset.h:'m',f=Object.assign({},CAM.fr),s={x:e.clientX,y:e.clientY},r=CAM.r;e.preventDefault();
 const fb=CAM.fe.getBoundingClientRect();
-const mv=ev=>{if(!CAM||!CAM.o)return;if(mode=='dv'){CAM.dv=Math.min(.9,Math.max(.1,(ev.clientX-fb.left)/Math.max(1,fb.width)));qgCamLay();return}const dx=(ev.clientX-s.x)/r.dw,dy=(ev.clientY-s.y)/r.dh,MW=.08,MH=.05;let x=f.x,y=f.y,w=f.w,h=f.h;
+const mv=ev=>{if(!CAM||!CAM.o)return;if(mode=='dv'){CAM.dv=Math.min(CAM.sf?.95:.9,Math.max(.1,(ev.clientX-fb.left)/Math.max(1,fb.width)));qgCamLay();return}const dx=(ev.clientX-s.x)/r.dw,dy=(ev.clientY-s.y)/r.dh,MW=.08,MH=.05;let x=f.x,y=f.y,w=f.w,h=f.h;
 if(mode=='m'){x=Math.min(1-w,Math.max(0,f.x+dx));y=Math.min(1-h,Math.max(0,f.y+dy))}
 else{if(mode.includes('w')){const nx=Math.min(f.x+f.w-MW,Math.max(0,f.x+dx));w=f.x+f.w-nx;x=nx}
 if(mode.includes('e'))w=Math.min(1-f.x,Math.max(MW,f.w+dx));
@@ -3282,12 +3290,25 @@ if(mode.includes('s'))h=Math.min(1-f.y,Math.max(MH,f.h+dy))}
 CAM.fr={x,y,w,h};qgCamLay()};
 const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);if(CAM&&CAM.o)qgFrSave()};
 addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)}
-function qgCamShot(){if(!CAM||!CAM.o||!CAM.v||CAM.sel)return;const v=CAM.v,vw=v.videoWidth,vh=v.videoHeight;if(!vw||!vh)return toast('Kamera belum siap, tunggu sebentar');
-CAM.cs.width=vw;CAM.cs.height=vh;CAM.cs.getContext('2d').drawImage(v,0,0,vw,vh);try{v.pause()}catch(e){}qgCamSel(1)}
+function qgCamShot(){if(!CAM||!CAM.o||!CAM.v||CAM.sel)return;
+if(CAM.cdt){qgCamCdStop();return}
+if(CAM.tm){const v=CAM.v;if(!v.videoWidth||!v.videoHeight)return toast('Kamera belum siap, tunggu sebentar');CAM.cdt=3;qgCamCdUi();CAM.ci=setInterval(()=>{if(!CAM||!CAM.o){return}CAM.cdt--;if(CAM.cdt<=0){clearInterval(CAM.ci);CAM.cdt=0;qgCamCdUi();qgCamSnap()}else qgCamCdUi()},1000);return}
+qgCamSnap()}
+function qgCamSnap(){if(!CAM||!CAM.o||!CAM.v||CAM.sel)return;const v=CAM.v,vw=v.videoWidth,vh=v.videoHeight;if(!vw||!vh)return toast('Kamera belum siap, tunggu sebentar');
+const z=CAM.zh?1:(CAM.zm||1),sw=vw/z,sh=vh/z,sx=(vw-sw)/2,sy=(vh-sh)/2,cw=Math.round(sw),ch=Math.round(sh);
+CAM.cs.width=cw;CAM.cs.height=ch;CAM.cs.getContext('2d').drawImage(v,sx,sy,sw,sh,0,0,cw,ch);try{v.pause()}catch(e){}qgCamSel(1)}
+function qgCamCdUi(){const e=document.getElementById('qgCamCd');if(e)e.textContent=CAM&&CAM.cdt?CAM.cdt:''}
+function qgCamCdStop(){if(!CAM)return;clearInterval(CAM.ci);CAM.cdt=0;qgCamCdUi()}
+function qgCamTmUi(){const b=document.getElementById('qgCamTm');if(!b||!CAM)return;b.style.background=CAM.tm?'#facc15':'';b.style.color=CAM.tm?'#111':'';b.setAttribute('aria-pressed',CAM.tm?'true':'false')}
+function qgCamTm(){if(!CAM)return;CAM.tm=!CAM.tm;try{L[QGTM_K]=CAM.tm?'1':'0'}catch(e){}qgCamTmUi();toast(CAM.tm?'Timer 3 detik aktif':'Timer mati')}
+function qgCamZInit(){const c=CAM;if(!c||!c.o)return;const r=document.getElementById('qgCamZR');if(r){r.min=c.zmin;r.max=c.zmax;r.step=c.zh?((c.zmax-c.zmin)/40||.1):.1;r.value=c.zm}c.o.classList.add('zmok');qgCamZoom(c.zm)}
+function qgCamZoom(z){const c=CAM;if(!c||!c.o)return;z=Math.min(c.zmax,Math.max(c.zmin,+z||1));c.zm=z;const r=document.getElementById('qgCamZR'),l=document.getElementById('qgCamZL');if(r&&+r.value!==z)r.value=z;if(l)l.textContent=(c.zh?z/c.zmin:z).toFixed(1)+'x';
+if(c.zh){try{c.st.getVideoTracks()[0].applyConstraints({advanced:[{zoom:z}]}).catch(()=>{})}catch(e){}}else if(c.v)c.v.style.transform=z>1?'scale('+z+')':'';qgCamLay()}
+function qgCamZStep(d){const c=CAM;if(!c)return;qgCamZoom(c.zm+d*(c.zh?(c.zmax-c.zmin)/10:.5))}
 function qgCamRetake(){if(!CAM||!CAM.o)return;if(CAM.st&&CAM.v){try{CAM.v.play().catch(()=>{})}catch(e){}qgCamSel(0)}else{qgCamClose();qgCamOpen(null)}}
 /* Potong hanya isi bingkai dari foto beku (resolusi penuh), lalu baca */
 function qgCamRead(){if(!CAM||!CAM.o||!CAM.sel)return;const src=CAM.cs,vw=src.width,vh=src.height;
-const f=CAM.fr,sx=Math.max(0,Math.round(f.x*vw)),sy=Math.max(0,Math.round(f.y*vh)),sw=Math.max(8,Math.min(vw-sx,Math.round(f.w*vw))),sh=Math.max(8,Math.min(vh-sy,Math.round(f.h*vh))),m=Math.max(sw,sh),k=m>1000?1000/m:(m<560?Math.min(1.6,560/m):1),
+const f=CAM.fr,sx=Math.max(0,Math.round(f.x*vw)),sy=Math.max(0,Math.round(f.y*vh)),sw=Math.max(8,Math.min(vw-sx,Math.round(f.w*vw*(CAM.sf?CAM.dv:1)))),sh=Math.max(8,Math.min(vh-sy,Math.round(f.h*vh))),m=Math.max(sw,sh),k=m>1000?1000/m:(m<560?Math.min(1.6,560/m):1),
 cw=Math.max(1,Math.round(sw*k)),ch=Math.max(1,Math.round(sh*k)),pad=12,c=document.createElement('canvas');c.width=cw+pad*2;c.height=ch+pad*2;
 const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.imageSmoothingQuality='high';x.drawImage(src,sx,sy,sw,sh,pad,pad,cw,ch);
 const dvx=CAM.sf?0:pad+CAM.dv*cw,CAM_SF=!!CAM.sf;qgCamClose();if(CAM_SF)qgOcrSfxPrep(c);else qgOcrNorm(c);c.dvx=dvx;qgOcrRun(()=>Promise.resolve(c))}
