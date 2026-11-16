@@ -1314,20 +1314,28 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qrjt{display:block;height:14px;border-radius:5px;background:var(--tr);overflow:hidden}.qrbar{display:block;height:100%;border-radius:4px}
 .qrtr{display:grid;grid-template-columns:1fr 34px 34px 96px;gap:6px;align-items:center;height:28px;font-size:12px;border-bottom:1px solid var(--ln)}
 @media print{html.qgprn .qrmx{display:none!important}html.qgprn .qgsmc{max-width:none!important;width:auto!important;padding:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}html.qgprn .qrctl,html.qgprn .qgsH,html.qgprn .qgsf{display:none!important}html.qgprn .qrwrap{width:var(--pw)!important;height:var(--ph)!important;overflow:hidden!important;margin:0!important;border-radius:0!important}html.qgprn .qrs{transform:scale(var(--pk))!important;border:0}html.qgprn,html.qgprn body{background:#fff!important}}
-/* Halaman 2 Summary Report: detail defect per item (panel + titik, daftar defect, C/M, evidence) */
+/* Halaman 2 Summary Report: detail defect per item. Kartu 250px (2 per halaman), 3 defect per kartu; kalau satu halaman cuma berisi 1 kartu -> .big (penuh, foto lebih besar) */
 .qrp2{position:relative}
-.qrxg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:248px;gap:10px;align-content:start;min-height:0}
-.qrxc{padding:8px 12px;overflow:hidden;min-height:0;border-radius:14px}
-.qrxh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}.qrxh b{font-size:13px;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.qrxh span{font-size:11px;font-weight:600;color:#ED7D31;white-space:nowrap}
-.qrxb{display:flex;gap:10px;min-height:0;flex:1}
-.qrxi{position:relative;display:inline-block;line-height:0;flex:none;align-self:flex-start;background:#fff;border-radius:6px}.qrxi img{display:block;max-width:150px;max-height:190px;width:auto;height:auto;border-radius:6px}
-.qrxi.no{display:flex;width:150px;height:110px;align-items:center;justify-content:center;text-align:center;font-size:10px;line-height:1.2;padding:6px;border:1px dashed var(--pbd);background:transparent;color:var(--pm)}
-.qrxl{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
-.qrxr{display:flex;align-items:center;gap:6px;min-height:38px}
+.qrxg{display:flex;flex-direction:column;gap:10px;min-height:0}
+.qrxc{height:250px;padding:8px 12px;overflow:hidden;border-radius:14px;box-sizing:border-box}
+.qrxc.big{height:510px}
+.qrxh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;min-height:24px}.qrxh b{flex:1;min-width:0;font-size:14px;font-weight:700;line-height:1.2}.qrxh span{flex:none;font-size:12px;font-weight:600;color:#ED7D31;white-space:nowrap}
+.qrxb{display:flex;gap:10px;min-height:0}
+.qrxp{flex:none;width:205px;height:205px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:6px;overflow:hidden}
+.qrxc.big .qrxp{width:280px;height:340px}
+.qrxi{position:relative;display:inline-block;line-height:0}.qrxi img{display:block;max-width:205px;max-height:205px;width:auto;height:auto}
+.qrxc.big .qrxi img{max-width:280px;max-height:340px}
+.qrxp.no{font-size:11px;line-height:1.2;text-align:center;padding:8px;border:1px dashed var(--pbd);background:transparent;color:var(--pm);box-sizing:border-box}
+.qrxs{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-content:start}
+.qrxc.big .qrxs{grid-template-columns:repeat(2,minmax(0,1fr))}
+.qrxr{min-width:0}
+.qrxe{display:block;width:100%;height:150px;object-fit:cover;border-radius:6px;border:1px solid var(--pbd);box-sizing:border-box}
+.qrxc.big .qrxe{height:180px}
+.qrxe.none{background:var(--tr)}
+.qrxa{display:flex;gap:5px;align-items:center;margin-top:5px}.qrxa b{flex:1;min-width:0;font-size:11px;font-weight:700;line-height:1.2}
 .qrxn{flex:none;width:16px;height:16px;border-radius:50%;background:#ef4444;color:#fff;font-size:9px;font-weight:700;font-style:normal;line-height:16px;text-align:center}
-.qrxt{flex:1;min-width:0;line-height:1.2}.qrxt b{display:block;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qrxt span,.qrxt em{display:block;font-size:9px;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qrxt span{color:var(--pm)}.qrxt em{color:#92D050}
+.qrxt{line-height:1.2;margin-top:2px}.qrxt span,.qrxt em{display:block;font-size:9px;font-style:normal;overflow-wrap:anywhere}.qrxt span{color:var(--pm)}.qrxt em{color:#92D050;margin-top:1px}
 .qrs.l .qrxt em{color:#3B6D11}
-.qrxe{flex:none;width:50px;height:38px;object-fit:cover;border-radius:5px;border:1px solid var(--pbd);display:block}.qrxe.none{background:var(--tr)}
 .qrxf{position:absolute;right:22px;bottom:4px;font-size:10px;color:var(--pm)}
 @media print{html.qgprn .qrwrap.qrpb{break-after:page;page-break-after:always}}
 html[data-view=pc] .qg-vr .qg-k{min-width:110px}html[data-view=pc] .qg-vb{font-size:15px;padding:12px 0}
@@ -3111,13 +3119,13 @@ ${co('td','bg2 k3')}<div class="qrt" style="margin-bottom:2px;display:flex;align
 function qgRepFn(day){const dt=new Date(day+'T00:00:00');if(isNaN(dt))return String(day);let m;try{m=new Intl.DateTimeFormat(LC(),{month:'short'}).format(dt).replace(/\./g,'')}catch(e){m=String(dt.getMonth()+1)}return String(dt.getDate()).padStart(2,'0')+' '+m+' '+String(dt.getFullYear()).slice(-2)}
 /* Halaman 2+ Summary Report: item yang punya defect (mengikuti filter Varian). Satu kartu = satu item, maks 4 defect per kartu (lebih dari itu lanjut ke kartu berikut), 4 kartu per halaman */
 function qgRepDefPages(day,th){const d=qgRepData(day),ch=[];
-d.sl.forEach(s=>{const L=s.df||[];for(let i=0;i<L.length;i+=4)ch.push({s,i,n:L.length})});
+d.sl.forEach(s=>{const L=s.df||[];for(let i=0;i<L.length;i+=3)ch.push({s,i,n:L.length})});
 if(!ch.length)return[];
-const dt=new Date(day+'T00:00:00'),dts=isNaN(dt)?day:dt.toLocaleDateString(LC(),{day:'numeric',month:'short',year:'numeric'}),np=Math.ceil(ch.length/4),tot=np+1,out=[];
+const dt=new Date(day+'T00:00:00'),dts=isNaN(dt)?day:dt.toLocaleDateString(LC(),{day:'numeric',month:'short',year:'numeric'}),np=Math.ceil(ch.length/2),tot=np+1,out=[];
 const dots=L=>L.map((x,j)=>x.x!=null&&x.y!=null?`<span class="qrdd" style="left:${+x.x}%;top:${+x.y}%">${j+1}</span>`:'').join('');
-const card=c=>{const L=c.s.df,rows=L.slice(c.i,c.i+4).map((x,j)=>`<div class="qrxr"><i class="qrxn">${c.i+j+1}</i><div class="qrxt"><b>${esc(x.t)}</b><span>Body ${esc(String(x.b||'-'))} &middot; Sfx ${esc(String(x.sf||'-'))} &middot; ${esc(x.vr)}</span>${x.ct?`<em>C/M: ${esc(x.ct)}</em>`:''}</div>${x.e?`<img class="qrxe" src="${esc(x.e)}" alt="Evidence">`:'<span class="qrxe none"></span>'}</div>`).join('');
-return`<div class="qrc qrxc"><div class="qrxh"><b>${esc(c.s.k)}</b><span>${c.n} defect${c.i?' &middot; lanjutan':''}</span></div><div class="qrxb">${c.s.im?`<span class="qrxi"><img src="${esc(c.s.im)}" alt="">${dots(L)}</span>`:'<span class="qrxi no">Gambar panel belum ada</span>'}<div class="qrxl">${rows}</div></div></div>`};
-for(let p=0;p<np;p++)out.push(`<div class="qrs qrp2 ${th}"><div class="qrhd"><div><div class="qrlg"><img src="${QG_LOGO}" alt="ADM"></div></div><div class="qrtt"><div>DAILY REPORT QG${d.fv!='A'?' &middot; '+QG_VN[d.fv].toUpperCase():''}</div><b>DETAIL DEFECT</b></div><div class="qrc qrdb"><div><em>Tanggal</em><b>${esc(dts)}</b></div><div><em>Shift</em><b style="color:#C55A11">${esc(qgRepShift(day))}</b></div></div></div><div class="qrxg">${ch.slice(p*4,p*4+4).map(card).join('')}</div><div class="qrxf">Halaman ${p+2} / ${tot}</div></div>`);
+const card=(c,big)=>{const L=c.s.df,tl=L.slice(c.i,c.i+3).map((x,j)=>`<div class="qrxr">${x.e?`<img class="qrxe" src="${esc(x.e)}" alt="Evidence">`:'<span class="qrxe none"></span>'}<div class="qrxa"><i class="qrxn">${c.i+j+1}</i><b>${esc(x.t)}</b></div><div class="qrxt"><span>Body ${esc(String(x.b||'-'))} &middot; Sfx ${esc(String(x.sf||'-'))} &middot; ${esc(x.vr)}</span>${x.ct?`<em>C/M: ${esc(x.ct)}</em>`:''}</div></div>`).join('');
+return`<div class="qrc qrxc${big?' big':''}"><div class="qrxh"><b>${esc(c.s.k)}</b><span>${c.n} defect${c.i?' &middot; lanjutan':''}</span></div><div class="qrxb">${c.s.im?`<div class="qrxp"><span class="qrxi"><img src="${esc(c.s.im)}" alt="">${dots(L)}</span></div>`:'<div class="qrxp no">Gambar panel belum ada</div>'}<div class="qrxs">${tl}</div></div></div>`};
+for(let p=0;p<np;p++){const cs=ch.slice(p*2,p*2+2);out.push(`<div class="qrs qrp2 ${th}"><div class="qrhd"><div><div class="qrlg"><img src="${QG_LOGO}" alt="ADM"></div></div><div class="qrtt"><div>DAILY REPORT QG${d.fv!='A'?' &middot; '+QG_VN[d.fv].toUpperCase():''}</div><b>DETAIL DEFECT</b></div><div class="qrc qrdb"><div><em>Tanggal</em><b>${esc(dts)}</b></div><div><em>Shift</em><b style="color:#C55A11">${esc(qgRepShift(day))}</b></div></div></div><div class="qrxg">${cs.map(c=>card(c,cs.length==1)).join('')}</div><div class="qrxf">Halaman ${p+2} / ${tot}</div></div>`)}
 return out}
 function qgSumView(){const day=qgDay(),sz=QG.rs=='A3'?'A3':'A4',th=QG.rt=='l'?'l':'d',b=(k,v,t,on)=>`<button type="button" class="qrb${on?' on':''}" onclick="qgRepSet('${k}',${v})">${t}</button>`;
 return`<div class="qgov t3 qgsm" onclick="if(event.target===this){QG.sum=0;render()}"><div class="c qgc qgsmc qrw"><button type="button" class="qgx" aria-label="Tutup" onclick="QG.sum=0;render()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
@@ -3134,11 +3142,12 @@ const cp=(a,b)=>{const cs=getComputedStyle(a);let t='';for(let i=0;i<cs.length;i
 const rend=async(el,lite)=>{const W=900,H=636,cl=el.cloneNode(true);cp(el,cl);
 const hd=el.querySelector('.qrhd'),hc=cl.querySelector('.qrhd');
 if(hd&&hc){try{const ps=getComputedStyle(hd,'::before');if(ps&&ps.content!='none'&&ps.display!='none'&&ps.clipPath&&ps.clipPath!='none'){const dg=document.createElement('div');dg.setAttribute('style','position:absolute;top:0;bottom:0;left:'+ps.left+';width:'+ps.width+';background-color:'+ps.backgroundColor+';clip-path:'+ps.clipPath+';-webkit-clip-path:'+ps.clipPath+';z-index:0;pointer-events:none');hc.insertBefore(dg,hc.firstChild)}}catch(e){}}
+cl.querySelectorAll('.qrxh b,.qrxh span,.qrxa b,.qrxt,.qrxt span,.qrxt em').forEach(e=>{e.style.height='auto';e.style.maxWidth='none'});cl.querySelectorAll('.qrxh b,.qrxa b,.qrxt span,.qrxt em').forEach(e=>{e.style.width='auto'});
 if(lite)cl.querySelectorAll('img.qrxe').forEach(i=>i.setAttribute('src','data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'));
 cl.style.transform='none';cl.style.width=W+'px';cl.style.height=H+'px';cl.setAttribute('xmlns','http://www.w3.org/1999/xhtml');
 const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'"><foreignObject width="100%" height="100%">'+new XMLSerializer().serializeToString(cl)+'</foreignObject></svg>',im=new Image();
 await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)});
-const c=document.createElement('canvas');c.width=W*2;c.height=H*2;const x=c.getContext('2d');x.scale(2,2);x.fillStyle=getComputedStyle(el).backgroundColor||'#fff';x.fillRect(0,0,W,H);x.drawImage(im,0,0,W,H);return c.toDataURL('image/jpeg',.92)};
+const q=el.classList.contains('qrp2')?3:2,c=document.createElement('canvas');c.width=W*q;c.height=H*q;const x=c.getContext('2d');x.scale(q,q);x.fillStyle=getComputedStyle(el).backgroundColor||'#fff';x.fillRect(0,0,W,H);x.drawImage(im,0,0,W,H);return c.toDataURL('image/jpeg',.92)};
 try{if(!window.jspdf)throw 0;const W=900,H=636,doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:QG.rs=='A3'?'a3':'a4'}),pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight(),k=Math.min(pw/W,ph/H);
 for(let i=0;i<els.length;i++){let u;try{u=await rend(els[i],false)}catch(e){if(!i)throw e;u=await rend(els[i],true)}if(i)doc.addPage();doc.addImage(u,'JPEG',(pw-W*k)/2,(ph-H*k)/2,W*k,H*k)}
 await outPdf(doc,nm,0)}
