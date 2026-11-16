@@ -2862,9 +2862,9 @@ function qgOpen(k){QG.part=k;QG.pal=0;QG.lim=QG_LIM;render()}
 function qgClose(){QG.part='';QG.pal=0;QG.dp=null;QG.draft=null;QG.df=null;QG.cm=null;QG.kt=null;QG.dirty=0;QG.lim=QG_LIM;render()}
 function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.cp=null;QG.dp=null;QG.bm=0;QG.df=null;QG.cm=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3],qgCm(r[4]),qgKt(r[5])]:['','',[],'',qgCm(null),qgKt(null)]});QG.kt=null;QG.dirty=0;render();setTimeout(()=>qgOcrWarm().catch(()=>{}),300)}
 /* Copy data dari item lain: pilih kolom yang disalin lewat centang. Kolom: b=No. Body, s=Sfx, j=Judge, d=Defect (+titik, C/M, Evidence), v=Variant */
-const QG_CPF=[['b','No. Body',''],['s','Sfx',''],['j','Judge','OK, NG, Other Shift'],['d','Defect','Titik, C/M, dan Evidence ikut'],['v','Variant','Domestic atau Export']];
+const QG_CPF=[['b','No. Body',''],['s','Sfx',''],['j','Judge','OK, NG, Other Shift'],['v','Variant','Domestic atau Export'],['d','Defect','Titik, C/M, dan Evidence ikut']];
 function qgCopy(k){if(!k||!QG.draft)return;const n=QG.pal,src=(qgP(qgDay(),k).p||{})[n];if(!src||!src.length){render();return toast('Item itu belum punya data pada palet '+n)}
-QG.cp={k,b:1,s:1,j:0,d:1,v:0};render()}
+QG.cp={k,b:1,s:1,j:1,v:1,d:0};render()}
 function qgCpT(f){if(QG.cp){QG.cp[f]=QG.cp[f]?0:1;render()}}
 function qgCpAll(){const c=QG.cp;if(!c)return;const all=QG_CPF.every(x=>c[x[0]]);QG_CPF.forEach(x=>c[x[0]]=all?0:1);render()}
 function qgCpCancel(){QG.cp=null;render()}
