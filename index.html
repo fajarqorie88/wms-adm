@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 261.
+<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 262.
   [x] Tahap 1: Summary Report = grid 48 kolom x 24 baris, 9 kartu (tc, ok, ng, pl, hi, dpu, jd, dc, td) pakai posisi [x,y,w,h]; default sama dengan tampilan lama; HP tetap satu kolom lewat CSS .qrmob (cari QGL_DEF, qgLay, .qrg)
   [x] Tahap 2: Mode edit Developer (PC saja): tombol Edit layout di QG, geser dan ubah ukuran kartu (snap ke grid, tidak boleh tumpang tindih), Simpan / Reset / Batal; layout disimpan di D.M.qgly dan ikut sinkron ke server (cari qgLyEdit, qgLySave)
   [x] Tahap 3: mode edit punya icon mata di tiap kartu (sembunyikan) dan daftar "Kartu tersembunyi" di bar edit (klik untuk tambah kembali, otomatis dicarikan ruang kosong); kartu tersembunyi disimpan sebagai 0 di D.M.qgly.c, tidak tampil di PC, HP, popup dan cetak PDF (cari qgLyHide, qgLyAdd, qgLyFit, .qrhid, .qrey)
@@ -1505,7 +1505,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=261;
+const APP_REV=262;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -3018,7 +3018,7 @@ return`<div class="qgov t3 qgsm" onclick="if(event.target===this){QG.sum=0;rende
 ${qgFiltBar()}<div class="qrwrap${QG.rz?' z':''}">${qgRepSheet(day,th)}</div>
 <div class="qgsf">Dibuat ${esc(new Date().toLocaleString(LC()))}</div>
 <button type="button" class="qgpb" onclick="qgPrint()">Cetak / PDF (${sz} landscape)</button>
-<button type="button" class="qgpb" style="margin-top:8px;background:#2F6FB5" onclick="qgShare()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button></div></div>`}
+<button type="button" class="qgpb" style="margin-top:8px;background:#2F6FB5;display:flex;align-items:center;justify-content:center;gap:8px" onclick="qgShare()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex:none"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button></div></div>`}
 /* Bagikan Summary Report: render lembar (.qrs, 900x636) jadi gambar lewat SVG foreignObject dengan style terhitung disalin ke klon, lalu dibungkus PDF landscape dan dibuka lewat menu bagikan bawaan (WhatsApp, Email, dll.). Kalau render gagal, yang dibagikan teks ringkasan */
 async function qgShare(){const el=document.querySelector('.qgsm .qrs');if(!el)return toast('Laporan belum siap');const day=qgDay(),nm='Summary_QG_'+String(day).replace(/\D/g,'')+'.pdf',msg='Summary Report Quality Gate '+qgDate(day);
 const cp=(a,b)=>{const cs=getComputedStyle(a);let t='';for(let i=0;i<cs.length;i++)t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';b.setAttribute('style',t);for(let i=0;i<a.children.length;i++)cp(a.children[i],b.children[i])};
