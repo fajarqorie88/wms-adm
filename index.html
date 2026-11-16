@@ -2826,9 +2826,9 @@ const qgFm=n=>n==null?'-':n.toLocaleString(LC());
 const qgProd=day=>((D.M.prod||{})[day])||{};
 /* Jumlah palet = (target + baris Other Shift) / isi palet, per item. Baris Other Shift (OS) memakai slot tapi tidak memenuhi target, jadi palet bertambah otomatis. Tanpa k = nilai terbesar dari semua item. Palet yang sudah berisi tidak pernah hilang */
 function qgPals(day,k){const t=prNum(qgProd(day).t);if(t==null||t<=0)return 0;
-if(k===undefined)return Math.max(Math.ceil(t/QG_N),...qgParts().map(it=>qgPals(day,it.k)));
+if(k===undefined){const a=qgParts().map(it=>qgPals(day,it.k));return a.length?Math.max(...a):Math.ceil(t/QG_N)}
 const P=qgP(day,k),os=qgOsN(P,'A');let hi=0;Object.keys(P.p||{}).forEach(n=>{if((P.p[n]||[]).some(x=>String(x[0]||'').trim()||String(x[1]||'').trim()||x[3]))hi=Math.max(hi,+n||0)});
-return Math.min(Math.max(Math.ceil((t+os)/QG_N),hi),300)}
+return Math.min(Math.max(Math.ceil((qgTgtI(day,k)+os)/QG_N),hi),300)}
 /* Shikake (panjang siklus Skk) bisa diedit per item per tanggal: P.k (default QG_CYC = 10). Start (P.s) dan nomor Skk semua palet mengikuti nilai ini */
 const qgCyc=P=>{const k=parseInt(P&&P.k);return k>=1&&k<=99?k:QG_CYC};
 const qgSkk=(s,n,k)=>{k=k||QG_CYC;return(((s||1)-1+n-1)%k)+1};
@@ -2853,6 +2853,8 @@ function qgTgt(day,k,v){const Pr=qgProd(day),t=prNum(Pr.t),va=prNum(Pr.v),pk=t!=
 if(v=='V')return va;if(v=='P')return pk;const a=vs.includes('V')?va:null,b=vs.includes('P')?pk:null;return a==null&&b==null?null:(a||0)+(b||0)}
 /* Hitung baris per judgement. OK = lolos, NG = tidak lolos, OS = Other Shift (tidak masuk target shift ini). Actual = OK + NG (sudah dijudge di shift ini) */
 function qgCnt(P,v,f){let n=0;Object.keys(P.p||{}).forEach(p=>{const tg=(P.pv||{})[p]||'';if(v!='A'&&tg!=v)return;(P.p[p]||[]).forEach(x=>{if(f(x[3]))n++})});return n}
+/* Target 'All' PER ITEM mengikuti variant yang berlaku di item itu: item khusus Van = target Van saja, khusus Pickup = Pickup saja, Van+Pickup = Target total. Kalau Van belum diisi di Produksi, jatuh ke Target total */
+function qgTgtI(day,k){const x=qgTgt(day,k,'A');return x!=null?x:(prNum(qgProd(day).t)||0)}
 const qgOkN=(P,v)=>qgCnt(P,v,j=>j=='OK'),qgOsN=(P,v)=>qgCnt(P,v,j=>j=='OS'),qgActN=(P,v)=>qgCnt(P,v,j=>j=='OK'||j=='NG');
 function qgVar(v){qgWrite(qgDay(),QG.part,P=>{if(v)P.v=v;else delete P.v})}
 const qgDone=(P,n)=>{const r=P.p[n];return!!r&&r.length==QG_N&&r.every(x=>x[3]=='OK'||x[3]=='NG'||x[3]=='OS')};
@@ -2989,8 +2991,8 @@ return a.map(x=>{if(!x.t)return`<div class="qgdf-i"><div class="qgdf-h"><span>${
 const op=o[x.k]===undefined?x.k==fi:!!o[x.k],mx=x.L[0][1];
 return`<div class="qgdf-i${op?' on':''}"><button type="button" class="qgdf-h" aria-expanded="${op?'true':'false'}" onclick="qgDfTog('${esc(x.k)}',${op?1:0})"><span>${esc(x.n)}</span><em>${x.t} defect</em><i aria-hidden="true">&#9662;</i></button>${op?`<div class="qgdf-b">${x.L.map(([t,c])=>`<div class="qgdf-r"><span>${esc(t)}</span><div><i style="width:${Math.round(c/mx*100)}%"></i></div><b>${c}</b></div>`).join('')}</div>`:''}</div>`}).join('')}
 function qgDash(day,tot){const d=qgDashData(day),em='<div class="qgd-em">Belum ada data WMS pada tanggal ini</div>',items=qgParts();
-let gOk=0,gPal=0;const rows=items.map(it=>{const P=qgP(day,it.k),o=qgOkN(P,'A'),n=qgCnt(P,'A',j=>j=='NG');let pal=0;for(let i=1;i<=tot;i++)if(qgDone(P,i))pal++;gOk+=o;gPal+=pal;return`<tr><td>${esc(it.n)}</td><td>${pal}/${tot}</td><td>${qgFm(o)}</td><td>${qgFm(n)}</td></tr>`}).join('');
-const t1=prNum(qgProd(day).t),tg=t1==null?null:t1*Math.max(1,items.length),pc=tg>0?Math.min(100,Math.round(gOk/tg*100)):0;
+let gOk=0,gPal=0;const rows=items.map(it=>{const P=qgP(day,it.k),o=qgOkN(P,'A'),n=qgCnt(P,'A',j=>j=='NG');let pal=0;const tt=qgPals(day,it.k);for(let i=1;i<=tt;i++)if(qgDone(P,i))pal++;gOk+=o;gPal+=pal;return`<tr><td>${esc(it.n)}</td><td>${pal}/${tt}</td><td>${qgFm(o)}</td><td>${qgFm(n)}</td></tr>`}).join('');
+const t1=prNum(qgProd(day).t),tg=t1==null?null:(items.length?items.reduce((a,it)=>a+qgTgtI(day,it.k),0):t1),pc=tg>0?Math.min(100,Math.round(gOk/tg*100)):0;
 return`<div class="qgdash">
 <div class="qgd-c qgd-6"><h4>Total Inspeksi <span>${esc(qgDate(day))}</span></h4><div class="qgd-big">${qgFm(d.tn)}</div><div class="qgd-sub">Tren jumlah pengecekan per shift</div>${d.tn?qgArea(d.L.map(k=>d.m[k].n),d.L):em}</div>
 <div class="qgd-c qgd-6"><h4>OK / NG <span>per shift</span></h4><div class="qgd-row">${qgDonut(d.tok,d.tng)}<div class="qgd-lg"><span><i style="background:${QGC.ok}"></i>OK ${qgFm(d.tok)}</span><span><i style="background:${QGC.ng}"></i>NG ${qgFm(d.tng)}</span></div><div style="flex:1;min-width:150px">${d.tn?qgStack(d,0):em}</div></div></div>
@@ -3054,13 +3056,13 @@ function qgRepLbl(n){n=String(n||'').replace(/^S\/A\s+/i,'').trim();const m=n.ma
 const qgFv=()=>QG.fv=='V'||QG.fv=='P'?QG.fv:'A';
 function qgRepData(day){const tot=qgPals(day),fv=qgFv(),its=qgParts().filter(it=>fv=='A'||qgVs(it).includes(fv)),d={fv,tot,ok:0,ng:0,os:0,pal:0,palAll:0,tg:0,bs:0,pj:{ok:0,ng:0,os:0,be:0},dfc:{},cmc:{},pa:[],pv:[],pp:[],sl:[]};{const t1=prNum(qgProd(day).t),va=prNum(qgProd(day).v);d.tp=fv=='V'?va:fv=='P'?(t1!=null&&va!=null?t1-va:null):t1}
 for(let n=0;n<tot;n++){d.pa.push(0);d.pv.push(0);d.pp.push(0)}
-its.forEach(it=>{const P=qgP(day,it.k),vs=qgVs(it),t0=qgTgt(day,it.k,fv),ti=qgPals(day,it.k);let pc=0;if(t0)d.tg+=t0;let di=0;const dl=[];
+its.forEach(it=>{const P=qgP(day,it.k),vs=qgVs(it),t0=fv=='A'?qgTgtI(day,it.k):qgTgt(day,it.k,fv),ti=qgPals(day,it.k);let pc=0;if(t0)d.tg+=t0;let di=0;const dl=[];
 for(let n=1;n<=ti;n++){const r=P.p[n]||[],v=(P.pv||{})[n]||'';if(fv!='A'&&v!=fv)continue;pc++;let hn=0,hs=0;
 r.forEach(x=>{const j=x[3];if(j=='OK'){d.ok++;d.pa[n-1]++;if(v=='V')d.pv[n-1]++;else if(v=='P')d.pp[n-1]++}else if(j=='NG'){d.ng++;hn=1}else if(j=='OS'){d.os++;hs=1}
 const cm=x[4]&&(x[4].t||x[4].i);qgDef(x[2]).forEach(m=>{const t=String(m.t||'').trim()||'(tanpa nama)';d.dfc[t]=(d.dfc[t]||0)+1;di++;dl.push({x:m.x,y:m.y,t,c:!!(m.c||m.e||cm),b:x[0],sf:x[1],vr:qgKt(x[5]).d=='E'?'Export':'Domestic',e:m.e,dy:day});if(m.c||m.e||cm)d.cmc[t]=(d.cmc[t]||0)+1})});
 const dn=qgDone(P,n);if(dn)d.pal++;if(hn)d.pj.ng++;else if(hs)d.pj.os++;else if(dn)d.pj.ok++;else d.pj.be++}
 {const pa2=fv=='A'?ti:Math.max(pc,t0>0?Math.ceil(t0/QG_N):0);d.palAll+=pa2;if(fv!='A')d.pj.be+=Math.max(0,pa2-pc)}
-[fv].forEach(c=>{const tg=qgTgt(day,it.k,c),o=qgOkN(P,c);d.sl.push({k:it.n,p:tg>0?Math.round(o/tg*100):null,dc:di,df:dl,im:qgImg(it.k)})})});
+[fv].forEach(c=>{const tg=c=='A'?qgTgtI(day,it.k):qgTgt(day,it.k,c),o=qgOkN(P,c);d.sl.push({k:it.n,p:tg>0?Math.round(o/tg*100):null,dc:di,df:dl,im:qgImg(it.k)})})});
 d.bs=Math.max(0,d.palAll*QG_N-d.ok-d.ng-d.os);return d}
 function qgRepSheet(day,th,ed){const L=qgLay(ed),co=(id,cl)=>{const a=L[id];if(!a)return`<div class="qrc ${cl} qrhid" data-c="${id}">`;return`<div class="qrc ${cl}" data-c="${id}" style="grid-column:${a[0]+1}/span ${a[2]};grid-row:${a[1]+1}/span ${a[3]}">${ed?'<b class="qrlb2">'+QGL_LB[id]+'</b><button type="button" class="qrey" aria-label="Sembunyikan kartu" title="Sembunyikan kartu" onclick="qgLyHide(\''+id+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><i class="qrrz"></i>':''}`};
 const d=qgRepData(day),chk=d.ok+d.ng,C=131.95,
@@ -3186,7 +3188,7 @@ function qgPrint(){const h=document.documentElement,a3=QG.rs=='A3',st=document.c
 function qgRow(P,i,cf){const dn=qgDone(P,i);return`<div class="qgr"><span class="qg-l">${i}</span><span class="qg-l">${cf?qgSkk(cf.s,i,cf.k):'-'}</span><button type="button" class="qg-o" onclick="qgOpenPal(${i})">Open</button><span class="qg-s ${dn?'ok':'ny'}">${dn?'Finish Check':'Not Yet'}</span></div>`}
 const qgMoreBtn=n=>`<button type="button" class="qgmore" onclick="qgMore()">Load more <small>(${n} palet lagi)</small> <span class="qgar">&#9660;</span></button>`;
 function qgMore(){const tot=qgPals(qgDay(),QG.part),o=document.querySelector('.qgov:not(.t2):not(.t3):not(.t4)'),y=o?o.scrollTop:0;QG.lim=Math.min(tot,(QG.lim||QG_LIM)+QG_LIM);render();const n=document.querySelector('.qgov:not(.t2):not(.t3):not(.t4)');if(n)n.scrollTop=y}
-function qgRowsH(day,k){const P=qgP(day,k),tot=qgPals(day,k),cf=qgCfg(P,day),t=prNum(qgProd(day).t);
+function qgRowsH(day,k){const P=qgP(day,k),tot=qgPals(day,k),cf=qgCfg(P,day),t=qgTgtI(day,k);
 const shown=Math.min(tot,QG.lim||QG_LIM);let rows='';for(let i=1;i<=shown;i++)rows+=qgRow(P,i,cf);
 return tot?rows+(tot>shown?qgMoreBtn(tot-shown):'')+`<div class="qginfo">Menampilkan ${shown} dari ${tot} palet (target ${qgFm(t)}${qgOsN(P,'A')?' + '+qgOsN(P,'A')+' Other Shift':''} &divide; ${QG_N} body/palet)</div>`:'<p class="text-sm text-center" style="padding:14px 0;opacity:.7">Target tanggal ini belum diisi. Isi di tab Data &gt; Produksi.</p>'}
 function qgPart(){const day=qgDay(),k=QG.part,P=qgP(day,k),Pr=qgProd(day),t=prNum(Pr.t),v=prNum(Pr.v),pk=t!=null&&v!=null?t-v:null,tot=qgPals(day,k),nm=(qgParts().find(x=>x.k==k)||{}).n||k;
@@ -3196,7 +3198,7 @@ return`<div class="qgov" onclick="if(event.target===this)qgClose()"><div class="
 <div class="qg-tp"><b>Target<br>Process:</b><div class="qg-tl"><div class="qg-t"><i>All</i><b>${qgFm(t)}</b></div><div class="qg-t"><i>Van</i><b>${qgFm(v)}</b></div><div class="qg-t"><i>Pickup</i><b>${pk!=null&&pk>=0?qgFm(pk):'-'}</b></div></div></div>
 <hr class="qg-hr">
 <div class="qg-vr"><span class="qg-k">Variant:</span>${['A',...qgVs(qgItem(k))].map(c=>`<button type="button" class="qg-vb${P.v==c?' on':''}" onclick="qgVar('${P.v==c?'':c}')">${QG_VN[c]}</button>`).join('')}</div>
-${(()=>{const vc=P.v,ac=vc?qgActN(P,vc):0,tv=vc&&vc!='A'?qgTgt(day,k,vc):t;return`<div class="qg-vr qg-tr"><span class="qg-k">Target:</span><span class="qg-b qg-tv">${tv!=null&&tv>=0?qgFm(tv):'-'}</span><span class="qg-k qg-ka">Actual:</span><span class="qg-b qg-tv qg-av">${vc?qgFm(ac):'-'}</span></div>`})()}
+${(()=>{const vc=P.v,ac=vc?qgActN(P,vc):0,tv=vc&&vc!='A'?qgTgt(day,k,vc):qgTgtI(day,k);return`<div class="qg-vr qg-tr"><span class="qg-k">Target:</span><span class="qg-b qg-tv">${tv!=null&&tv>=0?qgFm(tv):'-'}</span><span class="qg-k qg-ka">Actual:</span><span class="qg-b qg-tv qg-av">${vc?qgFm(ac):'-'}</span></div>`})()}
 <hr class="qg-hr">
 <div class="qg-vr"><span class="qg-k">Shikake:</span><span class="qg-b qg-tv">${cf?(P.v=='V'?'Van':'All')+' · Start '+cf.s+' / '+cf.k:'Pickup · target produksi'}</span></div>
 <hr class="qg-hr">
