@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 254.
+<!-- CATATAN TAHAP DASHBOARD INTERAKTIF (gaya Power BI, layout hanya bisa diubah Developer). Posisi saat ini: APP_REV 255.
   [x] Tahap 1: Summary Report = grid 48 kolom x 24 baris, 9 kartu (tc, ok, ng, pl, hi, dpu, jd, dc, td) pakai posisi [x,y,w,h]; default sama dengan tampilan lama; HP tetap satu kolom lewat CSS .qrmob (cari QGL_DEF, qgLay, .qrg)
   [x] Tahap 2: Mode edit Developer (PC saja): tombol Edit layout di QG, geser dan ubah ukuran kartu (snap ke grid, tidak boleh tumpang tindih), Simpan / Reset / Batal; layout disimpan di D.M.qgly dan ikut sinkron ke server (cari qgLyEdit, qgLySave)
   [x] Tahap 3: mode edit punya icon mata di tiap kartu (sembunyikan) dan daftar "Kartu tersembunyi" di bar edit (klik untuk tambah kembali, otomatis dicarikan ruang kosong); kartu tersembunyi disimpan sebagai 0 di D.M.qgly.c, tidak tampil di PC, HP, popup dan cetak PDF (cari qgLyHide, qgLyAdd, qgLyFit, .qrhid, .qrey)
@@ -1502,7 +1502,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=254;
+const APP_REV=255;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -3314,7 +3314,7 @@ ${verBox()}${devDots('developer')}`}
 
 /* ---------- RENDER ---------- */
 function render(){const y=scrollY,ps=window.__rs;window.__rs=scr;document.body.classList.toggle('wn',!!U&&scr=='app');if(!U){$('#app').innerHTML=loginView();trDom($('#app'));return}
-if(scr=='qg'&&!BKG)bkPush();if(scr!='app'){const keep=scr=='qg'&&ps=='qg',so=keep?[...document.querySelectorAll('.qgov,.qrfc,.qgdt2')].map(e=>[e.className,e.scrollTop]):[];const n0=$('nav');if(n0)n0.remove();$('#app').innerHTML=scr=='qg'?qgView():homeView();trDom($('#app'));if(scr=='qg'){qgInFit();if(QG.sum)qgRepFit()}if(keep){const rs=()=>{scrollTo(0,y);const nn=[...document.querySelectorAll('.qgov,.qrfc,.qgdt2')];nn.forEach((e,k)=>{const m=nn.length==so.length?so[k]:so.find(z=>z[0]==e.className);if(m&&m[1])e.scrollTop=m[1]})};rs();requestAnimationFrame(rs)}return}
+if(scr=='qg'&&!BKG)bkPush();if(scr!='app'){const keep=scr=='qg'&&ps=='qg',so=keep?[...document.querySelectorAll('.qgov,.qrfc,.qgdt2')].map(e=>[e.className,e.scrollTop]):[];const n0=$('nav');if(n0)n0.remove();const app0=$('#app'),ah=keep?app0.offsetHeight:0;clearTimeout(window.__qgMh);window.__qgLive=0;/* REV 255: tahan tinggi #app supaya scroll tidak terjepit ke atas saat isi dibangun ulang */app0.style.minHeight=ah?ah+'px':'';app0.innerHTML=scr=='qg'?qgView():homeView();trDom($('#app'));if(scr=='qg'){qgInFit();if(QG.sum)qgRepFit()}if(keep){const rs=()=>{scrollTo(0,y);const nn=[...document.querySelectorAll('.qgov,.qrfc,.qgdt2')];nn.forEach((e,k)=>{const m=nn.length==so.length?so[k]:so.find(z=>z[0]==e.className);if(m&&m[1])e.scrollTop=m[1]})};window.__qgLive=1;rs();requestAnimationFrame(rs);document.querySelectorAll('#app img').forEach(im=>{if(!im.complete)im.addEventListener('load',()=>{if(window.__qgLive)rs()},{once:true})});window.__qgMh=setTimeout(()=>{window.__qgLive=0;app0.style.minHeight=''},900)}return}
 if(!tabOK(tab))tab='input';const v={input:inputView,data:dataView,grafik:grafikView,master:masterView,setting:settingView,developer:devView}[tab]();
 $('#app').innerHTML=backBar()+'<div class="vw vw-'+tab+(vmOf()?' vm-'+vmOf():'')+(SLD?' sld-'+SLD:'')+'">'+v+'</div>';SLD='';let n=$('nav');if(!n){n=document.createElement('nav');document.body.appendChild(n)}
 const vt=visTabs(),bw=vt.length<=5?100/vt.length:20;n.innerHTML=vt.map(([k,l])=>`<button data-k="${k}" class="${tab==k?'on':''}" style="flex-basis:${bw}%" onclick="go('${k}')">${NI[k]||''}<span>${k=='grafik'&&LG=='en'?'Charts':l}${k=='master'&&pend()?' &#9679;':''}</span></button>`).join('')+(isDev()?`<button data-k="developer" class="${tab=='developer'?'on':''}" style="flex-basis:${bw}%" onclick="go('developer')">${NI.developer}<span>Developer</span></button>`:'');n.scrollLeft=tab=='developer'?n.scrollWidth:0;
