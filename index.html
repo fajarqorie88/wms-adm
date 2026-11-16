@@ -1514,7 +1514,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=263;
+const APP_REV=264;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2988,7 +2988,7 @@ for(let n=0;n<tot;n++){d.pa.push(0);d.pv.push(0);d.pp.push(0)}
 its.forEach(it=>{const P=qgP(day,it.k),vs=qgVs(it),t0=qgTgt(day,it.k,fv),ti=qgPals(day,it.k);let pc=0;if(t0)d.tg+=t0;let di=0;const dl=[];
 for(let n=1;n<=ti;n++){const r=P.p[n]||[],v=(P.pv||{})[n]||'';if(fv!='A'&&v!=fv)continue;pc++;let hn=0,hs=0;
 r.forEach(x=>{const j=x[3];if(j=='OK'){d.ok++;d.pa[n-1]++;if(v=='V')d.pv[n-1]++;else if(v=='P')d.pp[n-1]++}else if(j=='NG'){d.ng++;hn=1}else if(j=='OS'){d.os++;hs=1}
-const cm=x[4]&&(x[4].t||x[4].i);qgDef(x[2]).forEach(m=>{const t=String(m.t||'').trim()||'(tanpa nama)';d.dfc[t]=(d.dfc[t]||0)+1;di++;dl.push({x:m.x,y:m.y,t,c:!!(m.c||m.e||cm)});if(m.c||m.e||cm)d.cmc[t]=(d.cmc[t]||0)+1})});
+const cm=x[4]&&(x[4].t||x[4].i);qgDef(x[2]).forEach(m=>{const t=String(m.t||'').trim()||'(tanpa nama)';d.dfc[t]=(d.dfc[t]||0)+1;di++;dl.push({x:m.x,y:m.y,t,c:!!(m.c||m.e||cm),b:x[0],sf:x[1],vr:qgKt(x[5]).d=='E'?'Export':'Domestic',e:m.e,dy:day});if(m.c||m.e||cm)d.cmc[t]=(d.cmc[t]||0)+1})});
 const dn=qgDone(P,n);if(dn)d.pal++;if(hn)d.pj.ng++;else if(hs)d.pj.os++;else if(dn)d.pj.ok++;else d.pj.be++}
 {const pa2=fv=='A'?ti:Math.max(pc,t0>0?Math.ceil(t0/QG_N):0);d.palAll+=pa2;if(fv!='A')d.pj.be+=Math.max(0,pa2-pc)}
 [fv].forEach(c=>{const tg=qgTgt(day,it.k,c),o=qgOkN(P,c);d.sl.push({k:it.n,p:tg>0?Math.round(o/tg*100):null,dc:di,df:dl,im:qgImg(it.k)})})});
@@ -3077,20 +3077,25 @@ function qgHcTog(){const v=!qgHcOn();try{localStorage.setItem('qgHc',v?'1':'0')}
 function qgEyeBtn(){const on=qgHcOn();return`<button type="button" class="qrmx" aria-label="${on?'Sembunyikan callout':'Tampilkan callout'}" aria-pressed="${on?'true':'false'}" onclick="qgHcTog()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>${on?'':'<path d="M3 3l18 18"/>'}</svg></button>`}
 function qgDpp(d,big){if(!d.sl.length)return'<div class="qrem">Belum ada item</div>';
 const s=d.sl[qgHiIdx(d)],cm=qgHcOn(),G={},O=[];let n=0;
-(s.df||[]).forEach(x=>{const t=x.t;if(!G[t]){G[t]={t,q:0,p:[]};O.push(t)}const g=G[t];g.q++;if(x.x!=null&&x.y!=null){n++;g.p.push({x:+x.x,y:+x.y,n})}});
+(s.df||[]).forEach(x=>{const t=x.t;if(!G[t]){G[t]={t,q:0,p:[],l:[]};O.push(t)}const g=G[t];g.q++;if(x.x!=null&&x.y!=null){n++;g.p.push({x:+x.x,y:+x.y,n})}g.l.push(x)});
 const pl=[];O.forEach(t=>{const g=G[t];if(!g.p.length)return;const lb=g.t+(g.q>1?' \u00d7'+g.q:''),w=Math.min(70,lb.length*2+7),cl=a=>Math.max(2,Math.min(98,a)),xs=g.p.map(a=>a.x),cx=Math.max(w/2+2,Math.min(98-w/2,xs.reduce((a,b)=>a+b,0)/xs.length)),by=Math.min(...g.p.map(a=>a.y))-13;let cy=cl(by);
 for(const o of [0,-11,11,-22,22,-33,33]){const y=Math.max(6,Math.min(94,by+o));if(!pl.some(q=>Math.abs(q.cx-cx)<(q.w+w)/2&&Math.abs(q.cy-y)<10)){cy=y;break}}
 pl.push({g,lb,w,cx,cy})});
 const dots=O.map(t=>G[t].p.map(a=>`<span class="qrdd" style="left:${a.x}%;top:${a.y}%">${a.n}</span>`).join('')).join(''),
-cls=cm?`<svg class="qrdl" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${pl.map(o=>o.g.p.map(a=>`<line x1="${o.cx.toFixed(1)}" y1="${o.cy.toFixed(1)}" x2="${a.x}" y2="${a.y}"/>`).join('')).join('')}</svg>${pl.map(o=>`<span class="qrdc" style="left:${o.cx.toFixed(1)}%;top:${o.cy.toFixed(1)}%">${esc(o.lb)}</span>`).join('')}`:'',
+cls=cm?`<svg class="qrdl" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${pl.map(o=>o.g.p.map(a=>`<line x1="${o.cx.toFixed(1)}" y1="${o.cy.toFixed(1)}" x2="${a.x}" y2="${a.y}"/>`).join('')).join('')}</svg>${pl.map(o=>`<span class="qrdc"${big?` role="button" tabindex="0" onclick="qgDfPill(${O.indexOf(o.g.t)})" onkeydown="if(event.key=='Enter')qgDfPill(${O.indexOf(o.g.t)})" style="cursor:pointer;left:${o.cx.toFixed(1)}%;top:${o.cy.toFixed(1)}%"`:` style="left:${o.cx.toFixed(1)}%;top:${o.cy.toFixed(1)}%"`}>${esc(o.lb)}</span>`).join('')}`:'',
 zc=big||QG.ed?0:1,box=s.im?`<div class="qrdp${zc?' qrzm':''}"${zc?' onclick="qgDpMax(1)" title="Perbesar foto"':''}><img src="${s.im}" alt="" draggable="false">${cls}${dots}${zc?'<span class="qrzi" aria-hidden="true">&#128269;</span>':''}</div>`:`<div class="qrdp qrdn">${esc((qgRepLbl(s.k)[0]||'?').charAt(0).toUpperCase())}</div>`,
 lst=O.length?'<div class="qhh"><span>No.</span><span>Defect</span><span>Point</span><span>Qty</span></div>'+O.map((t,k)=>{const g=G[t];return`<div class="qhr"><span class="qhi">${k+1}</span><span class="qhn">${esc(g.t)}</span><span class="qhb">${g.p.length?g.p.map(a=>`<i>${a.n}</i>`).join(''):'-'}</span><span class="qhq">${g.q}</span></div>`}).join(''):'<div class="qhe">Tidak ada defect</div>';
 return`<div class="qrdg${big?' big':''}"><div class="qrdi">${box}<div class="qrdf"><span>${esc(s.k)}</span><span><b>${s.dc||0}</b> defect</span></div><div class="qhl">${lst}</div></div></div>`}
 /* Highlight Issue: daftar kartu panel berurutan (foto kecil, nama, jumlah defect). Klik kartu = jadikan panel aktif dan buka tampilan besar (peta defect + callout) */
 function qgHiList(d){if(!d.sl.length)return'<div class="qrem">Belum ada item</div>';const i=qgHiIdx(d);return`<div class="qhl2">${d.sl.map((s,k)=>`<div class="qhc${k==i?' on':''}" role="button" tabindex="0" aria-label="Perbesar ${esc(s.k)}" onclick="qgHiOpen(${k})" onkeydown="if(event.key=='Enter')qgHiOpen(${k})"><div class="qht">${s.im?`<img src="${s.im}" alt="" draggable="false">`:`<b>${esc((qgRepLbl(s.k)[0]||'?').charAt(0).toUpperCase())}</b>`}</div><div class="qhm">${esc(s.k)}</div><div class="qhd"><b>${s.dc||0}</b> defect</div></div>`).join('')}</div>`}
 function qgHiOpen(k){QG.hi=+k||0;QG.dpx=1;render()}
-function qgDpMax(v){QG.dpx=v?1:0;render()}
-function qgDpView(){const day=qgDay(),d=qgRepData(day);return`<div class="qgov t4 qrfs" onclick="if(event.target===this)qgDpMax(0)"><div class="c qgc qrfc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDpMax(0)">&times;</button><div class="qgsH"><b>Highlight Issue</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div><div class="qrfsl">${qgHiSel(d)}${qgEyeBtn()}</div>${qgDpp(d,1)}</div></div>`}
+function qgDpMax(v){QG.dpx=v?1:0;QG.dpi=null;render()}
+function qgDfPill(k){QG.dpi={k:+k};render()}
+function qgDpiClose(){QG.dpi=null;render()}
+function qgDfPopup(d){if(!QG.dpi||!d.sl.length)return'';const s=d.sl[qgHiIdx(d)],O=[],G={};(s.df||[]).forEach(x=>{if(!G[x.t]){G[x.t]=[];O.push(x.t)}G[x.t].push(x)});const t=O[QG.dpi.k];if(t==null)return'';
+const rows=G[t].map((x,i)=>`<div style="border:1px solid var(--bd,#ddd);border-radius:10px;padding:10px;margin-top:8px"><div style="display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px"><span>Date</span><b>${esc(qgDate(x.dy))}</b><span>Shift</span><b>${esc(qgRepShift(x.dy))}</b><span>No. Body</span><b>${esc(String(x.b||'-'))}</b><span>Sufix</span><b>${esc(String(x.sf||'-'))}</b><span>Varian</span><b>${esc(x.vr)}</b></div>${x.e?`<img src="${x.e}" alt="Foto defect" style="width:100%;max-height:240px;object-fit:contain;border-radius:8px;margin-top:8px;cursor:zoom-in" onclick="qgEvOpen(this.src)">`:'<div style="font-size:12px;opacity:.6;margin-top:8px">Tidak ada foto</div>'}</div>`).join('');
+return`<div class="qgov t5" onclick="if(event.target===this)qgDpiClose()"><div class="c qgc" style="max-width:360px;max-height:85vh;overflow:auto"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDpiClose()">&times;</button><div class="qgsH"><b>${esc(t)}</b><span>${G[t].length} defect &middot; ${esc(s.k)}</span></div>${rows}</div></div>`}
+function qgDpView(){const day=qgDay(),d=qgRepData(day);return`<div class="qgov t4 qrfs" onclick="if(event.target===this)qgDpMax(0)"><div class="c qgc qrfc"><button type="button" class="qgx" aria-label="Tutup" onclick="qgDpMax(0)">&times;</button><div class="qgsH"><b>Highlight Issue</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div><div class="qrfsl">${qgHiSel(d)}${qgEyeBtn()}</div>${qgDpp(d,1)}</div></div>${qgDfPopup(d)}`}
 /* Summary Report tampil langsung di halaman Quality Gate (menggantikan dashboard lama); popup tetap dipakai untuk Download & Print */
 function qgInRep(day){const pc=isDev()&&qgPcOn(),ed=pc&&!!QG.ed,hl=ed?Object.keys(QGL_DEF).filter(k=>!qgLay(true)[k]):[],bar=pc?(ed?`<div class="qrlyb"><span>Mode edit: geser kartu, tarik pojok kanan bawah untuk ubah ukuran, icon mata untuk sembunyikan</span><button type="button" class="on" onclick="qgLySave()">Simpan</button><button type="button" onclick="qgLyReset()">Reset</button><button type="button" onclick="qgLyCancel()">Batal</button><div class="qrlyh"><em>Kartu tersembunyi:</em>${hl.length?hl.map(k=>`<button type="button" onclick="qgLyAdd('${k}')">+ ${QGL_LB[k]}</button>`).join(''):'<em>tidak ada</em>'}</div></div>`:`<div class="qrlyb"><button type="button" onclick="qgLyEdit()">Edit layout</button></div>`):'';return`<div class="qrin">${bar}${ed?'':qgFiltBar()}<div class="qrwrap qrwi">${qgRepSheet(day,QG.rt=='l'?'l':'d',ed)}</div></div>`}
 function qgInFit(){document.querySelectorAll('.qrwi').forEach(w=>{const s=w.querySelector('.qrs');if(!s)return;const k=Math.min(1,w.clientWidth/900);s.style.transform='scale('+k+')';w.style.height=Math.round(636*k)+'px'})}
@@ -3321,6 +3326,7 @@ function openMenu(k){if(k!='qg'&&BKG){BKG=0;try{history.back()}catch(e){}}scr=k=
 var BKG=0;
 function bkPush(){try{history.pushState({wmsqg:1},'');BKG=1}catch(e){}}
 function bkClose(){
+if(QG.dpi&&!QG.ev){QG.dpi=null;render();return 1}
 if(CAM){qgCamClose();return 1}
 if(document.querySelector('.qgdlg')){document.querySelectorAll('.qgdlg').forEach(x=>x.remove());return 1}
 if(QG.cp){qgCpCancel();return 1}
