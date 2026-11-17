@@ -1320,6 +1320,14 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qrdkc{display:inline-block;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-left:6px;vertical-align:middle;opacity:.6}
 @media print{html.qgprn .qrdkc,html.qgprn .qrdkn{display:none!important}}
 .qrdb .qrpic{display:block;font-size:14px;line-height:1.25;overflow:hidden;text-overflow:ellipsis}
+/* Header laporan (PC): kotak Tanggal/Shift/PIC mengikuti lebar isi, PIC tidak lagi melebar kosong (nama panjang dipotong ... di 150px) */
+.qrs .qrhd{grid-template-columns:186px 1fr auto}
+.qrs .qrhd .qrdb{width:max-content;justify-self:end}
+.qrs .qrhd .qrdb>div,.qrs .qrhd .qrdb>div:first-child{flex:0 0 auto}
+.qrs .qrhd .qrdb>div:last-child{min-width:64px;max-width:150px}
+/* HP: tetap selebar layar seperti semula */
+.qrmob .qrs .qrhd .qrdb{width:auto;justify-self:stretch}
+.qrmob .qrs .qrhd .qrdb>div{flex:1}.qrmob .qrs .qrhd .qrdb>div:first-child{flex:1.3}.qrmob .qrs .qrhd .qrdb>div:last-child{flex:1.5;min-width:0;max-width:none}
 .qrdb>div{display:flex;flex-direction:column;justify-content:center;box-sizing:border-box}.qrdb>div>em,.qrdb>div>b{line-height:1.25}
 /* Halaman 2 Summary Report: detail defect per item. Kartu 250px (2 per halaman), 3 defect per kartu; kalau satu halaman cuma berisi 1 kartu -> .big (penuh, foto lebih besar) */
 .qrp2{position:relative}
@@ -2847,7 +2855,7 @@ async function qgSync(mode){
 }
 let QAT=0;
 function qgAuto(m){clearTimeout(QAT);if(m=='pal')QS.m='pal';QAT=setTimeout(()=>{const mm=QS.m||'auto';QS.m='';qgSync(mm)},500)}
-setInterval(()=>{const a=document.activeElement;if(U&&D&&document.visibilityState=='visible'&&document.querySelector('.qgus')&&!QG.dirty&&!QS.busy&&!QG.df&&!QG.cm&&!QG.kt&&!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))qgSync('poll')},15000);
+setInterval(()=>{const a=document.activeElement;if(U&&D&&document.visibilityState=='visible'&&document.querySelector('.qgus')&&!QG.dirty&&!QS.busy&&!QG.an&&!QG.df&&!QG.cm&&!QG.kt&&!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))qgSync('poll')},15000);
 /* ---------- QUALITY GATE: pilih part -> daftar palet (Shikake) -> detail palet. Data di D.M.qg[tanggal][RH|LH] (ikut sync master, simpan 45 hari) ---------- */
 const QG_PARTS=[['RH','S/A Front Door RH'],['LH','S/A Front Door LH'],['RRH','S/A Rear Door RH'],['RLH','S/A Rear Door LH'],['EH','S/A Engine Hood'],['BD','S/A Back Door']],QG_N=10,QG_CYC=10;
 let QG={day:'',part:'',pal:0,draft:null,dirty:0,df:null,cm:null,kt:null,dp:null,lim:14};
@@ -2904,7 +2912,7 @@ const qgOkN=(P,v)=>qgCnt(P,v,j=>j=='OK'),qgOsN=(P,v)=>qgCnt(P,v,j=>j=='OS'),qgAc
 function qgVar(v){qgWrite(qgDay(),QG.part,P=>{if(v)P.v=v;else delete P.v})}
 const qgDone=(P,n)=>{const r=P.p[n];return!!r&&r.length==QG_N&&r.every(x=>x[3]=='OK'||x[3]=='NG'||x[3]=='OS')};
 function qgDate(day){const d=new Date(day+'T00:00:00');return isNaN(d)?day:String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()}
-function qgWrite(day,k,fn,mode){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1&&!P.k&&!P.v)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();qgAuto(mode||'auto')}
+function qgWrite(day,k,fn,mode){D.M.qg=D.M.qg||{};const A=D.M.qg[day]=D.M.qg[day]||{},P=A[k]=A[k]||{s:1,p:{}};fn(P);if(!Object.keys(P.p).length&&(P.s||1)==1&&!P.k&&!P.v)delete A[k];else{P.by=myEm();P.at=Date.now()}if(!Object.keys(A).length)delete D.M.qg[day];const lim=ymd(new Date(Date.now()-45*864e5));Object.keys(D.M.qg).forEach(d=>{if(d<lim)delete D.M.qg[d]});D.masterT=Date.now();save(true);render();if(mode!=='none')qgAuto(mode||'auto')}
 function qgOpen(k){QG.part=k;QG.pal=0;QG.lim=QG_LIM;render()}
 function qgClose(){QG.part='';QG.pal=0;QG.dp=null;QG.draft=null;QG.df=null;QG.cm=null;QG.kt=null;QG.dirty=0;QG.lim=QG_LIM;render()}
 function qgOpenPal(n){const P=qgP(qgDay(),QG.part);QG.pal=n;QG.cp=null;QG.dp=null;QG.bm=0;QG.df=null;QG.cm=null;QG.draft=Array.from({length:QG_N},(_,i)=>{const r=P.p[n]&&P.p[n][i];return r?[r[0],r[1],qgDef(r[2]),r[3],qgCm(r[4]),qgKt(r[5])]:['','',[],'',qgCm(null),qgKt(null)]});QG.kt=null;QG.dirty=0;render();setTimeout(()=>qgOcrWarm().catch(()=>{}),300)}
@@ -3155,8 +3163,8 @@ if(o.k=='r')return`<rect x="${o.x}%" y="${o.y}%" width="${o.w}%" height="${o.h}%
 return`<ellipse cx="${o.x+o.w/2}%" cy="${o.y+o.h/2}%" rx="${o.w/2}%" ry="${o.h/2}%" fill="${o.fl||'none'}" stroke="${o.c}" stroke-width="${w}"${sl}/>`}).join('')}</svg>`}
 function qgAnTarget(el){const d=el.closest('.qrxw').dataset;return{day:d.d,k:d.k,pn:+d.p,ri:+d.r,mi:+d.m}}
 function qgAnM(P,r){const row=(P.p[r.pn]||[])[r.ri];if(!row)return null;row[2]=qgDef(row[2]);return row[2][r.mi]||null}
-function qgAnPut(r,fn){qgWrite(r.day,r.k,P=>{const m=qgAnM(P,r);if(!m)return;fn(m);P.pt=P.pt||{};P.pt[r.pn]=Date.now()},'pal')}
-function qgAnEye(el){const r=qgAnTarget(el);qgAnPut(r,m=>{if(m.av===0)delete m.av;else m.av=0})}
+function qgAnPut(r,fn,mode){qgWrite(r.day,r.k,P=>{const m=qgAnM(P,r);if(!m)return;fn(m);P.pt=P.pt||{};P.pt[r.pn]=Date.now()},mode||'auto')}
+function qgAnEye(el){const r=qgAnTarget(el);qgAnPut(r,m=>{if(m.av===0)delete m.av;else m.av=0},'none')}
 function qgAnOpen(el){const r=qgAnTarget(el),img=el.closest('.qrxw').querySelector('img.qrxe'),row=(qgP(r.day,r.k).p[r.pn]||[])[r.ri],m=row&&qgDef(row[2])[r.mi];if(!m||!m.e)return toast('Foto evidence belum ada');QG.an=Object.assign({},r,{src:m.e,ar:Math.max(.3,(img.offsetWidth||300)/(img.offsetHeight||150)),a:qgAn(m.a),v:m.av!==0,tool:'o',c:QG_ANC[0],ep:'a',sel:-1,sw:2.5,br:0,ct:0,h:[],r:[],cr:null,s0:m.e,mn:'',z:1,zx:0,zy:0,fl:'',ds:0,fz:18});render()}
 function qgAnClose(){QG.an=null;render()}
 function qgAnSave(){const a=QG.an;if(!a)return;const r={day:a.day,k:a.k,pn:a.pn,ri:a.ri,mi:a.mi},L=qgAn(a.a),fin=u=>{QG.an=null;qgAnPut(r,m=>{if(u)m.e=u;if(L.length)m.a=L;else delete m.a;if(a.v||!L.length)delete m.av;else m.av=0})};
