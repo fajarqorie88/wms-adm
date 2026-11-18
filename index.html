@@ -1331,6 +1331,18 @@ html[data-view=pc] .qgov.qgsm .qgsmc{max-width:720px}
 .qrmob .qrs .qrhd .qrdb>div{flex:1}.qrmob .qrs .qrhd .qrdb>div:first-child{flex:1.3}.qrmob .qrs .qrhd .qrdb>div:last-child{flex:1.5;min-width:0;max-width:none}
 .qrdb>div{display:flex;flex-direction:column;justify-content:center;box-sizing:border-box}.qrdb>div>em,.qrdb>div>b{line-height:1.25}
 /* Halaman 2 Summary Report: detail defect per item. Kartu 250px (2 per halaman), 3 defect per kartu; kalau satu halaman cuma berisi 1 kartu -> .big (penuh, foto lebih besar) */
+.qrtp{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:0}.qrtq{display:flex;align-items:baseline;justify-content:space-between;gap:8px}.qrtq span{font-size:12px;color:var(--pm);white-space:nowrap}.qrtq b{font-size:19px;font-weight:600;line-height:1.1;white-space:nowrap}.qrtq b small{font-size:12px;font-weight:600;color:var(--pm);margin-left:3px}
+.qrmob .qrtq b{font-size:16px}.qrmob .qrtq b small{font-size:11px}.qrmob .qrtq span{font-size:11px}
+/* Detail Defect di dashboard HP: kartu satu kolom, gambar panel di atas, daftar defect di bawah */
+.qrmob .qrdm .qrxg{gap:8px}
+.qrmob .qrxc{height:auto;overflow:visible;padding:8px 10px}
+.qrmob .qrxb{flex-direction:column;gap:8px}
+.qrmob .qrxp{width:100%;height:auto;min-height:140px;padding:4px;box-sizing:border-box}
+.qrmob .qrxi img{max-width:100%;max-height:340px}
+.qrmob .qrxp.no{min-height:70px}
+.qrmob .qrxs{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.qrmob .qrxe{height:120px}
+@media (min-width:640px){.qrmob .qrxs{grid-template-columns:repeat(3,minmax(0,1fr))}.qrmob .qrxe{height:150px}}
 .qrp2{position:relative}
 .qrxg{display:flex;flex-direction:column;gap:10px;min-height:0}
 .qrxc{height:250px;padding:8px 12px;overflow:hidden;border-radius:14px;box-sizing:border-box}
@@ -1587,7 +1599,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=274;
+const APP_REV=275;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -3062,7 +3074,7 @@ return`<div class="qgdash">
 </div>`}
 /* Dashboard Quality Gate versi HP: satu kolom (kartu angka, target + performa item, OK/NG per shift, Defect List per item). Versi PC tetap qgDash */
 /* Isi dashboard HP = Summary Report PC (data palet QG), disusun satu kolom lewat CSS .qrmob */
-function qgDashMBody(day,tot){return`<div class="qrmob">${qgFiltBar()}<div class="qrs-w">${qgRepSheet(day,QG.rt=='l'?'l':'d')}</div></div>`}
+function qgDashMBody(day,tot){const th=QG.rt=='l'?'l':'d',dd=qgRepDefMob(day,th,true);return`<div class="qrmob">${qgFiltBar()}<div class="qrs-w">${qgRepSheet(day,th)}</div>${dd?`<div class="qrs-w" style="margin-top:8px">${dd}</div>`:''}</div>`}
 function qgDmOn(){try{return localStorage.getItem('qgDm')=='1'}catch(e){return false}}
 function qgDmTog(){try{localStorage.setItem('qgDm',qgDmOn()?'0':'1')}catch(e){QG.dmx=!QG.dmx}render()}
 function qgDashM(day,tot){const on=qgDmOn()||!!QG.dmx;return`<button type="button" class="qgm-tg" aria-expanded="${on?'true':'false'}" onclick="qgDmTog()"><span>QUALITY GATE DASHBOARD</span><em>${on?'Hide Dashboard':'Open Dashboard'} ${on?'&#9650;':'&#9660;'}</em></button>${on?qgDashMBody(day,tot):''}`}
@@ -3117,7 +3129,7 @@ function qgRepShift(day){const s=String(qgProd(day).sh||prShA(day)||'');return s
 /* Label grafik 2 baris: buang awalan S/A, sisi RH/LH di baris kedua */
 function qgRepLbl(n){n=String(n||'').replace(/^S\/A\s+/i,'').trim();const m=n.match(/^(.*\S)\s+(RH|LH)$/i);if(m)return[m[1],m[2].toUpperCase()];const w=n.split(' ');return w.length>1?[w[0],w.slice(1).join(' ')]:[n,'']}
 const qgFv=()=>QG.fv=='V'||QG.fv=='P'?QG.fv:'A';
-function qgRepData(day){const tot=qgPals(day),fv=qgFv(),its=qgParts().filter(it=>fv=='A'||qgVs(it).includes(fv)),d={fv,tot,ok:0,ng:0,os:0,pal:0,palAll:0,tg:0,bs:0,pj:{ok:0,ng:0,os:0,be:0},dfc:{},cmc:{},pa:[],pv:[],pp:[],sl:[]};{const t1=prNum(qgProd(day).t),va=prNum(qgProd(day).v);d.tp=fv=='V'?va:fv=='P'?(t1!=null&&va!=null?t1-va:null):t1}
+function qgRepData(day,fo){const tot=qgPals(day),fv=fo||qgFv(),its=qgParts().filter(it=>fv=='A'||qgVs(it).includes(fv)),d={fv,tot,ok:0,ng:0,os:0,pal:0,palAll:0,tg:0,bs:0,pj:{ok:0,ng:0,os:0,be:0},dfc:{},cmc:{},pa:[],pv:[],pp:[],sl:[]};{const t1=prNum(qgProd(day).t),va=prNum(qgProd(day).v);d.tp=fv=='V'?va:fv=='P'?(t1!=null&&va!=null?t1-va:null):t1}
 for(let n=0;n<tot;n++){d.pa.push(0);d.pv.push(0);d.pp.push(0)}
 its.forEach(it=>{const P=qgP(day,it.k),vs=qgVs(it),t0=fv=='A'?qgTgtI(day,it.k):qgTgt(day,it.k,fv),ti=qgPals(day,it.k);let pc=0;if(t0)d.tg+=t0;let di=0;const dl=[];
 for(let n=1;n<=ti;n++){const r=P.p[n]||[],v=(P.pv||{})[n]||'';if(fv!='A'&&v!=fv)continue;pc++;let hn=0,hs=0;
@@ -3127,6 +3139,8 @@ const dn=qgDone(P,n);if(dn)d.pal++;if(hn)d.pj.ng++;else if(hs)d.pj.os++;else if(
 {const pa2=fv=='A'?ti:Math.max(pc,t0>0?Math.ceil(t0/QG_N):0);d.palAll+=pa2;if(fv!='A')d.pj.be+=Math.max(0,pa2-pc)}
 [fv].forEach(c=>{const tg=c=='A'?qgTgtI(day,it.k):qgTgt(day,it.k,c),o=qgOkN(P,c);d.sl.push({k:it.n,p:tg>0?Math.round(o/tg*100):null,dc:di,df:dl,im:qgImg(it.k)})})});
 d.bs=Math.max(0,d.palAll*QG_N-d.ok-d.ng-d.os);return d}
+/* Kartu Target Process: baris All Variant dan Van Only, masing-masing body dicek (OK+NG) / target. Tidak ikut filter Varian di bar atas; hitung lewat qgRepData(day, varian) */
+function qgTpRows(day,d0){return[['A','All Variant'],['V','Van Only']].map(([c,n])=>{const x=c==d0.fv?d0:qgRepData(day,c),k=x.ok+x.ng;return`<div class="qrtq"><span>${n}</span><b>${qgFm(k)}<small>/ ${x.tg?qgFm(x.tg):'-'}</small></b></div>`}).join('')}
 function qgRepSheet(day,th,ed){const L=qgLay(ed),co=(id,cl)=>{const a=L[id];if(!a)return`<div class="qrc ${cl} qrhid" data-c="${id}">`;return`<div class="qrc ${cl}" data-c="${id}" style="grid-column:${a[0]+1}/span ${a[2]};grid-row:${a[1]+1}/span ${a[3]}">${ed?'<b class="qrlb2">'+QGL_LB[id]+'</b><button type="button" class="qrey" aria-label="Sembunyikan kartu" title="Sembunyikan kartu" onclick="qgLyHide(\''+id+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><i class="qrrz"></i>':''}`};
 const d=qgRepData(day),chk=d.ok+d.ng,C=131.95,
 ring=(f,col)=>`<svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="21" fill="none" stroke="var(--tr)" stroke-width="7"/><circle cx="27" cy="27" r="21" fill="none" stroke="${col}" stroke-width="7" stroke-dasharray="${(Math.max(0,Math.min(1,f))*C).toFixed(1)} ${C}" transform="rotate(-90 27 27)"/></svg>`,
@@ -3144,8 +3158,8 @@ dots=df.slice(0,8).map(([t,q],i)=>{const x=(36+q/mq*210).toFixed(1),y=(104-(d.cm
 sc=df.length?`<svg viewBox="0 0 273 140" width="100%" class="qrsv"><line x1="30" y1="8" x2="30" y2="108" stroke="var(--pm)"/><line x1="30" y1="108" x2="268" y2="108" stroke="var(--pm)"/>${[8,41,74].map(y=>`<line x1="30" y1="${y}" x2="268" y2="${y}" stroke="var(--ln)" stroke-opacity=".5"/>`).join('')}<text x="26" y="12" text-anchor="end">${mc}</text><text x="26" y="111" text-anchor="end">0</text><text x="30" y="121">0</text><text x="246" y="121" text-anchor="middle">${mq}</text>${dots}<text x="150" y="134" text-anchor="middle">Total Defect</text><text x="10" y="60" transform="rotate(-90 10 60)" text-anchor="middle">C/M</text></svg>`:'<div class="qrem">Tidak ada defect tercatat</div>',
 sI=QG.hl&&d.sl.length?d.sl[qgHiIdx(d)]:null,tz=(()=>{let dd=df,mm=mq,cc=d.cmc;if(sI){const c1={},m1={};(sI.df||[]).forEach(x=>{c1[x.t]=(c1[x.t]||0)+1;if(x.c)m1[x.t]=(m1[x.t]||0)+1});dd=Object.entries(c1).sort((a,b)=>b[1]-a[1]);mm=Math.max(1,...dd.map(x=>x[1]));cc=m1}return{dd,mm,cc}})(),
 tp=tz.dd.slice(0,4).map(([t,q],i,a)=>`<div class="qrtr"${i==a.length-1&&tz.dd.length>=4?' style="border-bottom:0"':''}><span>${esc(t)}</span><span>${q}</span><span>${tz.cc[t]||0}</span><span class="qrbar" style="width:${(q/tz.mm*100).toFixed(0)}%;background:#ED7D31;height:12px"></span></div>`).join('')+(tz.dd.length&&tz.dd.length<4?Array.from({length:4-tz.dd.length},(_,k)=>`<div class="qrtr" style="color:var(--pm)${k==3-tz.dd.length?';border-bottom:0':''}"><span>-</span><span></span><span></span><span></span></div>`).join(''):'');
-return`<div class="qrs ${th}${QG.dl==0?' nolb':''}"><div class="qrhd"><div><div class="qrlg"><img src="${QG_LOGO}" alt="ADM"></div></div><div class="qrtt"><div>DAILY SUMMARY REPORT${d.fv!='A'?' &middot; '+QG_VN[d.fv].toUpperCase():''}</div><b>QUALITY GATE</b></div><div class="qrc qrdb"><div class="qrdk"><em>Tanggal</em><b>${esc(dts)}<i class="qrdkc" aria-hidden="true"></i></b><input type="date" class="qrdkn" value="${esc(day)}" aria-label="Ubah tanggal laporan" onclick="try{this.showPicker()}catch(e){}" onchange="qgSumDate(this.value)"></div><div><em>Shift</em><b style="color:#C55A11">${esc(qgRepShift(day))}</b></div><div><em>PIC</em><b class="qrpic">${esc(qgRepPic(day))}</b></div></div></div>
-<div class="qrg${ed?' qred':''}">${co('tc','kp')}<div class="qrt">Total Check</div><div class="qrrow"><div class="qrbig">${qgFm(chk)}</div><div class="qrsub">Target ${d.tg?qgFm(d.tg):'-'}<br>Sisa ${d.tg?qgFm(Math.max(0,d.tg-chk)):'-'}</div></div></div>
+return`<div class="qrs ${th}${QG.dl==0?' nolb':''}"><div class="qrhd"><div><div class="qrlg"><img src="${QG_LOGO}" alt="ADM"></div></div><div class="qrtt"><div>DAILY SUMMARY REPORT${d.fv!='A'?' &middot; '+QG_VN[d.fv].toUpperCase():''}</div><b>QUALITY GATE</b></div><div class="qrc qrdb"><div class="qrdk"><em>Date</em><b>${esc(dts)}<i class="qrdkc" aria-hidden="true"></i></b><input type="date" class="qrdkn" value="${esc(day)}" aria-label="Ubah tanggal laporan" onclick="try{this.showPicker()}catch(e){}" onchange="qgSumDate(this.value)"></div><div><em>Shift</em><b style="color:#C55A11">${esc(qgRepShift(day))}</b></div><div><em>PIC</em><b class="qrpic">${esc(qgRepPic(day))}</b></div></div></div>
+<div class="qrg${ed?' qred':''}">${co('tc','kp')}<div class="qrt">Target Process</div><div class="qrtp">${qgTpRows(day,d)}</div></div>
 ${co('ok','kp')}<div class="qrt">OK Ratio</div><div class="qrrow">${ring(chk?d.ok/chk:0,'#92D050')}<div class="qrbig">${qgPct(d.ok,chk)}%</div></div></div>
 ${co('ng','kp')}<div class="qrt">Total NG</div><div class="qrrow"><div class="qrbig" style="color:#ED7D31">${qgFm(d.ng)}</div><div class="qrsub">Other Shift ${qgFm(d.os)}<br>NG Rate ${qgPct(d.ng,chk)}%</div></div></div>
 ${co('pl','kp')}<div class="qrt">Pallet Finish Check</div><div class="qrrow">${ring(d.palAll?d.pal/d.palAll:0,'#8FAADC')}<div class="qrbig">${d.pal}/${d.palAll}</div></div></div>
@@ -3237,15 +3251,21 @@ return`<div class="qgov t5 qgan" onclick="if(event.target===this)qgAnClose()"><d
 <div class="qgan-h">${hint}</div>
 <div class="qgan-bar">${b("qgAnSet('del')",'Hapus terpilih',0,a.sel<0)}${b("qgAnSet('clr')",'Hapus semua',0,!a.a.length)}<button type="button" class="qganb eye${a.v?' on':''}" aria-label="${a.v?'Sembunyikan':'Tampilkan'} coretan" aria-pressed="${a.v?'true':'false'}" onclick="qgAnSet('v')">${QG_EYE[a.v?1:0].replace(/width="14" height="14"/,'width="20" height="20"')}</button><span style="flex:1"></span><button type="button" class="qganb" onclick="qgAnClose()">Batal</button><button type="button" class="qganb pri" onclick="qgAnSave()">Simpan</button></div></div></div>`}
 
-function qgRepDefPages(day,th,ia){const d=qgRepData(day),ch=[];
-d.sl.forEach(s=>{const L=s.df||[];for(let i=0;i<L.length;i+=3)ch.push({s,i,n:L.length})});
+/* Detail Defect: kartu per item (gambar panel + titik + daftar defect). Dipakai halaman 2+ Summary Report (PC/popup/cetak) dan dashboard HP. Ukuran kartu selalu sama, walau halaman hanya berisi 1 item */
+function qgDefChunks(d){const ch=[];d.sl.forEach(s=>{const L=s.df||[];for(let i=0;i<L.length;i+=3)ch.push({s,i,n:L.length})});return ch}
+const qgDefDots=L=>L.map((x,j)=>x.x!=null&&x.y!=null?`<span class="qrdd" style="left:${+x.x}%;top:${+x.y}%">${j+1}</span>`:'').join('');
+function qgDefCard(c,ia,big){const L=c.s.df,tl=L.slice(c.i,c.i+3).map((x,j)=>`<div class="qrxr">${x.e?`<span class="qrxw" data-d="${esc(x.dy)}" data-k="${esc(x.ik)}" data-p="${x.pn}" data-r="${x.ri}" data-m="${x.mi}"><img class="qrxe" src="${esc(x.e)}" alt="Evidence">${x.av===0?'':qgAnSvg(x.a)}${ia?`<span class="qrxk">${x.a&&x.a.length?`<button type="button" class="qrxb2" aria-label="${x.av===0?'Tampilkan':'Sembunyikan'} coretan" aria-pressed="${x.av===0?'false':'true'}" onclick="qgAnEye(this)">${QG_EYE[x.av===0?0:1]}</button>`:''}<button type="button" class="qrxb2 ed" onclick="qgAnOpen(this)">Edit</button></span>`:''}</span>`:'<span class="qrxe none"></span>'}<div class="qrxa"><i class="qrxn">${c.i+j+1}</i><b>${esc(x.t)}</b></div><div class="qrxt"><span>Body ${esc(String(x.b||'-'))} &middot; Sfx ${esc(String(x.sf||'-'))} &middot; ${esc(x.vr)}</span>${x.ct?`<em>C/M: ${esc(x.ct)}</em>`:''}</div></div>`).join('');
+return`<div class="qrc qrxc${big?' big':''}"><div class="qrxh"><b>${esc(c.s.k)}</b><span>${c.n} defect${c.i?' &middot; lanjutan':''}</span></div><div class="qrxb">${c.s.im?`<div class="qrxp"><span class="qrxi"><img src="${esc(c.s.im)}" alt="">${qgDefDots(L)}</span></div>`:'<div class="qrxp no">Gambar panel belum ada</div>'}<div class="qrxs">${tl}</div></div></div>`}
+function qgDefHd(day,d,dts){return`<div class="qrhd"><div><div class="qrlg"><img src="${QG_LOGO}" alt="ADM"></div></div><div class="qrtt"><div>DAILY REPORT QG${d.fv!='A'?' &middot; '+QG_VN[d.fv].toUpperCase():''}</div><b>DETAIL DEFECT</b></div><div class="qrc qrdb"><div class="qrdk"><em>Date</em><b>${esc(dts)}<i class="qrdkc" aria-hidden="true"></i></b><input type="date" class="qrdkn" value="${esc(day)}" aria-label="Ubah tanggal laporan" onclick="try{this.showPicker()}catch(e){}" onchange="qgSumDate(this.value)"></div><div><em>Shift</em><b style="color:#C55A11">${esc(qgRepShift(day))}</b></div><div><em>PIC</em><b class="qrpic">${esc(qgRepPic(day))}</b></div></div></div>`}
+function qgRepDefPages(day,th,ia){const d=qgRepData(day),ch=qgDefChunks(d);
 if(!ch.length)return[];
 const dt=new Date(day+'T00:00:00'),dts=isNaN(dt)?day:dt.toLocaleDateString(LC(),{day:'numeric',month:'short',year:'numeric'}),np=Math.ceil(ch.length/2),tot=np+1,out=[];
-const dots=L=>L.map((x,j)=>x.x!=null&&x.y!=null?`<span class="qrdd" style="left:${+x.x}%;top:${+x.y}%">${j+1}</span>`:'').join('');
-const card=(c,big)=>{const L=c.s.df,tl=L.slice(c.i,c.i+3).map((x,j)=>`<div class="qrxr">${x.e?`<span class="qrxw" data-d="${esc(x.dy)}" data-k="${esc(x.ik)}" data-p="${x.pn}" data-r="${x.ri}" data-m="${x.mi}"><img class="qrxe" src="${esc(x.e)}" alt="Evidence">${x.av===0?'':qgAnSvg(x.a)}${ia?`<span class="qrxk">${x.a&&x.a.length?`<button type="button" class="qrxb2" aria-label="${x.av===0?'Tampilkan':'Sembunyikan'} coretan" aria-pressed="${x.av===0?'false':'true'}" onclick="qgAnEye(this)">${QG_EYE[x.av===0?0:1]}</button>`:''}<button type="button" class="qrxb2 ed" onclick="qgAnOpen(this)">Edit</button></span>`:''}</span>`:'<span class="qrxe none"></span>'}<div class="qrxa"><i class="qrxn">${c.i+j+1}</i><b>${esc(x.t)}</b></div><div class="qrxt"><span>Body ${esc(String(x.b||'-'))} &middot; Sfx ${esc(String(x.sf||'-'))} &middot; ${esc(x.vr)}</span>${x.ct?`<em>C/M: ${esc(x.ct)}</em>`:''}</div></div>`).join('');
-return`<div class="qrc qrxc${big?' big':''}"><div class="qrxh"><b>${esc(c.s.k)}</b><span>${c.n} defect${c.i?' &middot; lanjutan':''}</span></div><div class="qrxb">${c.s.im?`<div class="qrxp"><span class="qrxi"><img src="${esc(c.s.im)}" alt="">${dots(L)}</span></div>`:'<div class="qrxp no">Gambar panel belum ada</div>'}<div class="qrxs">${tl}</div></div></div>`};
-for(let p=0;p<np;p++){const cs=ch.slice(p*2,p*2+2);out.push(`<div class="qrs qrp2 ${th}"><div class="qrhd"><div><div class="qrlg"><img src="${QG_LOGO}" alt="ADM"></div></div><div class="qrtt"><div>DAILY REPORT QG${d.fv!='A'?' &middot; '+QG_VN[d.fv].toUpperCase():''}</div><b>DETAIL DEFECT</b></div><div class="qrc qrdb"><div class="qrdk"><em>Tanggal</em><b>${esc(dts)}<i class="qrdkc" aria-hidden="true"></i></b><input type="date" class="qrdkn" value="${esc(day)}" aria-label="Ubah tanggal laporan" onclick="try{this.showPicker()}catch(e){}" onchange="qgSumDate(this.value)"></div><div><em>Shift</em><b style="color:#C55A11">${esc(qgRepShift(day))}</b></div><div><em>PIC</em><b class="qrpic">${esc(qgRepPic(day))}</b></div></div></div><div class="qrxg">${cs.map(c=>card(c,cs.length==1)).join('')}</div><div class="qrxf">Halaman ${p+2} / ${tot}</div></div>`)}
+for(let p=0;p<np;p++){const cs=ch.slice(p*2,p*2+2);out.push(`<div class="qrs qrp2 ${th}">${qgDefHd(day,d,dts)}<div class="qrxg">${cs.map(c=>qgDefCard(c,ia)).join('')}</div><div class="qrxf">Halaman ${p+2} / ${tot}</div></div>`)}
 return out}
+/* Detail Defect untuk dashboard HP: satu kolom, semua kartu berurutan, fitur sama dengan PC (evidence, coretan, mata, Edit) */
+function qgRepDefMob(day,th,ia){const d=qgRepData(day),ch=qgDefChunks(d);if(!ch.length)return'';
+const dt=new Date(day+'T00:00:00'),dts=isNaN(dt)?day:dt.toLocaleDateString(LC(),{day:'numeric',month:'short',year:'numeric'});
+return`<div class="qrs qrp2 qrdm ${th}">${qgDefHd(day,d,dts)}<div class="qrxg">${ch.map(c=>qgDefCard(c,ia)).join('')}</div></div>`}
 function qgSumView(){const day=qgDay(),sz=QG.rs=='A3'?'A3':'A4',th=QG.rt=='l'?'l':'d',b=(k,v,t,on)=>`<button type="button" class="qrb${on?' on':''}" onclick="qgRepSet('${k}',${v})">${t}</button>`;
 return`<div class="qgov t3 qgsm" onclick="if(event.target===this){QG.sum=0;render()}"><div class="c qgc qgsmc qrw"><button type="button" class="qgx" aria-label="Tutup" onclick="QG.sum=0;render()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 <div class="qgsH"><b>Summary Report</b><span>Quality Gate &middot; ${esc(qgDate(day))}</span></div>
@@ -3281,7 +3301,7 @@ function qgFiltBar(){const fv=qgFv(),jm=QG.jm=='p'?'p':'b',b=(js,t,on)=>`<button
 return`<div class="qrctl qrfl"><span class="qrfn">Varian</span>${['A','V','P'].map(v=>b("qgFvSet('"+v+"')",QG_VN[v],fv==v)).join('')}<span class="qrfn">Judge</span>${b("qgRepSet('jm','b')",'Body',jm=='b')}${b("qgRepSet('jm','p')",'Palet',jm=='p')}</div>`}
 /* Layout dashboard (Summary Report) = grid 48 kolom x 24 baris. Tiap kartu [x,y,w,h]. Layout tersimpan di D.M.qgly (sinkron ke semua perangkat), hanya Developer yang boleh mengubah (mode PC). HP tetap satu kolom lewat CSS .qrmob */
 const QGL_DEF={tc:[0,0,12,5],ok:[12,0,12,5],ng:[24,0,12,5],pl:[36,0,12,5],hi:[0,5,15,19],dpu:[15,5,33,9],jd:[15,14,9,10],dc:[24,14,12,10],td:[36,14,12,10]};
-const QGL_LB={tc:'Total Check',ok:'OK Ratio',ng:'Total NG',pl:'Pallet Finish Check',hi:'Highlight Issue',dpu:'DPU',jd:'Judge',dc:'Top Defect Panel',td:'Top Defect'};
+const QGL_LB={tc:'Target Process',ok:'OK Ratio',ng:'Total NG',pl:'Pallet Finish Check',hi:'Highlight Issue',dpu:'DPU',jd:'Judge',dc:'Top Defect Panel',td:'Top Defect'};
 const qgLayOk=a=>Array.isArray(a)&&a.length==4&&a.every(Number.isInteger)&&a[0]>=0&&a[1]>=0&&a[2]>=4&&a[3]>=3&&a[0]+a[2]<=48&&a[1]+a[3]<=24;
 function qgLay(ed){const s=ed&&QG.edl?QG.edl:(((D.M||{}).qgly||{}).c||{}),o={};Object.keys(QGL_DEF).forEach(k=>{o[k]=s[k]===0?0:(qgLayOk(s[k])?s[k]:QGL_DEF[k])});return o}
 const qgLyCp=o=>JSON.parse(JSON.stringify(o));
