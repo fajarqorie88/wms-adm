@@ -1608,7 +1608,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=283;
+const APP_REV=284;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2511,8 +2511,8 @@ function pdfChart(doc,x,y,w,h,title,d){const n=d.length,v=d.map(i=>+i.kA),L=d[n-
   doc.setFontSize(7);doc.setTextColor(15,23,42);doc.text(f1(i.kA),pxk(k),py(v[k])-2.6,{align:'center'});
   doc.setFontSize(6.5);doc.setTextColor(100);doc.text(new Date(i.dt).toLocaleDateString(LC(),{day:'2-digit',month:'2-digit'}),pxk(k),py1+5,{align:'center'})});
  doc.setTextColor(0)}
-function pdfCharts(doc,a){const sel=[].concat(Q.main||[]).filter(x=>D.mains.some(m=>m.id==x)),ids=sel.length?sel:[...new Set(a.map(i=>i.mid))],G=[];
- D.mains.filter(m=>ids.includes(m.id)).forEach(m=>{const r=a.filter(i=>i.mid==m.id),mats=D.M.mats.filter(x=>r.some(i=>i.mat==x));r.forEach(i=>{if(!mats.includes(i.mat))mats.push(i.mat)});
+function pdfCharts(doc,a){const sel=[].concat(Q.main||[]).filter(x=>D.mains.some(m=>m.id==x)),ids=sel.length?sel:[...new Set(a.map(i=>i.mid))],G=[],H=mqHist();
+ D.mains.filter(m=>ids.includes(m.id)).forEach(m=>{const r=H.filter(i=>i.mid==m.id),mats=D.M.mats.filter(x=>r.some(i=>i.mat==x));r.forEach(i=>{if(!mats.includes(i.mat))mats.push(i.mat)});
   mats.forEach(mt=>{const d=r.filter(i=>i.mat==mt).sort((x,y)=>(new Date(x.dt)-new Date(y.dt))||(x.created-y.created)).slice(-5);if(d.length)G.push({m,mt,d})})});
  if(!G.length)return;
  const CW=(277-12)/3,CH=84,hd=()=>{doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(37,99,235);doc.text('Grafik - 5 Data Terakhir per Equipment dan Material',10,14);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100);doc.text('Titik hijau = OK   Titik merah = NG   Pita hijau = rentang standar',10,20);doc.setTextColor(0)};
@@ -2551,6 +2551,7 @@ async function pdfCard(id,dl){const i=D.insp.find(x=>x.id==id);if(!i)return;
  await outPdf(doc,'WMS_Kartu_'+String(i.main||'data').replace(/[^\w-]+/g,'_')+'_'+stamp()+'.pdf',dl)}
 /* Filter Equipment tab Data: multi-pilih (Q.main = array id). Daftar tetap terbuka saat mencentang, tutup kalau klik di luar */
 /* Grafik 5 data terakhir per Equipment per Material (muncul di tab Data saat equipment dipilih di filter) */
+function mqHist(){let h=filt(Object.assign({},Q,{cal:''}));if(Q.cal)h=h.filter(i=>dtIn(i.dt).slice(0,10)<=Q.cal);return h}
 function mqSvg(d,mn,mx){const X0=38,X1=282,Y0=18,Y1=128,n=d.length,v=d.map(i=>+i.kA),hs=isFinite(mn)&&isFinite(mx);let lo=Math.min(...v,...(hs?[mn]:[])),hi=Math.max(...v,...(hs?[mx]:[]));const sp=(hi-lo)||1;lo-=sp*.15;hi+=sp*.15;
  const y=a=>Y1-(a-lo)/(hi-lo)*(Y1-Y0),x=k=>n>1?X0+16+k*((X1-X0-32)/(n-1)):(X0+X1)/2;let h='';
  for(let k=0;k<4;k++){const t=lo+(hi-lo)*k/3;h+=`<line x1="${X0}" x2="${X1}" y1="${y(t)}" y2="${y(t)}" stroke="currentColor" stroke-opacity=".12"/><text x="${X0-6}" y="${y(t)+4}" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".6">${t.toFixed(1)}</text>`}
@@ -2558,7 +2559,7 @@ function mqSvg(d,mn,mx){const X0=38,X1=282,Y0=18,Y1=128,n=d.length,v=d.map(i=>+i
  if(n>1)h+=`<polyline points="${v.map((a,k)=>x(k)+','+y(a)).join(' ')}" fill="none" stroke="currentColor" stroke-opacity=".45" stroke-width="1.5"/>`;
  d.forEach((i,k)=>{const ng=stD(i)=='NG',dt=new Date(i.dt).toLocaleDateString(LC(),{day:'2-digit',month:'2-digit'});h+=`<circle cx="${x(k)}" cy="${y(v[k])}" r="4.5" fill="${ng?'#dc2626':'#16a34a'}"/><text x="${x(k)}" y="${y(v[k])-9}" text-anchor="middle" font-size="11" fill="currentColor">${f1(i.kA)}</text><text x="${x(k)}" y="${Y1+18}" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">${dt}</text>`});
  return`<svg viewBox="0 0 300 170" style="width:100%;height:auto;display:block;color:var(--tx)">${h}</svg>`}
-function mqCharts(){const sel=[].concat(Q.main||[]).filter(x=>D.mains.some(m=>m.id==x));if(!sel.length)return'';const a=filt(Q);let h='';
+function mqCharts(){const sel=[].concat(Q.main||[]).filter(x=>D.mains.some(m=>m.id==x));if(!sel.length)return'';const a=mqHist();let h='';
  D.mains.filter(m=>sel.includes(m.id)).forEach(m=>{const r=a.filter(i=>i.mid==m.id),mats=D.M.mats.filter(x=>r.some(i=>i.mat==x));r.forEach(i=>{if(!mats.includes(i.mat))mats.push(i.mat)});
   if(!mats.length){h+=`<div class="c"><b class="text-sm">${esc(m.code)}</b><p class="text-xs opacity-60">Belum ada data</p></div>`;return}
   mats.forEach(mt=>{const d=r.filter(i=>i.mat==mt).sort((x,y)=>(new Date(x.dt)-new Date(y.dt))||(x.created-y.created)).slice(-5),L=d[d.length-1];
