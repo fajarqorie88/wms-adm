@@ -1608,7 +1608,7 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
    Revisi ini = 205. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=278;
+const APP_REV=280;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -2495,10 +2495,10 @@ if(C&&C.Filesystem&&C.Share){const r=await C.Filesystem.writeFile({path:name,dat
 const blob=doc.output('blob'),f=new File([blob],name,{type:'application/pdf'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});return}
 const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();awSuccess('PDF berhasil diunduh',esc(name))}catch(e){if(e&&e.name!='AbortError'&&!/cancel/i.test(e.message||''))toast('Gagal membagikan PDF')}}
 function pdfTable(doc,y,cols,rows,ng){const head=()=>{doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setFillColor(37,99,235);doc.rect(10,y-4.5,277,6,'F');doc.setTextColor(255);cols.forEach(c=>doc.text(c[0],c[1],y));doc.setTextColor(0);doc.setFont('helvetica','normal');y+=6};head();
-rows.forEach((r,n)=>{if(y>198){doc.addPage();y=14;head()}if(n%2){doc.setFillColor(241,245,249);doc.rect(10,y-4,277,5.5,'F')}if(ng&&ng[n]){doc.setGState(new doc.GState({opacity:.18}));doc.setFillColor(220,38,38);doc.rect(10,y-4,277,5.5,'F');doc.setGState(new doc.GState({opacity:1}))}cols.forEach((c,j)=>{const t=String(r[j]==null?'':r[j]),mx=c[2]||30;doc.text(t.length>mx?t.slice(0,mx)+'..':t,c[1],y)});y+=5.5});return y}
+rows.forEach((r,n)=>{if(y>198){doc.addPage();y=14;head()}{const f=ng?(ng[n]?[249,216,216]:[241,245,249]):(n%2?[241,245,249]:null);if(f){doc.setFillColor(f[0],f[1],f[2]);doc.rect(10,y-4,277,5.5,'F')}}cols.forEach((c,j)=>{let t=String(r[j]==null?'':r[j]);const lim=(cols[j+1]?cols[j+1][1]:287)-c[1]-2;if(doc.getTextWidth(t)>lim&&c[0]=='Lokasi')t=t.replace(/\bFRONT DOOR\b/gi,'FD').replace(/\bREAR DOOR\b/gi,'RD').replace(/\bENGINE HOOD\b/gi,'HOOD').replace(/\bBACK DOOR\b/gi,'BD');if(doc.getTextWidth(t)>lim){while(t.length>1&&doc.getTextWidth(t+'..')>lim)t=t.slice(0,-1);t+='..'}doc.text(t,c[1],y)});y+=5.5});return y}
 async function pdfData(dl,eq){const doc=mkDoc();if(!doc)return;const a=filt(Q).filter(i=>!eq||eq.includes(i.mid)).sort((x,y)=>y.created-x.created);
 doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(37,99,235);doc.text('WMS - Data Pengecekan',10,14);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(90);doc.text('Akun: '+U.id+'   Dibuat: '+new Date().toLocaleString(LC())+'   Jumlah data: '+a.length,10,20);doc.setTextColor(0);
-pdfTable(doc,30,[['Waktu',10,20],['Main',42,16],['Sub',70,20],['Material',108,12],['Output (kA)',132,8],['Standar',148,12],['Status',172,6],['Checker',190,22],['Lokasi',224,14],['Approval',246,26]],a.map(i=>[new Date(i.dt).toLocaleString(LC()),i.main,i.sub+' '+i.subType,i.mat,f1(i.kA),f1(i.min)+'-'+f1(i.max),stD(i),i.c1+(i.c2?' / '+i.c2:''),i.loc,apSt(i)=='a'?(i.apName||'-')+(i.apRole?' ('+i.apRole+')':''):'Pending']),a.map(i=>stD(i)=='NG'));
+pdfTable(doc,30,[['Waktu',10,20],['Main',42,16],['Sub',70,20],['Material',108,12],['Output (kA)',132,8],['Standar',148,12],['Status',172,6],['Checker',184,22],['Lokasi',212,14],['Approval',240,26]],a.map(i=>[new Date(i.dt).toLocaleString(LC()),i.main,i.sub+' '+i.subType,i.mat,f1(i.kA),f1(i.min)+'-'+f1(i.max),stD(i),i.c1+(i.c2?' / '+i.c2:''),i.loc,apSt(i)=='a'?(i.apName||'-')+(i.apRole?' ('+i.apRole+')':''):'Pending']),a.map(i=>stD(i)=='NG'));
 await outPdf(doc,'WMS_Data_'+stamp()+'.pdf',dl)}
 /* Unduh/Bagikan satu kartu data (tombol panah di kartu) + pilih equipment untuk PDF tab Data */
 function mkDocP(){if(!window.jspdf){toast('Library PDF belum termuat');return null}const d=new window.jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a5'}),ot=d.text.bind(d);d.text=(t,...a)=>ot(Array.isArray(t)?t.map(tr):tr(String(t)),...a);return d}
@@ -2516,7 +2516,7 @@ async function pdfCard(id,dl){const i=D.insp.find(x=>x.id==id);if(!i)return;
  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(100);doc.text(new Date(i.dt).toLocaleString(LC()),W-m,14,{align:'right'});
  doc.setDrawColor(37,99,235);doc.setLineWidth(.5);doc.line(m,17,W-m,17);
  doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(15,23,42);doc.text(String(i.main||'-'),m,26);
- ng?al(.18,220,38,38,m,30,W-2*m,22):al(.16,22,163,74,m,30,W-2*m,22);
+ ng?al(1,249,216,216,m,30,W-2*m,22):al(1,220,240,228,m,30,W-2*m,22);
  doc.setFontSize(26);ng?doc.setTextColor(185,28,28):doc.setTextColor(15,23,42);const kt=f1(i.kA);doc.text(kt,m+4,44);const kw=doc.getTextWidth(kt);
  doc.setFontSize(10);doc.setTextColor(100);doc.text('kA',m+6+kw,44);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text('Standar '+f1(i.min)+' - '+f1(i.max)+' kA',m+4,49);
  ng?doc.setFillColor(220,38,38):doc.setFillColor(22,163,74);doc.roundedRect(W-m-32,36,28,10,2,2,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(255);doc.text(String(v),W-m-18,43,{align:'center'});
@@ -2532,11 +2532,12 @@ var MQ={open:0};
 function mnOk(q,id){const a=[].concat(q.main||[]);return !a.length||a.includes(id)}
 function mqN(){return [].concat(Q.main||[]).filter(x=>D.mains.some(m=>m.id==x)).length}
 function mqSel(){const sel=[].concat(Q.main||[]).filter(x=>D.mains.some(m=>m.id==x)),n=sel.length,all=n==D.mains.length,nm=sel.map(x=>(mainBy(x)||{}).code||x),tx=n==0?'Semua Equipment':n>2?n+' dipilih':nm.join(', ');
- return`<div class="mqw" style="width:48%;display:inline-block;vertical-align:top"><button type="button" class="i" style="width:100%;margin:0;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:6px;cursor:pointer" onclick="mqTog()"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(tx)}</span><span>${MQ.open?'&#9652;':'&#9662;'}</span></button>${MQ.open?`<div style="border:1px solid var(--bd);border-radius:8px;margin-top:4px;padding:6px;background:var(--cd)"><div class="flex justify-between items-center" style="padding:0 4px 6px;border-bottom:1px solid var(--bd);margin-bottom:4px"><span class="text-xs opacity-70">Pilih equipment</span><button type="button" class="text-blue-600 text-xs" onclick="mqAll()">${all?'Hapus semua':'Pilih semua'}</button></div><div style="max-height:220px;overflow-y:auto">${D.mains.map(m=>`<label class="flex items-center gap-2 py-1 text-sm" style="margin:0"><input type="checkbox" ${sel.includes(m.id)?'checked':''} onchange="mqT('${m.id}')"> ${esc(m.code)}</label>`).join('')}</div></div>`:''}</div>`}
+ return`<div class="mqw" style="width:48%;display:inline-block;vertical-align:top"><button type="button" class="i" style="width:100%;margin:0;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:6px;cursor:pointer" onclick="mqTog()"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(tx)}</span><span>${MQ.open?'&#9652;':'&#9662;'}</span></button>${MQ.open?`<div style="border:1px solid var(--bd);border-radius:8px;margin-top:4px;padding:6px;background:var(--cd)"><div class="flex justify-between items-center" style="padding:0 4px 6px;border-bottom:1px solid var(--bd);margin-bottom:4px"><span class="text-xs opacity-70">Pilih equipment</span><button type="button" class="text-blue-600 text-xs" onclick="mqAll()">${all?'Hapus semua':'Pilih semua'}</button></div><div id="mqlist" style="max-height:220px;overflow-y:auto">${D.mains.map(m=>`<label class="flex items-center gap-2 py-1 text-sm" style="margin:0"><input type="checkbox" ${sel.includes(m.id)?'checked':''} onchange="mqT('${m.id}')"> ${esc(m.code)}</label>`).join('')}</div></div>`:''}</div>`}
 function mqTog(){MQ.open=!MQ.open;render()}
 function mqSet(a){if(a.length)Q.main=a;else delete Q.main}
-function mqT(id){const a=[].concat(Q.main||[]),i=a.indexOf(id);i<0?a.push(id):a.splice(i,1);mqSet(a);render()}
-function mqAll(){mqSet(mqN()==D.mains.length?[]:D.mains.map(m=>m.id));render()}
+function mqR(){const l=document.getElementById('mqlist'),t=l?l.scrollTop:0,y=scrollY;render();const n=document.getElementById('mqlist');if(n)n.scrollTop=t;scrollTo(0,y)}
+function mqT(id){const a=[].concat(Q.main||[]),i=a.indexOf(id);i<0?a.push(id):a.splice(i,1);mqSet(a);mqR()}
+function mqAll(){mqSet(mqN()==D.mains.length?[]:D.mains.map(m=>m.id));mqR()}
 document.addEventListener('click',e=>{if(MQ.open&&!(e.target.closest&&e.target.closest('.mqw'))){MQ.open=0;render()}});
 var GP={open:0,sel:[],eq:[],lc:[],mode:'dl'};
 function gpOpen(m){if(GP.open&&GP.mode==m)GP.open=0;else{GP.open=1;GP.mode=m;GP.sel=[...matList()];GP.eq=[...eqList()];GP.lc=[...lcList()]}render()}
