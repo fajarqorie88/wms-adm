@@ -306,6 +306,10 @@ html[data-view=hp] .vw-developer>.c.mgc{grid-column:1/-1}
 .lc1{background:rgba(56,139,253,.22);border-color:rgba(96,165,250,.5)}.lc2{background:rgba(249,115,22,.2);border-color:rgba(249,115,22,.55)}.lc4{background:rgba(148,163,184,.18);border-color:rgba(148,163,184,.42)}.lc5{background:rgba(236,72,153,.18);border-color:rgba(236,72,153,.5)}
 .lwn{font-size:11px;color:#94a3b8;margin:4px 0 0;line-height:1.5}.lwe{font-size:13px;color:#fca5a5;margin:8px 0 0}
 .lwd{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.15);display:grid;grid-template-columns:1fr 1fr;gap:8px}.lwd b{grid-column:1/-1;font-size:12px;color:#fde68a;font-weight:600}.lwd label{font-size:11px;color:#cbd5e1}.lwd .i{margin:2px 0 0}
+.lwtb{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.lwtb button{padding:10px;border-radius:12px;font-size:13px;font-weight:600}.lwpb{background:rgba(56,139,253,.35);border:1px solid rgba(96,165,250,.7);color:#fff}.lwrs{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.55);color:#fecaca}
+.lwpr{border:1.5px solid rgba(52,211,153,.7);background:rgba(16,185,129,.16);border-radius:14px;padding:10px 12px;margin:8px 0 6px;color:#fff}.lwpr .a{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:#a7f3d0}.lwpr .a b{font-size:22px;font-weight:600;color:#fff}.lwpr .a u{text-decoration:none;margin-left:4px}.lwpr .bar{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.15);margin:10px 0 6px}.lwpr .bar i{position:absolute;left:20%;width:60%;top:0;bottom:0;border-radius:99px;background:rgba(52,211,153,.75)}.lwpr .bar em{position:absolute;left:50%;top:-3px;width:3px;height:14px;background:#fff;border-radius:2px}.lwpr .b{display:flex;justify-content:space-between;font-size:11px;color:#d1fae5}
+.lwov{position:fixed;inset:0;z-index:60;background:rgba(2,6,23,.94);overflow:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(20px + env(safe-area-inset-bottom,0px))}.lwov .bar{display:flex;gap:8px;max-width:640px;margin:0 auto 10px}.lwov .bar button{flex:1;padding:10px;border-radius:12px;font-size:13px;font-weight:600;background:rgba(56,139,253,.35);border:1px solid rgba(96,165,250,.7);color:#fff}.lwov .bar button.x{flex:none;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:#e2e8f0}.lwov .cap{max-width:640px;margin:0 auto 8px;font-size:11px;color:#94a3b8}
+.lws{max-width:900px;margin:0 auto 14px;background:#fff;overflow-x:auto;border-radius:4px}.lws table{border-collapse:collapse;width:100%;min-width:640px;color:#111;font-size:10.5px;line-height:1.25}.lws td{border:1px solid #444;padding:3px 4px;text-align:center;vertical-align:middle}.lws .h1{background:#cfd8e3;font-weight:500;height:22px}.lws .h2{background:#e5e5e5;font-weight:500;height:52px}.lws .l{text-align:left}.lws .it{text-align:left;vertical-align:top;padding:0}.lws .it div{padding:4px 6px;border-bottom:1px solid #444;min-height:30px}.lws .it div:last-child{border-bottom:0}.lws .it small{display:block;font-size:9.5px;color:#666}.lws .it b{font-weight:500}
 .glass{background:rgba(255,255,255,.08);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:20px}
 .lg .i{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff}.lg .i::placeholder{color:#cbd5e1}
 .gb{width:100%;background:#fff;color:#0f172a;border-radius:12px;padding:12px;font-weight:600;display:flex;gap:10px;justify-content:center;align-items:center}
@@ -1621,8 +1625,8 @@ const TABS=[['input','Input'],['data','Data'],['grafik','Grafik'],['master','Mas
    APP_REV = jumlah deployment/revisi file index.html ini. Tampil di footer tab Setting / Developer dan login: "WELDING MONITORING SYSTEM │ WMS V3.0-<APP_REV>".
    ATURAN: SETIAP kali file ini direvisi atau di-deploy ulang (sekecil apa pun), NAIKKAN APP_REV +1. Jangan pernah turun / reset.
    Akun atau agent baru: baca nilai APP_REV di bawah ini sebagai versi terakhir, lalu lanjutkan dari situ (revisi berikutnya = APP_REV + 1).
-   Revisi ini = 277. (Ada juga komentar pengingat di baris paling atas file.) */
-const APP_REV=277;
+   Revisi ini = 278. (Ada juga komentar pengingat di baris paling atas file.) */
+const APP_REV=278;
 /* ---------- BAHASA / LANGUAGE ---------- */
 let LG=L.woms_lang||'id';document.documentElement.lang=LG;
 const LC=()=>LG=='en'?'en-GB':'id-ID';
@@ -3214,11 +3218,11 @@ function lwRes(j){const r=lwCalc(j);
  if(r.wait)return'<p class="lwn">Isi tebal semua layer untuk melihat hasil.</p>';
  if(r.err)return'<p class="lwe">'+esc(r.err)+'</p>';
  const c=lwCfg(),P=(cls,lb,v,u,sub,full)=>`<div class="lwp ${cls}${full?' lwf':''}"><i>${lb}</i><b>${v}</b>${u?`<u>${u}</u>`:''}${sub?`<s>${sub}</s>`:''}</div>`;
- let h='<div class="lwg">'+P('lc4','Squeeze',c.sq,'cyc')+P('lc4','Up slope',r.up,'cyc');
+ let h=lwPrBox(r)+'<div class="lwg">'+P('lc4','Squeeze',c.sq,'cyc')+P('lc4','Up slope',r.up,'cyc');
  for(let k=0;k<3;k++)h+=P('lc1','Current '+(k+1),lwF(r.i[k]),'kA','min '+lwF(r.lo[k]))+P('lc2','Welding time '+(k+1),r.t[k],'cyc');
  h+=P('lc4','Hold',r.hold,'cyc')+P('lc4','Off Time',c.off,'cyc')
   +P('lc5','Turn Ratio',esc(LW.turn)||'-','')+P('lc5','Margin (batas bawah arus)',lwF(r.lo[0])+' / '+lwF(r.lo[1])+' / '+lwF(r.lo[2]),'kA')+'</div>'
-  +`<p class="lwn" style="margin-top:8px">Tekanan setting ${r.setp==null?'-':r.setp} (rekomendasi ${r.press==null?'-':r.press}) &bull; Total up slope-hold ${r.total==null?'-':r.total} cyc &bull; Arus rata-rata ${lwF(r.avg)} kA (batas bawah ${lwF(r.avgLo)}) &bull; Flange min ${lwF(r.fl)} mm</p><p class="lwn">Cool: tidak dipakai di pola 3 step ini.</p>`;
+  +`<p class="lwn" style="margin-top:8px">Total up slope-hold ${r.total==null?'-':r.total} cyc &bull; Arus rata-rata ${lwF(r.avg)} kA (batas bawah ${lwF(r.avgLo)}) &bull; Flange min ${lwF(r.fl)} mm</p><p class="lwn">Cool: tidak dipakai di pola 3 step ini.</p>`;
  return h}
 function lwJ(j,i){const n=LW.joints.length;
  return`<div class="lwj"><div class="lwh"><input class="i" maxlength="40" value="${esc(j.n)}" placeholder="Joint ${i+1} (nama opsional)" oninput="lwName(${i},this.value)" aria-label="Nama joint ${i+1}">${n>1?`<button type="button" class="lwx" aria-label="Hapus joint ${i+1}" onclick="lwDelJ(${i})">&#10005;</button>`:''}</div>
@@ -3230,10 +3234,11 @@ function lwcView(){lwLoad();const dv=isDev()&&!VAU,c=lwCfg();
 <div class="glass"><h2 class="font-bold text-lg text-center" style="color:#7dd3fc;letter-spacing:.08em">LWC CALCULATION</h2><p class="text-xs text-center" style="color:#cbd5e1;margin-top:2px">Parameter welding 3 step (ACS 2019). Isi tebal dan material tiap layer, hasil muncul otomatis.</p>
 <label class="text-xs" style="display:block;margin-top:10px;color:#cbd5e1">Nama proses (opsional)</label><input class="i" maxlength="60" value="${esc(LW.proc)}" oninput="lwProc(this.value)" placeholder="mis. SRTC-9898/R" autocomplete="off">
 <label class="text-xs" style="display:block;color:#cbd5e1">Turn Ratio (diisi manual)</label><input class="i" maxlength="20" value="${esc(LW.turn)}" oninput="lwTurn(this.value)" placeholder="mis. 108" autocomplete="off" style="margin-bottom:0">
+<div class="lwtb"><button type="button" class="lwpb" onclick="lwShare()">Print &amp; Share</button><button type="button" class="lwrs" onclick="lwReset()">Reset data</button></div>
 ${dv?`<div class="lwd"><b>Pengaturan Developer</b><div><label>Squeeze (cyc)</label><input class="i" inputmode="numeric" value="${c.sq}" onchange="lwCfgSet('sq',this.value)"></div><div><label>Off Time (cyc)</label><input class="i" inputmode="numeric" value="${c.off}" onchange="lwCfgSet('off',this.value)"></div></div>`:''}</div>
 ${LW.joints.map(lwJ).join('')}
 <button type="button" class="lwa" onclick="lwAddJ()">+ Tambah joint</button>
-<p class="text-xs" style="color:#94a3b8;margin-top:10px;line-height:1.5">Dasar: file ACS 2019 (Welcon), gun PSW, kelas standar 1, tanpa sealer. SCGA = ada plating, SPCC = tanpa plating. Rentang tebal ${String(LW_MIN).replace('.',',')} sampai ${String(LW_MAX).replace('.',',')} mm, 2 sampai 3 layer. Hasil adalah acuan awal, tetap verifikasi di lapangan.</p></div></div>`}
+<p class="text-xs" style="color:#94a3b8;margin-top:10px;line-height:1.5">Dasar: file ACS 2019 (Welcon), gun PSW, kelas standar 1, tanpa sealer. SCGA = ada plating, SPCC = tanpa plating. Rentang tebal ${String(LW_MIN).replace('.',',')} sampai ${String(LW_MAX).replace('.',',')} mm, 2 sampai 3 layer. Hasil adalah acuan awal, tetap verifikasi di lapangan.</p></div>${LW.pv?lwPv():''}</div>`}
 function lwRef(){LW.joints.forEach((j,i)=>{const e=document.getElementById('lwr'+i);if(e)e.innerHTML=lwRes(j)});}
 function lwT(i,k,v){LW.joints[i].ly[k].t=String(v).slice(0,8);lwSave();const e=document.getElementById('lwr'+i);if(e)e.innerHTML=lwRes(LW.joints[i])}
 function lwM(i,k,m){LW.joints[i].ly[k].m=m;lwSave();render()}
@@ -3245,6 +3250,55 @@ function lwDelL(i){const j=LW.joints[i];if(j.ly.length>2){j.ly.pop();lwSave();re
 function lwAddJ(){if(LW.joints.length>=30)return toast('Maksimal 30 joint');LW.joints.push(lwNew());lwSave();render()}
 function lwDelJ(i){if(LW.joints.length<2)return;if(!confirm('Hapus joint ini?'))return;LW.joints.splice(i,1);lwSave();render()}
 function lwCfgSet(k,v){if(!isDev())return;const x=parseFloat(String(v).replace(',','.'));if(!isFinite(x)||x<0||x>999)return toast('Isi angka 0 sampai 999');mPut(M=>{M.lwc=M.lwc||{};M.lwc[k]=Math.round(x)})}
+
+/* ---------- LWC: RESET, REKOMENDASI PRESSURE, PRINT & SHARE (APP_REV 278) ----------
+   Pressure dari mesin hitung (kolom G) dianggap daN; ditampilkan dalam kN (1 daN = 0,01 kN).
+   Range pressure = rekomendasi +/- LW_PR (ASUMSI 10%, ganti LW_PR bila ada acuan resmi).
+   Print & Share: satu lembar A4 landscape per joint (format FORMAT_LWC_WMS.xlsx), kolom 1 = Parameter Input Recommendation (hasil kalkulator), kolom 2 dan 3 = Actual Parameter (kosong, diisi tangan). */
+const LW_DAN=0.01,LW_PR=0.10;
+const lwKn=x=>x.toFixed(2).replace('.',',');
+function lwPr(r){if(r.press==null||!isFinite(r.press))return null;const v=r.press*LW_DAN;return{v:lwKn(v),lo:lwKn(v*(1-LW_PR)),hi:lwKn(v*(1+LW_PR))}}
+function lwPrBox(r){const p=lwPr(r);if(!p)return'';return`<div class=\"lwpr\"><div class=\"a\"><span>Rekomendasi Pressure</span><span><b>${p.v}</b><u>kN</u></span></div><div class=\"bar\"><i></i><em></em></div><div class=\"b\"><span>Min ${p.lo}</span><span>Range ${p.lo} &ndash; ${p.hi} kN</span><span>Maks ${p.hi}</span></div></div>`}
+function lwReset(){if(!confirm('Hapus semua data LWC (nama proses, turn ratio, dan semua joint)?'))return;LW.joints=[lwNew()];LW.proc='';LW.turn='';LW.pv=false;lwSave();render();toast('Data LWC dihapus')}
+const lwT2=v=>String(lwNum(v)).replace('.',',');
+function lwSheet(j){const r=lwCalc(j);if(r.wait||r.err)return null;const c=lwCfg(),p=lwPr(r),n=r.up+r.t[0]+r.t[1]+r.t[2];
+ const th=j.ly.map(l=>lwT2(l.t)).join(' + '),ma=j.ly.map(l=>l.m).join(' + ');
+ return{doc:LW.proc||'',name:j.n||'',th,ma,
+  left:[['Timer',''],['Trafo No.',''],['Gun Type',''],['Spot Quantity',''],['Joint Part Thickness',j.ly.map((l,k)=>(k+1)+': '+lwT2(l.t)).join(' / ')],['Tip Gun (Fix)',''],['Tip Gun (Move)','']],
+  rows:[['Squeeze (cyc)',c.sq],['Up Slope (cyc)',r.up],['Time 1 (cyc)',r.t[0]],['Current 1 (kA)',lwF(r.i[0])],['Cool 1 (cyc)',0],['Time 2 (cyc)',r.t[1]],['Current 2 (kA)',lwF(r.i[1])],['Cool 2 (cyc)',0],['Time 3 (cyc)',r.t[2]],['Current 3 (kA)',lwF(r.i[2])],['Hold (cyc)',r.hold],['Off Time (cyc)',c.off],['Turn Ratio',LW.turn||'-'],
+   ['#','Output data'],['Current out (\u00B15%) (kA)',lwF(r.avg)],['W/ Time total (cyc)',n],['Press rekomendasi (kN)',p?p.v:'-'],['Press range (kN)',p?p.lo+' - '+p.hi:'-']]}}
+function lwSheets(){return LW.joints.map(lwSheet).filter(Boolean)}
+function lwSheetH(s){const E=v=>esc(String(v))||'&nbsp;';
+ const top=`<table style=\"margin-bottom:-1px\"><tr><td style=\"width:90px;font-weight:500;height:56px\">Doc No:<br><span style=\"font-weight:400\">${E(s.doc)}</span></td><td style=\"font-weight:500;font-size:13px\">LIST WELDING CONDITION</td><td style=\"width:70px;vertical-align:top\">Approved</td><td style=\"width:70px;vertical-align:top\">Checked</td><td style=\"width:70px;vertical-align:top\">Prepared</td></tr><tr><td colspan=\"5\" class=\"l\"><b style=\"font-weight:500\">Process Name:</b> ${E(s.name)}</td></tr></table>`;
+ const it=s.left.map(a=>`<div><small>${a[0]}</small><b>${E(a[1])}</b></div>`).join('');
+ const rows=s.rows.map((r,k)=>{const first=k==0?`<td class=\"it\" rowspan=\"${s.rows.length}\" style=\"width:130px\">${it}</td>`:'';
+  if(r[0]=='#')return`<tr><td class=\"h1\" colspan=\"4\">${r[1]}</td></tr>`;
+  return`<tr>${first}<td class=\"l\" style=\"width:140px\">${r[0]}</td><td>${E(r[1])}</td><td>&nbsp;</td><td>&nbsp;</td></tr>`}).join('');
+ const main=`<table><tr><td class=\"h1\" style=\"width:130px\">Data mesin dan proses</td><td class=\"h1\">Item check</td><td class=\"h1\" colspan=\"3\">Data parameter welding</td></tr><tr><td class=\"h2\">Item / keterangan</td><td class=\"h2\">Parameter / satuan</td><td class=\"h2\">Parameter Input<br>Recommendation<br><span style=\"font-weight:400\">${s.th} / ${s.ma}</span></td><td class=\"h2\">Actual Parameter<br><span style=\"font-weight:400\">Date: ...........</span></td><td class=\"h2\">Actual Parameter<br><span style=\"font-weight:400\">Date: ...........</span></td></tr>${rows}</table>`;
+ return`<div class=\"lws\"><div style=\"min-width:640px\">${top}${main}<table style=\"margin-top:-1px\"><tr><td class=\"l\" style=\"font-size:10px;color:#444\">Perhitungan welding time standar: Slope + W1 + W2 + W3</td></tr></table></div></div>`}
+function lwShare(){const S=lwSheets();if(!S.length)return toast('Isi tebal semua layer dulu, belum ada hasil untuk dicetak');LW.pv=true;render();const o=document.querySelector('.lwov');if(o)o.scrollTop=0}
+function lwPv(){const S=lwSheets(),t=LW.joints.length-S.length;
+ return`<div class=\"lwov\"><div class=\"bar\"><button type=\"button\" onclick=\"lwPdf(true)\">Cetak / PDF</button><button type=\"button\" onclick=\"lwPdf(false)\">Bagikan PDF</button><button type=\"button\" class=\"x\" onclick=\"lwPvClose()\" aria-label=\"Tutup\">&#10005;</button></div><p class=\"cap\">${S.length} lembar (satu per joint)${t?'. '+t+' joint belum lengkap dan tidak dicetak':''}. Geser ke samping bila tabel terpotong.</p>${S.map(lwSheetH).join('')}</div>`}
+function lwPvClose(){LW.pv=false;render()}
+function lwBox(d,x,y,w,h,f){d.setDrawColor(68);d.setLineWidth(.2);if(f){d.setFillColor(f[0],f[1],f[2]);d.rect(x,y,w,h,'FD')}else d.rect(x,y,w,h,'S')}
+function lwTx(d,t,x,y,w,h,o){o=o||{};const L=String(t).split('\n'),lh=o.lh||3.6,fs=o.fs||8;d.setFont('helvetica',o.b?'bold':'normal');d.setFontSize(fs);d.setTextColor(o.col||0);const y0=y+h/2-(L.length-1)*lh/2+fs*.12;L.forEach((s,k)=>d.text(s,o.l?x+1.5:x+w/2,y0+k*lh,{align:o.l?'left':'center'}))}
+function lwDraw(d,s){const H1=[207,216,227],H2=[229,229,229],x0=10,wl=55,wb=62,cw=160/3,xb=x0+wl,xc=xb+wb;let y=10;
+ lwBox(d,x0,y,40,18);lwTx(d,'Doc No:\n'+s.doc,x0,y,40,18,{fs:7.5,b:1});
+ lwBox(d,50,y,147,18);lwTx(d,'LIST WELDING CONDITION',50,y,147,18,{b:1,fs:13});
+ ['Approved','Checked','Prepared'].forEach((t,k)=>{const x=197+k*30;lwBox(d,x,y,30,18);lwTx(d,t,x,y,30,6,{fs:7.5})});
+ y+=18;lwBox(d,x0,y,277,7);lwTx(d,'Process Name: '+s.name,x0,y,277,7,{l:1,b:1,fs:8});y+=7;
+ lwBox(d,x0,y,wl,6,H1);lwTx(d,'Data mesin dan proses',x0,y,wl,6,{b:1,fs:8});lwBox(d,xb,y,wb,6,H1);lwTx(d,'Item check',xb,y,wb,6,{b:1,fs:8});lwBox(d,xc,y,160,6,H1);lwTx(d,'Data parameter welding',xc,y,160,6,{b:1,fs:8});y+=6;
+ lwBox(d,x0,y,wl,14,H2);lwTx(d,'Item / keterangan',x0,y,wl,14,{b:1,fs:8});lwBox(d,xb,y,wb,14,H2);lwTx(d,'Parameter / satuan',xb,y,wb,14,{b:1,fs:8});
+ lwBox(d,xc,y,cw,14,H2);lwTx(d,'Parameter Input\nRecommendation',xc,y,cw,9,{b:1,fs:7.5,lh:3.4});lwTx(d,s.th+' / '+s.ma,xc,y+8.5,cw,5.5,{fs:6.5});
+ [1,2].forEach(k=>{const x=xc+k*cw;lwBox(d,x,y,cw,14,H2);lwTx(d,'Actual Parameter',x,y,cw,8,{b:1,fs:7.5});lwTx(d,'Date: ...........',x,y+7,cw,7,{fs:7})});
+ y+=14;const n=s.rows.length,rh=6.6,ih=n*rh/s.left.length;
+ s.left.forEach((a,k)=>{const yy=y+k*ih;lwBox(d,x0,yy,wl,ih);lwTx(d,a[0],x0+1.5,yy+.8,wl-3,ih*.42,{l:1,fs:6.5,col:100});lwTx(d,a[1],x0+1.5,yy+ih*.42,wl-3,ih*.55,{l:1,b:1,fs:8})});
+ s.rows.forEach((r,k)=>{const yy=y+k*rh;if(r[0]=='#'){lwBox(d,xb,yy,wb+160,rh,H1);lwTx(d,r[1],xb,yy,wb+160,rh,{b:1,fs:8});return}
+  lwBox(d,xb,yy,wb,rh);lwTx(d,r[0],xb,yy,wb,rh,{l:1,fs:8});lwBox(d,xc,yy,cw,rh);lwTx(d,r[1],xc,yy,cw,rh,{fs:8});lwBox(d,xc+cw,yy,cw,rh);lwBox(d,xc+2*cw,yy,cw,rh)});
+ y+=n*rh;lwBox(d,x0,y,277,7);lwTx(d,'Perhitungan welding time standar: Slope + W1 + W2 + W3',x0,y,277,7,{l:1,fs:7,col:70})}
+async function lwPdf(dl){const S=lwSheets();if(!S.length)return toast('Belum ada hasil untuk dicetak');const d=mkDoc();if(!d)return;
+ S.forEach((s,k)=>{if(k)d.addPage();lwDraw(d,s)});
+ const nm='LWC_'+String(LW.proc||'Welding_Condition').replace(/[^\w\-]+/g,'_').slice(0,40)+'_'+stamp()+'.pdf';await outPdf(d,nm,dl)}
 
 /* ---------- SINKRON QUALITY GATE: cepat (hanya master), otomatis tiap ada perubahan + cek berkala, progress bar & animasi centang ---------- */
 const QS={p:0,show:false,err:false,t:0,busy:false,q:0,m:'',pn:0};
